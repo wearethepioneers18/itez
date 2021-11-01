@@ -107,13 +107,9 @@ The following details how to deploy this application.
 Heroku
 ^^^^^^
 
-See detailed `cookiecutter-django Heroku documentation`_.
-
-.. _`cookiecutter-django Heroku documentation`: http://cookiecutter-django.readthedocs.io/en/latest/deployment-on-heroku.html
+Please visit the docs at http://127.0.0.1:7000  
 
 Docker
 ^^^^^^
 
-See detailed `cookiecutter-django Docker documentation`_.
-
-.. _`cookiecutter-django Docker documentation`: http://cookiecutter-django.readthedocs.io/en/latest/deployment-with-docker.html
+Please visit the docs at http://127.0.0.1:7000  
