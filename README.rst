@@ -15,10 +15,6 @@ Platform to manage Intersex and Trans-persons in Zambia.
 Settings
 --------
 
-Moved to settings_.
-
-.. _settings: http://cookiecutter-django.readthedocs.io/en/latest/settings.html
-
 Basic Commands
 --------------
 
