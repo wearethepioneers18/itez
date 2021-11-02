@@ -12,8 +12,60 @@ Platform to manage Intersex and Trans-persons in Zambia.
 
 :License: MIT
 
+Local Dev setup
+---------------
+
+To have a running local dev environement you will need to do the following
+
+- To build and start all services 
+
+::
+
+  $ docker-compose -f local.yml up
+
+    
+*The  above command will build and start all services.*
+
+    You can now access the web interface at http://127.0.0.1:8000
+    
+    You can access the api docs at http://127.0.0.1:8000/api
+    
+    You can access mailhog at http://127.0.0.1:8025
+    
+    You can access celery flower at http://127.0.0.1:5000 - user `debug` pass `debug`
+    
+    You can access the auto docs at http://127.0.0.1:7000
+
+    You can access thebrowsersync UI at http://127.0.0.1:3001
+
+- To create a superuser
+
+::
+
+  $ docker-compose -f local.yml run --rm django python manage.py createsuperuser
+
+- To update database migrations
+
+::
+
+  $ docker-compose -f local.yml run --rm django python manage.py makemigrations
+
+- To apply database migrations
+::
+
+  $ docker-compose -f local.yml run --rm django python manage.py migrate
+
+
+- To collect static assets
+
+::
+
+  $ docker-compose -f local.yml run --rm django python manage.py collectstatic
+
+
 Settings
 --------
+
 
 Basic Commands
 --------------
