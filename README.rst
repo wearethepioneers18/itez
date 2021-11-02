@@ -23,7 +23,13 @@ To have a running local dev environement you will need to do the following
 
   $ docker-compose -f local.yml up
 
-    
+- To rebuild and start all services
+
+::
+
+  $ docker-compose -f local.yml up --build
+  
+  
 *The  above command will build and start all services.*
 
     You can now access the web interface at http://127.0.0.1:8000
