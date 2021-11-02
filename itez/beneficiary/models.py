@@ -8,13 +8,14 @@ class Province(models.Model):
     """
     name = models.CharField(
         _("Province"),
-        max_length=255, 
+        max_length=255 
     )
 
     created = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
         return self.name
+    
     class Meta:
         verbose_name = 'Province'
         verbose_name_plural = 'Provinces'
