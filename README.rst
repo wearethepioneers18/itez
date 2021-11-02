@@ -15,10 +15,6 @@ Platform to manage Intersex and Trans-persons in Zambia.
 Settings
 --------
 
-Moved to settings_.
-
-.. _settings: http://cookiecutter-django.readthedocs.io/en/latest/settings.html
-
 Basic Commands
 --------------
 
@@ -116,4 +112,20 @@ Docker
 
 See detailed `cookiecutter-django Docker documentation`_.
 
-.. _`cookiecutter-django Docker documentation`: http://cookiecutter-django.readthedocs.io/en/latest/deployment-with-docker.html
+.. _`cookiecutter-django Docker documentation`: http://cookiecutter-django.readthedocs.io/en/latest/deployment-with-docker.html 
+
+
+Thank You - Contributors
+^^^^^^^^^
+
+As an open source and free software, this project would not be possible without the wonderful efforts and contributions from the following talents.
+
+- `Esther Kabwe <https://github.com/Coderkabs>`_
+- `Bupe Mulenga <https://github.com/wearethepioneers18>`_
+- `Jachin Manda <https://github.com/jmnda-dev>`_
+- `Chriford Siame <https://github.com/chriford>`_
+- `Olipa Tembo <https://github.com/Olipa776>`_
+- `Cephas Zulu <https://github.com/cazterk>`_
+- `Obbie Chinyere <https://github.com/obbie03>`_
+- `Prince Musole <https://github.com/MusoleP>`_
+- Lead Engineer `Alison Mukoma <https://github.com/sonlinux>`_ <mukomalison@gmail.com>
