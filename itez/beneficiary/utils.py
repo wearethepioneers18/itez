@@ -3,8 +3,9 @@ import uuid
 
 def generate_uuid_and_agent_code():
     """
-     This function generate a 7 digit code for agent and uuid.
+    Generates a seven digit agent ID and a unique ID.
     """
-    uuid_one = uuid.uuid4()
-    agent_code = str(uuid_one)[1:8].upper()
-    return uuid_one, agent_code
+    uu_id = uuid.uuid4()
+    agent_code = str(uu_id)[1:8].upper()
+    
+    return uu_id, agent_code
