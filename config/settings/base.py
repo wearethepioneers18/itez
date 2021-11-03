@@ -61,7 +61,7 @@ DJANGO_APPS = [
     "django.contrib.staticfiles",
     # "django.contrib.humanize", # Handy template tags
     "django.contrib.admin",
-    "django.forms",
+    "django.forms",  
 ]
 THIRD_PARTY_APPS = [
     "crispy_forms",
@@ -72,6 +72,7 @@ THIRD_PARTY_APPS = [
     "rest_framework",
     "rest_framework.authtoken",
     "corsheaders",
+    "rolepermissions"
 ]
 
 LOCAL_APPS = [
@@ -312,3 +313,8 @@ REST_FRAMEWORK = {
 CORS_URLS_REGEX = r"^/api/.*$"
 # Your stuff...
 # ------------------------------------------------------------------------------
+
+
+# django-role-permissions
+ROLEPERMISSIONS_MODULE = 'config.settings.roles'
+# ROLEPERMISSIONS_REGISTER_ADMIN = True
