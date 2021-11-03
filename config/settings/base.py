@@ -317,4 +317,3 @@ CORS_URLS_REGEX = r"^/api/.*$"
 
 # django-role-permissions
 ROLEPERMISSIONS_MODULE = 'config.settings.roles'
-# ROLEPERMISSIONS_REGISTER_ADMIN = True
