@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 volumes:
   local_postgres_data: {}
@@ -10,6 +10,7 @@ services:
       context: .
       dockerfile: ./compose/local/django/Dockerfile
     image: itez_local_django
+    restart: always
     container_name: django
     depends_on:
       - postgres
@@ -24,16 +25,20 @@ services:
     command: /start
 
   postgres:
-    build:
-      context: .
-      dockerfile: ./compose/production/postgres/Dockerfile
-    image: itez_production_postgres
+    # build:
+    #   context: .
+    #   dockerfile: ./compose/production/postgres/Dockerfile
+    image: kartoza/postgis:9.6-2.4
+    restart: always
     container_name: postgres
     volumes:
       - local_postgres_data:/var/lib/postgresql/data:Z
       - local_postgres_data_backups:/backups:z
-    env_file:
-      - ./.envs/.local/.postgres
+    environment:
+      - ALLOW_IP_RANGE=0.0.0.0/0
+      - POSTGRES_USER=debug
+      - POSTGRES_PASS=debug
+      - POSTGRES_DBNAME=itez
 
   docs:
     image: itez_local_docs
@@ -64,6 +69,7 @@ services:
   celeryworker:
     <<: *django
     image: itez_local_celeryworker
+    restart: always
     container_name: celeryworker
     depends_on:
       - redis
@@ -86,6 +92,7 @@ services:
   flower:
     <<: *django
     image: itez_local_flower
+    restart: always
     container_name: flower
     ports:
       - "5555:5555"
