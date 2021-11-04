@@ -45,6 +45,26 @@ class District(models.Model):
         return self.name
 
 
+class ServiceArea(models.Model):
+    """
+    Define service area properties
+    """
+    name = models.CharField(
+        _('Service Area'),
+        max_length=200
+    )
+
+    district = models.ForeignKey(
+        District,
+        on_delete=PROTECT
+    )
+
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
+
 class WorkDetail(models.Model):
     """
     Include Work Detail properties. 
