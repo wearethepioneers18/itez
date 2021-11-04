@@ -3,15 +3,20 @@ from rolepermissions.roles import AbstractUserRole
 
 class SystemAdmin(AbstractUserRole):
     """
-    Added custom user roles for system admin as follows.
+    Defines custom role permissions for a System Admin.
 
-    System Admin can drop tables.
-    
-    System Admin can manage project manager accounts.
-    
-    System Admin can manage field data collected.
-    
-    System Admin can manage reports generated.
+    Parameters
+    ----------
+
+    AbstractUserRole: str
+    A base factory object implementing role permission management
+
+    Permissions
+    -----------
+    >> Can drop database tables.
+    >> Can manage project manager accounts, roles, permissions.
+    >> Can manage field data saved on the database.
+    >> Can manage reports generated.
     """
     available_permissions = {
         'can_drop_tables': True,
@@ -22,13 +27,19 @@ class SystemAdmin(AbstractUserRole):
 
 class ProjectManagement(AbstractUserRole):
     """
-    Added custom user roles for Project Manager as follows.
-    
-    Project Manager can view content.
-    
-    Project Manager can manage field personnel accounts.
-    
-    Project Manager can manage donor accounts.
+    Defines custom role permissions for a Project Manager.
+
+    Parameters
+    ----------
+
+    AbstractUserRole: str
+    A base factory object implementing role permission management
+
+    Permissions
+    -----------
+    >> Can view database content.
+    >> Can manage field personnel accounts.
+    >> Can manage donor accounts.
     """
     available_permissions = {
         'can_view_content': True,
@@ -38,15 +49,20 @@ class ProjectManagement(AbstractUserRole):
 
 class DatabaseAdministrator(AbstractUserRole):
     """
-    Added custom user roles for Database Administrator as follows.
-    
-    Database Administrator can view content.
-    
-    Database Administrator can manage field reports.
-    
-    Database Administrator can manage reports.
-    
-    Database Administrator can manage api data.
+    Defines custom role permissions for a Database Administrator.
+
+    Parameters
+    ----------
+
+    AbstractUserRole: str
+    A base factory object implementing role permission management
+
+    Permissions
+    -----------
+    >> Can view database content.
+    >> Can manage field reports saved on the databse.
+    >> Can manage all other reports generated.
+    >> Can manage api data.
     """
     available_permissions = {
         'can_view_content': True,
@@ -57,11 +73,18 @@ class DatabaseAdministrator(AbstractUserRole):
 
 class DonorRepresentative(AbstractUserRole):
     """
-    Added custom user roles for Donor Representative as follows.
-    
-    Donor Representative can view content.
+    Defines custom role permissions for a Donor Representative.
 
-    Donor Representative can manage reports.
+    Parameters
+    ----------
+
+    AbstractUserRole: str
+    A base factory object implementing role permission management
+
+    Permissions
+    -----------
+    >> Can view database content.
+    >> can manage reports generated.
     """
     available_permissions = {
         'can_view_content': True,
@@ -70,13 +93,19 @@ class DonorRepresentative(AbstractUserRole):
 
 class FieldPersonnel(AbstractUserRole):
     """
-    Added custom user roles for Field Personnel.
+    Defines custom role permissions for a Field Personnel.
 
-    Field Personnel can view permissions.
+    Parameters
+    ----------
 
-    Field Personnel can collect data.
+    AbstractUserRole: str
+    A base factory object implementing role permission management
 
-    Field Personnel can create field reports. 
+    Permissions
+    -----------
+    >> Can view permissions.
+    >> Can collect and save data to the database.
+    >> Can create field reports.
     """
     available_permissions = {
         'can_view_permissions': True,
