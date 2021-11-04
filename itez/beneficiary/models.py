@@ -47,7 +47,7 @@ class District(models.Model):
 
 class ServiceArea(models.Model):
     """
-    Define service area properties
+    Define service area properties.
     """
     name = models.CharField(
         _('Service Area'),
