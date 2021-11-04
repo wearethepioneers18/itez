@@ -37,12 +37,10 @@ class ProjectManagement(AbstractUserRole):
 
     Permissions
     -----------
-    >> Can view database content.
     >> Can manage field personnel accounts.
     >> Can manage donor accounts.
     """
     available_permissions = {
-        'can_view_content': True,
         'can_manage_field_personnel': True,
         'can_manage_donors': True
     }
@@ -59,13 +57,11 @@ class DatabaseAdministrator(AbstractUserRole):
 
     Permissions
     -----------
-    >> Can view database content.
     >> Can manage field reports saved on the databse.
     >> Can manage all other reports generated.
     >> Can manage api data.
     """
     available_permissions = {
-        'can_view_content': True,
         'can_manage_field_reports': True,
         'can_manage_reports': True,
         'can_manage_api_data': True
@@ -83,11 +79,9 @@ class DonorRepresentative(AbstractUserRole):
 
     Permissions
     -----------
-    >> Can view database content.
     >> can manage reports generated.
     """
     available_permissions = {
-        'can_view_content': True,
         'can_manage_reports': True
     }
 
