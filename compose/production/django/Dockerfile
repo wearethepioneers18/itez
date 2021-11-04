@@ -23,8 +23,11 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
   # dependencies for building Python packages
   build-essential \
   # psycopg2 dependencies
-  libpq-dev
+  libpq-dev \
+  libgeos-dev \
+  libgdal-dev
 
+RUN pip install pygdal==$(gdal-config --version).*
 # Requirements are installed here to ensure they will be cached.
 COPY ./requirements .
 
@@ -55,6 +58,13 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
   libpq-dev \
   # Translations dependencies
   gettext \
+  # DGDAL dependencie
+  libproj-dev \
+  gdal-bin && \ 
+  echo "Installing GDAL dependencies" && \
+  apt-get install -y libgeos-dev libgdal-dev && \
+  # Trick is to rebuild build essential tools before gdal is reached
+  apt-get install -y --reinstall build-essential \
   # cleaning up unused files
   && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
   && rm -rf /var/lib/apt/lists/*
@@ -67,6 +77,7 @@ COPY --from=python-build-stage /usr/src/app/wheels  /wheels/
 RUN pip install --no-cache-dir --no-index --find-links=/wheels/ /wheels/* \
   && rm -rf /wheels/
 
+RUN pip install pygdal==2.1.2.3
 
 COPY --chown=django:django ./compose/production/django/entrypoint /entrypoint
 RUN sed -i 's/\r$//g' /entrypoint

@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 volumes:
   local_postgres_data: {}
@@ -10,10 +10,13 @@ services:
       context: .
       dockerfile: ./compose/local/django/Dockerfile
     image: itez_local_django
+    restart: always
     container_name: django
     depends_on:
-      - postgres
+      - db
       - mailhog
+    links:
+      - db
     volumes:
       - .:/app:z
     env_file:
@@ -23,17 +26,24 @@ services:
       - "8000:8000"
     command: /start
 
-  postgres:
-    build:
-      context: .
-      dockerfile: ./compose/production/postgres/Dockerfile
-    image: itez_production_postgres
-    container_name: postgres
+  db:
+    image: kartoza/postgis:9.6-2.4
+    restart: always
+    container_name: db
     volumes:
       - local_postgres_data:/var/lib/postgresql/data:Z
-      - local_postgres_data_backups:/backups:z
-    env_file:
-      - ./.envs/.local/.postgres
+    environment:
+      - ALLOW_IP_RANGE=0.0.0.0/0
+      - POSTGRES_USER=docker
+      - POSTGRES_PASS=docker
+      - POSTGRES_DBNAME=itez
+      - POSTGRES_MULTIPLE_EXTENSIONS=postgis,hstore,postgis_topology,postgis_raster,pgrouting
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U docker"]
+      timeout: 10s
+      retries: 5
+    ports:
+      - "5432:5432"
 
   docs:
     image: itez_local_docs
@@ -64,10 +74,11 @@ services:
   celeryworker:
     <<: *django
     image: itez_local_celeryworker
+    restart: always
     container_name: celeryworker
     depends_on:
+      - db
       - redis
-      - postgres
       - mailhog
     ports: []
     command: /start-celeryworker
@@ -77,8 +88,8 @@ services:
     image: itez_local_celerybeat
     container_name: celerybeat
     depends_on:
+      - db
       - redis
-      - postgres
       - mailhog
     ports: []
     command: /start-celerybeat
@@ -86,6 +97,7 @@ services:
   flower:
     <<: *django
     image: itez_local_flower
+    restart: always
     container_name: flower
     ports:
       - "5555:5555"

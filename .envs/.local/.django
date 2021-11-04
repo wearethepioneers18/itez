@@ -10,5 +10,12 @@ REDIS_URL=redis://redis:6379/0
 # ------------------------------------------------------------------------------
 
 # Flower
-CELERY_FLOWER_USER=debug
-CELERY_FLOWER_PASSWORD=debug
+CELERY_FLOWER_USER=docker
+CELERY_FLOWER_PASSWORD=docker
+
+# Database
+DATABASE_NAME=itez
+DATABASE_USERNAME=docker
+DATABASE_PASSWORD=docker
+DATABASE_HOST=db
+DATABASE_PORT=5432

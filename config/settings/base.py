@@ -2,8 +2,8 @@
 Base settings to build other settings files upon.
 """
 from pathlib import Path
-
 import environ
+
 
 ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 # itez/
@@ -40,8 +40,18 @@ LOCALE_PATHS = [str(ROOT_DIR / "locale")]
 # DATABASES
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
-DATABASES = {"default": env.db("DATABASE_URL")}
-DATABASES["default"]["ATOMIC_REQUESTS"] = True
+# DATABASES = {"default": env.db("DATABASE_URL")}
+# DATABASES["default"]["ATOMIC_REQUESTS"] = True
+DATABASES = {
+    'default': {
+        'ENGINE': "django.contrib.gis.db.backends.postgis",
+        'NAME': env("DATABASE_NAME"),
+        'USER': env("DATABASE_USERNAME"),
+        'PASSWORD': env("DATABASE_PASSWORD"),
+        'HOST': env("DATABASE_HOST"),
+        'PORT': env("DATABASE_PORT"),
+    }
+}
 
 # URLS
 # ------------------------------------------------------------------------------
@@ -60,8 +70,9 @@ DJANGO_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # "django.contrib.humanize", # Handy template tags
-    "django.contrib.admin",
-    "django.forms",  
+    "django.contrib.admin",    
+    "django.contrib.gis",
+    "django.forms",
 ]
 THIRD_PARTY_APPS = [
     "crispy_forms",
