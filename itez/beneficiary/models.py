@@ -1,7 +1,62 @@
 from django.contrib.gis.db import models
+from django.db.models.fields.related import create_many_to_many_intermediary_model
 from django.utils.translation import gettext_lazy as _
-
 from .utils import generate_uuid_and_agent_code
+
+
+class AgentDetail(models.Model):
+    """
+    Create agent detail table with its attributes or columns.
+    """
+    MALE        =  1
+    FEMALE      =  2
+    TRANSGENDER =  3
+    OTHER       =  4
+
+    GENDER_CHOICES = (
+        (MALE, _("Male")),
+        (FEMALE, _("Female")),
+        (TRANSGENDER, _("Transgender")),
+        (OTHER, _("Other"))
+    )
+    first_name = models.CharField(
+        _("First Name"),
+        max_length=200,
+        null=True,
+        blank=True
+    )
+    last_name = models.CharField(
+        _("Second Name"),
+        max_length=200,
+        null=False
+    )
+    birthdate = models.DateField(
+        _("Birth Date"),
+        auto_now_add=False,
+        null=True,
+        blank=True
+    )
+    agend_ID = models.CharField(
+        _("Agent Id"),
+        default=generate_uuid_and_agent_code()[1],
+        max_length=100
+    )
+    gender = models.CharField(
+        _("Gender"),
+        max_length=50,
+        choices=GENDER_CHOICES,
+        default=OTHER
+    )
+    location = models.PointField(
+        _("Location"),
+        geography=True,
+        blank=True,
+        null=True,
+        srid=4326
+    )
+
+    def __str__(self):
+        return f"{self.first_name} {self.second_name}"
 
 
 class Beneficiary(models.Model):
@@ -56,40 +111,52 @@ class Beneficiary(models.Model):
         choices=GENDER,
     )
     profile_photo = models.ImageField(
+        _("Profile Photo"),
         upload_to="profile_photo/",
         null=True,
         blank=True
     )
     phone_number = models.CharField(
+        _("Phone Number"),
         max_length=20,
         null=True,
         blank=True
     )
     email = models.EmailField(
+        _("Email"),
         max_length=200,
         null=True,
         blank=True
     )
-    beneficiary_id = models.UUIDField(
+    beneficiary_ID = models.UUIDField(
         default=generate_uuid_and_agent_code()[0],
         editable=False
     )
+    agent_ID = models.ForeignKey(
+        AgentDetail,
+        on_delete=models.PROTECT,
+        default=generate_uuid_and_agent_code()[1]
+    )
     date_of_birth = models.DateField(_("Date of Birth"))
+
     marital_status = models.CharField(
         _("Marital Status"),
         choices=MARITAL_STATUS,
         max_length=100
     )
     name_of_spouse = models.CharField(
+        _("Phone Number"),
         max_length=200,
         null=True,
         blank=True
     )
     number_of_children = models.IntegerField(
+        _("Number of children"),
         null=True,
         blank=True
     )
     number_of_siblings = models.IntegerField(
+        _("Number of siblings"),
         null=True,
         blank=True
     )
@@ -98,18 +165,13 @@ class Beneficiary(models.Model):
         on_delete=models.PROTECT
     )
     education_level = models.CharField(
+        _("Education level"),
         max_length=300,
         null=True,
         blank=True,
         choices=EDUCATION_LEVEL
     )
     created = models.DateTimeField(auto_now_add=True)
-    location = models.PointField(
-        geography=True,
-        blank=True,
-        null=True,
-        srid=4326
-    )
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
@@ -205,7 +267,10 @@ class District(models.Model):
     Define district properties and corresponding methods.
     """
 
-    name = models.CharField(_("District"), max_length=255)
+    name = models.CharField(
+        _("District"), 
+        max_length=255
+    )
 
     province = models.ForeignKey(
         Province,
@@ -223,11 +288,19 @@ class ServiceArea(models.Model):
     Define service area properties.
     """
 
-    name = models.CharField(_("Service Area"), max_length=200)
+    name = models.CharField(
+        _("Service Area"), 
+        max_length=200
+    )
 
-    district = models.ForeignKey(District, on_delete=models.PROTECT)
+    district = models.ForeignKey(
+        District, 
+        on_delete=models.PROTECT
+    )
 
-    created = models.DateTimeField(auto_now_add=True)
+    created = models.DateTimeField(
+        auto_now_add=True
+    )
 
     def __str__(self):
         return self.name
@@ -241,6 +314,7 @@ class WorkDetail(models.Model):
     gross_pay = models.DecimalField(
         _("Monthly Salary"),
         decimal_places=2,
+  
         max_digits=1000,
         null=False
     )

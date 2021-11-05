@@ -5,6 +5,7 @@ from itez.beneficiary.models import (
     District,
     ServiceArea,
     WorkDetail,
+    AgentDetail,
     Beneficiary,
     BeneficiaryParent
 )
@@ -14,15 +15,19 @@ class BeneficiaryAdmin(OSMGeoAdmin):
     list_display = [
         "first_name",
         "last_name",
-        "beneficiary_id",
+        "beneficiary_ID",
         "created",
-        "location",
         "parent_details"
     ]
 
 
 class BeneficiaryParentAdmin(admin.ModelAdmin):
-    list_display = ["father_first_name", "father_last_name", "mother_first_name", "mother_last_name"]
+    list_display = [
+        "father_first_name",
+        "father_last_name",
+        "mother_first_name", 
+        "mother_last_name"
+    ]
 
 class ProvinceAdmin(admin.ModelAdmin):
     list_display = ["name", "created"]
@@ -45,9 +50,20 @@ class WorkDetailAdmin(admin.ModelAdmin):
     ]
 
 
+class AgentDetailAdmin(admin.ModelAdmin):
+    list_display = [
+        'first_name',
+        'last_name',
+        'birthdate',
+        'agend_ID',
+        'gender',
+        'location'
+    ]
+
 admin.site.register(Province, ProvinceAdmin)
 admin.site.register(District, DistrictAdmin)
 admin.site.register(ServiceArea, ServiceAreaAdmin)
+admin.site.register(AgentDetail, AgentDetailAdmin)
 admin.site.register(WorkDetail, WorkDetailAdmin)
 admin.site.register(Beneficiary, BeneficiaryAdmin)
 admin.site.register(BeneficiaryParent, BeneficiaryParentAdmin)
