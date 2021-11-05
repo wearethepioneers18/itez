@@ -14,6 +14,7 @@ if settings.DEBUG:
 else:
     router = SimpleRouter()
 
+
 router.register("users", UserViewSet)
 router.register("provinces", ProvinceAPIView)
 router.register("districts", DistrictAPIView)
