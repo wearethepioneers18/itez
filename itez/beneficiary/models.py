@@ -1,5 +1,4 @@
 from django.contrib.gis.db import models
-from django.db.models.fields.related import create_many_to_many_intermediary_model
 from django.utils.translation import gettext_lazy as _
 
 from .utils import generate_uuid_and_agent_code
