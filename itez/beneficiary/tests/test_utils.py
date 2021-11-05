@@ -13,11 +13,6 @@ class UUIDAndAgentCode(TestCase):
         self.uuid_code = generate_uuid_and_agent_code()[0]
         self.agent_code = generate_uuid_and_agent_code()[1]
 
-    def tearDown(self):
-        """
-         This method is called for every test as well
-        """
-
     def test_uuid_valid(self):
         """
          This method tests for the validity of generated uuid.
