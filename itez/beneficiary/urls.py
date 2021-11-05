@@ -1,6 +1,6 @@
 from django.urls import path
+from . import views
 
-app_name = "users"
-urlpatterns = [
-    # path("~redirect/", view=user_redirect_view, name="redirect"),
-]
+
+app_name = "beneficiary"
+urlpatterns = []
