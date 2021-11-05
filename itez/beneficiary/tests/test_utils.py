@@ -1,23 +1,6 @@
-# from uuid import uuid4
-
-
 from django.test import TestCase
 
 from itez.beneficiary.utils import generate_uuid_and_agent_code
-
-# import uuid
-# from uuid import UUID
-
-# class UuidTest(TestCase):
-#     def test_uuid_function(self):
-#         uuid_one = uuid.uuid4()
-
-#         self.assertEquals(uuid_one, uuid.UUID().version == 4)
-
-#     def test_uuid_length(self):
-#         uuid_one = generate_uuid_and_agent_code()[0]
-#         agent_code_length = len(str(uuid_one)[1:8].upper())
-#         self.assertEquals(agent_code_length, 7)
 
 
 class UUIDAndAgentCode(TestCase):
