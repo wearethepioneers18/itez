@@ -3,12 +3,12 @@ from django.test import TestCase
 from itez.beneficiary.utils import generate_uuid_and_agent_code
 
 
-class UUIDAndAgentCode(TestCase):
+class TestUUIDAndAgentCode(TestCase):
 
     def setUp(self):
         """
          This method is called for every test that runs and 
-         helps with variable declaration
+         helps with variable declaration.
         """
         self.uuid_code = generate_uuid_and_agent_code()[0]
         self.agent_code = generate_uuid_and_agent_code()[1]
