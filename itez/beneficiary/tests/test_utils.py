@@ -34,6 +34,6 @@ class UUIDAndAgentCode(TestCase):
 
     def test_agent_code_upper(self):
         """
-         This function tests for capitalization.
+         This function tests for capitalization of agent code.
         """
         self.assertEqual((self.agent_code), self.agent_code.upper())
