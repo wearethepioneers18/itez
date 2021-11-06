@@ -1,7 +1,7 @@
 ITEZ
 ====
 
-Platform to manage Intersex and Trans-persons in Zambia.
+Platform to manage Intersex and Trans-persons in Zambia. As a Headless Backend API Service.
 
 .. image:: https://img.shields.io/badge/built%20with-Cookiecutter%20Django-ff69b4.svg?logo=cookiecutter
      :target: https://github.com/cookiecutter/cookiecutter-django/
