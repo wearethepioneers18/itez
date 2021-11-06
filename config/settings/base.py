@@ -316,8 +316,6 @@ STATICFILES_FINDERS += ["compressor.finders.CompressorFinder"]
 # django-rest-framework - https://www.django-rest-framework.org/api-guide/settings/
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework.authentication.SessionAuthentication",
-        "rest_framework.authentication.TokenAuthentication",
         'rest_framework_simplejwt.authentication.JWTAuthentication'
     ),
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
@@ -337,7 +335,6 @@ SPECTACULAR_SETTINGS = {
     'TITLE': 'ITEZ API',
     'DESCRIPTION': "Comprehensive data management of Intersex and Trans-persons in Zambia",
     'VERSION': '1.0.0',
-    # OTHER SETTINGS
 }
 
 # Settings for JWT Token Authentication.
