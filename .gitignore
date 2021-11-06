@@ -329,6 +329,8 @@ itez/media/
 
 .pytest_cache/
 
+# REST API
+schema.yml
 
 .ipython/
 .env
