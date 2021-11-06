@@ -25,4 +25,4 @@ django-role-permissions==3.1.1 # https://github.com/vintasoftware/django-role-pe
 djangorestframework==3.12.4  # https://github.com/encode/django-rest-framework
 django-cors-headers==3.10.0 # https://github.com/adamchainz/django-cors-headers
 djangorestframework-simplejwt==5.0.0  # https://github.com/jazzband/djangorestframework-simplejwt
-drf-openapi==1.3.0           # https://drf-openapi.readthedocs.io/en/latest/index.html
+drf-spectacular==0.20.2     # https://drf-spectacular.readthedocs.io/en/latest/index.html

@@ -42,8 +42,6 @@ LOCALE_PATHS = [str(ROOT_DIR / "locale")]
 # DATABASES
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
-# DATABASES = {"default": env.db("DATABASE_URL")}
-# DATABASES["default"]["ATOMIC_REQUESTS"] = True
 DATABASES = {
     'default': {
         'ENGINE': "django.contrib.gis.db.backends.postgis",
@@ -86,7 +84,8 @@ THIRD_PARTY_APPS = [
     "rest_framework.authtoken",
     "corsheaders",
     "rolepermissions",
-    "rest_framework_simplejwt"
+    "rest_framework_simplejwt",
+    "drf_spectacular",
 ]
 
 LOCAL_APPS = [
@@ -322,6 +321,7 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication'
     ),
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
 # django-cors-headers - https://github.com/adamchainz/django-cors-headers#setup
@@ -329,14 +329,18 @@ CORS_URLS_REGEX = r"^/api/.*$"
 # Your stuff...
 # ------------------------------------------------------------------------------
 
-
 # django-role-permissions
 ROLEPERMISSIONS_MODULE = 'config.settings.roles'
 
-"""
-Settings for JWT Token Authentication.
-"""
+# DRF SPECTACULAR CONFIGS
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'ITEZ API',
+    'DESCRIPTION': "Comprehensive data management of Intersex and Trans-persons in Zambia",
+    'VERSION': '1.0.0',
+    # OTHER SETTINGS
+}
 
+# Settings for JWT Token Authentication.
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),

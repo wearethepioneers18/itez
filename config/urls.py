@@ -4,17 +4,22 @@ from django.contrib import admin
 from django.urls import include, path
 from django.views import defaults as default_views
 from django.views.generic import TemplateView
+
 from rest_framework.authtoken.views import obtain_auth_token
+from drf_spectacular.views import (
+    SpectacularAPIView, 
+    SpectacularRedocView, 
+    SpectacularSwaggerView
+    )
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
 
 
-
 urlpatterns = [
 
-    path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),
+    path("index", TemplateView.as_view(template_name="pages/home.html"), name="home"),
     path(
         "about/", TemplateView.as_view(template_name="pages/about.html"), name="about"
     ),
@@ -31,6 +36,13 @@ urlpatterns = [
 urlpatterns += [
     # API base url
     path("api/", include("config.api_router")),
+
+   # YOUR PATTERNS
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    # Optional UI:
+    path("", SpectacularRedocView.as_view(url_name="schema"), name="redoc"),
+    path("api/schema/swagger-ui/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
+
     # DRF auth token
     path("auth-token/", obtain_auth_token),
     # JWT auth token
@@ -38,6 +50,10 @@ urlpatterns += [
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     
 ]
+
+admin.site.site_header = "ITEZ"                   
+admin.site.index_title = "Data management of Intersex and Trans-persons in Zambia."                 
+admin.site.site_title = "ITEZ Administration" 
 
 if settings.DEBUG:
     # This allows the error pages to be debugged during development, just visit
