@@ -4,21 +4,19 @@ from django.utils.translation import gettext_lazy as _
 from .utils import generate_uuid_and_agent_code
 
 
+GENDER_CHOICES = (
+    ("Male", _("Male")),
+    ("Female", _("Female")),
+    ("Transgender", _("Transgender")),
+    ("Other", _("Other"))
+)
+
+
 class AgentDetail(models.Model):
     """
     Create agent detail table with its attributes or columns.
     """
-    MALE        =  1
-    FEMALE      =  2
-    TRANSGENDER =  3
-    OTHER       =  4
 
-    GENDER_CHOICES = (
-        (MALE, _("Male")),
-        (FEMALE, _("Female")),
-        (TRANSGENDER, _("Transgender")),
-        (OTHER, _("Other"))
-    )
     first_name = models.CharField(
         _("First Name"),
         max_length=200,
@@ -45,7 +43,7 @@ class AgentDetail(models.Model):
         _("Gender"),
         max_length=50,
         choices=GENDER_CHOICES,
-        default=OTHER
+        default=GENDER_CHOICES[3][0]
     )
     location = models.PointField(
         _("Location"),
@@ -56,20 +54,13 @@ class AgentDetail(models.Model):
     )
 
     def __str__(self):
-        return f"{self.first_name} {self.second_name}"
+        return f"{self.first_name} {self.last_name}"
 
 
 class Beneficiary(models.Model):
     """
     Implements the Beneficiary properties and required methods.
     """
-
-    GENDER = (
-        ("male", _("Male")),
-        ("female", _("Female")),
-        ("other", _("Other"))
-    )
-
     MARITAL_STATUS = (
         ("single", _("Single")),
         ("married", _("Married")),
@@ -108,7 +99,8 @@ class Beneficiary(models.Model):
     gender = models.CharField(
         _("Gender"),
         max_length=100,
-        choices=GENDER,
+        choices=GENDER_CHOICES,
+        default=GENDER_CHOICES[3][0]
     )
     profile_photo = models.ImageField(
         _("Profile Photo"),

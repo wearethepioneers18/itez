@@ -1,10 +1,42 @@
-from rest_framework import serializers
+from rest_framework import fields, serializers
 from itez.beneficiary.models import (
+    AgentDetail,
+    Beneficiary,
+    BeneficiaryParent,
     Province,
     District,
     ServiceArea,
     WorkDetail
 )
+
+
+
+class AgentDetailSerializer(serializers.ModelSerializer):
+    """
+    AgentDetail serializer.
+    """
+    class Meta:
+        model = AgentDetail
+        fields = '__all__'
+
+
+class BeneficiarySerializer(serializers.ModelSerializer):
+    """
+    Beneficiary serializer.
+    """
+    class Meta:
+        model = Beneficiary
+        fields = '__all__'
+
+
+class BeneficiaryParentSerializer(serializers.ModelSerializer):
+    """
+    BeneficiaryParent serializer.
+    """
+    class Meta:
+        model = BeneficiaryParent
+        fields = '__all__'
+
 
 class ProvinceModelSerializer(serializers.ModelSerializer):
     """

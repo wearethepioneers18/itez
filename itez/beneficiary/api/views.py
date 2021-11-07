@@ -1,3 +1,5 @@
+from rest_framework.views import APIView
+from rest_framework.response import Response
 from rest_framework.mixins import (
     ListModelMixin,
     RetrieveModelMixin,
@@ -7,6 +9,9 @@ from rest_framework.mixins import (
 from rest_framework.viewsets import GenericViewSet
 
 from itez.beneficiary.models import (
+    AgentDetail,
+    Beneficiary,
+    BeneficiaryParent,
     Province,
     District,
     ServiceArea,
@@ -14,11 +19,68 @@ from itez.beneficiary.models import (
 )
 
 from itez.beneficiary.api.serializers import (
+    AgentDetailSerializer,
+    BeneficiarySerializer,
+    BeneficiaryParentSerializer,
     ProvinceModelSerializer,
     DistrictModelSerializer,
     ServiceAreaModelSerializer,
     WorkDetailModelSerializer
 )
+
+
+class AgentDetailAPIView(ListModelMixin, CreateModelMixin,
+    GenericViewSet, RetrieveModelMixin, UpdateModelMixin):
+    """
+    API end point for AgentDetail model list, create and update.
+    """
+    queryset = AgentDetail.objects.all()
+    serializer_class = AgentDetailSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+
+class BeneficiaryAPIView(ListModelMixin, CreateModelMixin,
+    GenericViewSet, RetrieveModelMixin, UpdateModelMixin):
+    """
+    API end point for Beneficiary model list, create and update.
+    """
+    queryset = Beneficiary.objects.all()
+    serializer_class = BeneficiarySerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+
+class BeneficiaryParentAPIView(ListModelMixin, CreateModelMixin,
+    GenericViewSet, RetrieveModelMixin, UpdateModelMixin):
+    """
+    API end point for BeneficiaryParent model list, create and update.
+    """
+    queryset = BeneficiaryParent.objects.all()
+    serializer_class = BeneficiaryParentSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
 
 
 class ProvinceAPIView(ListModelMixin,RetrieveModelMixin,
