@@ -1,6 +1,10 @@
 from django.contrib.gis.db import models
 from django.db.models.fields.related import create_many_to_many_intermediary_model
 from django.utils.translation import gettext_lazy as _
+
+from imagekit.processors import ResizeToFill
+from imagekit.models import ProcessedImageField
+
 from .utils import generate_uuid_and_agent_code
 
 
@@ -102,9 +106,11 @@ class Beneficiary(models.Model):
         choices=GENDER_CHOICES,
         default=GENDER_CHOICES[3][0]
     )
-    profile_photo = models.ImageField(
-        _("Profile Photo"),
-        upload_to="profile_photo/",
+    profile_photo = ProcessedImageField(
+        upload_to='profile_photo',
+        processors=[ResizeToFill(512, 512)],
+        format='JPEG',
+        options={'quality': 100},
         null=True,
         blank=True
     )
