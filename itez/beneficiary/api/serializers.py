@@ -1,4 +1,4 @@
-from rest_framework import fields, serializers
+from rest_framework import serializers
 
 from itez.beneficiary.models import (
     AgentDetail,

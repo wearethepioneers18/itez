@@ -1,7 +1,12 @@
 from django.conf import settings
+
 from rest_framework.routers import DefaultRouter, SimpleRouter
 
-from itez.users.api.views import UserViewSet, ChangePasswordView
+from itez.users.api.views import (
+    UserViewSet,
+    ChangePasswordView,
+    RoleAPIView
+)
 from itez.beneficiary.api.views import (
     AgentDetailAPIView,
     BeneficiaryAPIView,
@@ -20,6 +25,7 @@ else:
 
 router.register("users", UserViewSet)
 router.register("users/change_password", ChangePasswordView)
+router.register("roles", RoleAPIView)
 router.register("agents", AgentDetailAPIView)
 router.register("beneficiaries", BeneficiaryAPIView)
 router.register("beneficiary_parents", BeneficiaryParentAPIView)

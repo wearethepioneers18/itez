@@ -1,12 +1,24 @@
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group
+
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from rest_framework.decorators import action
-from rest_framework.mixins import ListModelMixin, RetrieveModelMixin, UpdateModelMixin
+from rest_framework.mixins import (
+    ListModelMixin,
+    RetrieveModelMixin,
+    CreateModelMixin,
+    UpdateModelMixin,
+    DestroyModelMixin
+)
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
-from .serializers import UserSerializer, ChangePasswordSerializer
+from .serializers import (
+    UserSerializer,
+    ChangePasswordSerializer,
+    GroupModelSerializer
+)
 
 User = get_user_model()
 
@@ -33,3 +45,18 @@ class ChangePasswordView(UpdateModelMixin, GenericViewSet):
     queryset = User.objects.all()
     permission_classes = (IsAuthenticated,)
     serializer_class = ChangePasswordSerializer
+
+
+class RoleAPIView(ListModelMixin,RetrieveModelMixin, 
+    CreateModelMixin, UpdateModelMixin, 
+    GenericViewSet, DestroyModelMixin
+    ):
+    """
+    API endpoint for Group model to list, create, update and delete.
+    """
+    queryset = Group.objects.all()
+    serializer_class = GroupModelSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+

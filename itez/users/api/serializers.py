@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group
 from django.contrib.auth.password_validation import validate_password
 
 from rest_framework import serializers
@@ -70,3 +71,13 @@ class ChangePasswordSerializer(serializers.Serializer):
         instance.save()
 
         return instance
+
+
+class GroupModelSerializer(serializers.ModelSerializer):
+    """
+    Serializer for the Django Group model.
+    """
+    class Meta:
+        model = Group
+        fields = '__all__'
+        depth = 2
