@@ -23,7 +23,7 @@ from .serializers import (
 User = get_user_model()
 
 
-class UserViewSet(RetrieveModelMixin, ListModelMixin, UpdateModelMixin, GenericViewSet):
+class UserViewSet(RetrieveModelMixin, ListModelMixin, CreateModelMixin, UpdateModelMixin, GenericViewSet):
     serializer_class = UserSerializer
     queryset = User.objects.all()
     lookup_field = "username"
@@ -47,12 +47,9 @@ class ChangePasswordView(UpdateModelMixin, GenericViewSet):
     serializer_class = ChangePasswordSerializer
 
 
-class RoleAPIView(ListModelMixin,RetrieveModelMixin, 
-    CreateModelMixin, UpdateModelMixin, 
-    GenericViewSet, DestroyModelMixin
-    ):
+class RoleAPIView(ListModelMixin, RetrieveModelMixin, GenericViewSet):
     """
-    API endpoint for Group model to list, create, update and delete.
+    API endpoint to list All available Groups and roles.
     """
     queryset = Group.objects.all()
     serializer_class = GroupModelSerializer
