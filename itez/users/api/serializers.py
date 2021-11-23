@@ -3,18 +3,13 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.password_validation import validate_password
 
 from rest_framework import serializers
+from rest_framework.fields import ListField
+
+from rolepermissions.roles import assign_role
+
+from ..models import Profile, UserWorkDetail
 
 User = get_user_model()
-
-
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ["username", "name", "url"]
-
-        extra_kwargs = {
-            "url": {"view_name": "api:user-detail", "lookup_field": "username"}
-        }
 
 
 class ChangePasswordSerializer(serializers.Serializer):
@@ -73,11 +68,30 @@ class ChangePasswordSerializer(serializers.Serializer):
         return instance
 
 
-class GroupModelSerializer(serializers.ModelSerializer):
-    """
-    Serializer for the Django Group model.
-    """
+class UserProfileSerializer(serializers.ModelSerializer):
+    profile_photo = serializers.ImageField(required=False)
     class Meta:
-        model = Group
-        fields = '__all__'
+        model = Profile
+        exclude = ('user',)
+
+
+class UserWorkDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserWorkDetail
+        exclude = ('user',)
+
+
+
+class UserSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
+    roles = ListField(required=False, default=[], write_only=True)
+    assigned_roles = serializers.SerializerMethodField(read_only=True)
+    profile = UserProfileSerializer(required=False)
+    user_work_detail = UserWorkDetailSerializer(required=False)
+    class Meta:
+        model = User
+        fields = ["email", "username", "name", "password", "roles", "assigned_roles", "profile", "user_work_detail"]
         depth = 2
+    
+    def get_assigned_roles(self, user):
+        return [group.name for group in user.groups.all()]

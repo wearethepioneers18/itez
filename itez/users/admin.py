@@ -4,6 +4,8 @@ from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 
 from itez.users.forms import UserChangeForm, UserCreationForm
+from .models import Profile, UserWorkDetail
+
 
 User = get_user_model()
 
@@ -32,3 +34,7 @@ class UserAdmin(auth_admin.UserAdmin):
     )
     list_display = ["username", "name", "is_superuser"]
     search_fields = ["name"]
+
+
+admin.site.register(Profile)
+admin.site.register(UserWorkDetail)

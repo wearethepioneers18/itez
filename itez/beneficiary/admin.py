@@ -1,5 +1,4 @@
 from django.contrib import admin
-from django.contrib.gis.admin import OSMGeoAdmin
 from itez.beneficiary.models import (
     Province,
     District,
@@ -11,11 +10,11 @@ from itez.beneficiary.models import (
 )
 
 
-class BeneficiaryAdmin(OSMGeoAdmin):
+class BeneficiaryAdmin(admin.ModelAdmin):
     list_display = [
         "first_name",
         "last_name",
-        "beneficiary_ID",
+        "beneficiary_id",
         "created",
         "parent_details"
     ]
@@ -55,7 +54,7 @@ class AgentDetailAdmin(admin.ModelAdmin):
         'first_name',
         'last_name',
         'birthdate',
-        'agend_ID',
+        'agend_id',
         'gender',
         'location'
     ]

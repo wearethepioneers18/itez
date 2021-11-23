@@ -7,7 +7,4 @@ class UsersConfig(AppConfig):
     verbose_name = _("Users")
 
     def ready(self):
-        try:
-            import itez.users.signals  # noqa F401
-        except ImportError:
-            pass
+        import itez.users.signals  # noqa F401

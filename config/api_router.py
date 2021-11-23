@@ -25,7 +25,7 @@ else:
 
 router.register("users", UserViewSet)
 router.register("users/change_password", ChangePasswordView)
-router.register("roles", RoleAPIView)
+router.register("roles", RoleAPIView, basename="roles")
 router.register("agents", AgentDetailAPIView)
 router.register("beneficiaries", BeneficiaryAPIView)
 router.register("beneficiary_parents", BeneficiaryParentAPIView)

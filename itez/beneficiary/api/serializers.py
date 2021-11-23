@@ -74,5 +74,6 @@ class WorkDetailModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = WorkDetail
         fields = '__all__'
+        depth = 2
         
 
