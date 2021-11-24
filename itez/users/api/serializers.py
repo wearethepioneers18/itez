@@ -83,15 +83,45 @@ class UserWorkDetailSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True)
     roles = ListField(required=False, default=[], write_only=True)
     assigned_roles = serializers.SerializerMethodField(read_only=True)
     profile = UserProfileSerializer(required=False)
     user_work_detail = UserWorkDetailSerializer(required=False)
     class Meta:
         model = User
-        fields = ["email", "username", "name", "password", "roles", "assigned_roles", "profile", "user_work_detail"]
+        fields = [
+            "email", 
+            "username", 
+            "name", 
+            "password", 
+            "roles", 
+            "assigned_roles", 
+            "profile", 
+            "user_work_detail"
+        ]
+        extra_kwargs = {
+            'email': {'required': True, 'min_length': 8}, 
+            'username': {'required': False, 'min_length': 4},
+            'name': {'required': True, 'min_length': 8},
+            'password': {'required': True, "write_only": True, 'min_length': 8},
+        }
         depth = 2
+    
+    def create(self, validated_data):
+        user = User.objects.create(
+            username=validated_data['username'],
+            email=validated_data['username'],
+            name=validated_data['username']
+        )
+        user.set_password(validated_data['password'])
+        user.save()
+
+        roles_to_assign = validated_data.get("roles", [])
+        if roles_to_assign:
+            for role in roles_to_assign:
+                assign_role(user, role)
+                
+        return user
     
     def get_assigned_roles(self, user):
         return [group.name for group in user.groups.all()]
