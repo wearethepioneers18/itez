@@ -54,7 +54,7 @@ class AgentDetailAdmin(admin.ModelAdmin):
         'first_name',
         'last_name',
         'birthdate',
-        'agend_id',
+        'agent_id',
         'gender',
         'location'
     ]

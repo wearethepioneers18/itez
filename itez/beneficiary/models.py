@@ -39,7 +39,7 @@ class AgentDetail(models.Model):
         null=True,
         blank=True
     )
-    agend_id = models.CharField(
+    agent_id = models.CharField(
         max_length=100,
         editable=False
     )

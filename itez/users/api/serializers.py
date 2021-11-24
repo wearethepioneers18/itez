@@ -100,8 +100,8 @@ class UserSerializer(serializers.ModelSerializer):
             "user_work_detail"
         ]
         extra_kwargs = {
-            'email': {'required': True, 'min_length': 8}, 
-            'username': {'required': False, 'min_length': 4},
+            'email': {'required': False, 'min_length': 8}, 
+            'username': {'required': True, 'min_length': 4},
             'name': {'required': True, 'min_length': 8},
             'password': {'required': True, "write_only": True, 'min_length': 8},
         }
