@@ -62,9 +62,9 @@ class DrugAPIView(APIView):
         except Drug.DoesNotExist:
             raise Http404
 
-    def get(self, request, pk, format=None):
-        drug = self.get_object(pk)
-        serializer = DrugSerializer(drug)
+    def get(self, request, format=None):
+        drug = Drug.objects.all()
+        serializer = DrugSerializer(drug, many=True)
         return Response(serializer.data)
 
     def put(self, request, pk, format=None):
@@ -91,9 +91,9 @@ class LabAPIView(APIView):
         except Lab.DoesNotExist:
             raise Http404
 
-    def get(self, request, pk, format=None):
-        lab = self.get_object(pk)
-        serializer = LabSerializer(lab)
+    def get(self, request, format=None):
+        lab = Lab.objects.all()
+        serializer = LabSerializer(lab, many=True)
         return Response(serializer.data)
 
     def put(self, request, pk, format=None):
@@ -120,9 +120,9 @@ class PrescriptionAPIView(APIView):
         except Prescription.DoesNotExist:
             raise Http404
 
-    def get(self, request, pk, format=None):
-        prescription = self.get_object(pk)
-        serializer = PrescriptionSerializer(prescription)
+    def get(self, request, format=None):
+        prescription = Prescription.objects.all()
+        serializer = PrescriptionSerializer(prescription, many=True)
         return Response(serializer.data)
 
     def put(self, request, pk, format=None):
@@ -149,9 +149,9 @@ class FacilityAPIView(APIView):
         except Facility.DoesNotExist:
             raise Http404
 
-    def get(self, request, pk, format=None):
-        facility = self.get_object(pk)
-        serializer = FacilitySerializer(facility)
+    def get(self, request, format=None):
+        facility = Facility.objects.all()
+        serializer = FacilitySerializer(facility, many=True)
         return Response(serializer.data)
 
     def put(self, request, pk, format=None):
@@ -178,7 +178,12 @@ class FacilityTypeAPIView(APIView):
         except FacilityType.DoesNotExist:
             raise Http404
 
-    def get(self, request, pk, format=None):
+    def get(self, request, format=None):
+        facility_type = Facility.objects.all()
+        serializer = FacilityTypeSerializer(facility_type, many=True)
+        return Response(serializer.data)
+
+    def put(self, request, pk, format=None):
         facility_type = self.get_object(pk)
         serializer = FacilityTypeSerializer(facility_type, data=request.data)
         if serializer.is_valid():
@@ -201,7 +206,12 @@ class ImplementingPartnerAPIView(APIView):
         except ImplementingPartner.DoesNotExist:
             raise Http404
 
-    def get(self, request, pk, format=None):
+    def get(self, request, format=None):
+        implementing_partner = ImplementingPartner.objects.all()
+        serializer = ImplementingPartnerSerializer(implementing_partner, many=True)
+        return Response(serializer.data)
+
+    def put(self, request, pk, format=None):
         implementing_partner = self.get_object(pk)
         serializer = ImplementingPartnerSerializer(implementing_partner, data=request.data)
         if serializer.is_valid():
@@ -225,9 +235,14 @@ class ServiceAPIView(APIView):
         except Service.DoesNotExist:
             raise Http404
 
-    def get(self, request, pk, format=None):
-        Service = self.get_object(pk)
-        serializer = ServiceSerializer(Service, data=request.data)
+    def get(self, request, format=None):
+        service = Service.objects.all()
+        serializer = ServiceSerializer(service, many=True)
+        return Response(serializer.data)
+
+    def put(self, request, pk, format=None):
+        service = self.get_object(pk)
+        serializer = ServiceSerializer(service, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -249,9 +264,20 @@ class ServiceProviderPersonelAPIView(APIView):
         except ServiceProviderPersonel.DoesNotExist:
             raise Http404
 
-    def get(self, request, pk, format=None):
+    def get(self, request, format=None):
+        service_provider_personel = Service.objects.all()
+        serializer = ServiceProviderPersonelSerializer(
+            service_provider_personel, 
+            many=True
+            )
+        return Response(serializer.data)
+
+    def put(self, request, pk, format=None):
         service_provider_personel = self.get_object(pk)
-        serializer = ServiceProviderPersonelSerializer(service_provider_personel, data=request.data)
+        serializer = ServiceProviderPersonelSerializer(
+            service_provider_personel, 
+            data=request.data
+            )
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -273,9 +299,20 @@ class ServiceProviderPersonelQualificationAPIView(APIView):
         except ServiceProviderPersonelQualification.DoesNotExist:
             raise Http404
 
-    def get(self, request, pk, format=None):
+    def get(self, request, format=None):
+        service_provider_personel_qualification = Service.objects.all()
+        serializer = ServiceProviderPersonelQualificationSerializer(
+            service_provider_personel_qualification, 
+            many=True
+            )
+        return Response(serializer.data)
+
+    def put(self, request, pk, format=None):
         service_provider_personel_qualification = self.get_object(pk)
-        serializer = ServiceProviderPersonelQualificationSerializer(service_provider_personel_qualification, data=request.data)
+        serializer = ServiceProviderPersonelSerializer(
+            service_provider_personel_qualification, 
+            data=request.data
+            )
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
