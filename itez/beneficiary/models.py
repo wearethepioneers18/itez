@@ -1,4 +1,5 @@
 from django.contrib.gis.db import models
+from django.contrib.gis.db.models import fields
 from django.utils.translation import gettext_lazy as _
 
 from imagekit.processors import ResizeToFill
@@ -137,7 +138,9 @@ class Beneficiary(models.Model):
     )
     agent = models.ForeignKey(
         AgentDetail,
-        on_delete=models.PROTECT
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True
     )
     date_of_birth = models.DateField(_("Date of Birth"))
 
@@ -192,15 +195,21 @@ class BeneficiaryParent(models.Model):
     )
     father_last_name = models.CharField(
         _("Father Last Name"),
-        max_length=200
+        max_length=250,
+        null=True,
+        blank=True
     )
     mother_first_name = models.CharField(
         _("Mother First Name"),
-        max_length=200
+        max_length=250,
+        null=True,
+        blank=True
     )
     mother_last_name = models.CharField(
         _("Mother Last Name"),
-        max_length=200
+        max_length=250,
+        null=True,
+        blank=True
     )
     address = models.TextField(
         max_length=300,
@@ -491,3 +500,193 @@ class ServiceProviderPersonel(models.Model):
     
     def __str__(self):
         return f"Service Provider: {self.first_name} {self.last_name}"
+
+class Drug(models.Model):
+    """
+    Beneficiary's prescribed Drug. 
+    """
+    beneficiary = models.ForeignKey(
+        Beneficiary,
+        on_delete=models.CASCADE,
+    )
+    name = models.CharField(
+        _("Drug Name"),
+        max_length=200,
+        null=True,
+        blank=True
+    )
+    manufacturer = models.DateField(
+        _("Drug Manufacturer"),
+        auto_created=False,
+        null=True,
+        blank=True
+    )
+    expiry_date = models.DateField(
+        _("Drug Expiry Date"),
+        auto_created=False,
+        null=True,
+        blank=True
+    )
+    created = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return self.name
+
+
+class Prescription(models.Model):
+    """
+    Beneficiary health Facility Prescription data.
+    """
+    title = models.CharField(
+        _("Prescription Title"),
+        max_length=200,
+        null=True,
+        blank=True
+    )
+    beneficiary = models.ForeignKey(
+        Beneficiary,
+        on_delete=models.CASCADE,
+    )
+    drugs = models.ManyToManyField(
+        Drug
+    )
+    service_provider = models.ForeignKey(
+        ServiceProviderPersonel,
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True
+    )
+    facility = models.ForeignKey(
+        Facility,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL
+    )
+    date = models.DateTimeField(
+        auto_now_add=False,
+        null=True,
+        blank=True
+    )
+    comment = models.TextField(
+        _("Extra Details/Comment"),
+        null=True,
+        blank=True
+    )
+    class Meta:
+        verbose_name = _("Prescription")
+        verbose_name_plural = _("Prescription")
+    
+    def __str__(self):
+        return f"{self.title} Prescription for: {self.beneficiary}"
+
+class Lab(models.Model):
+    """
+    Beneficiary's Lab Tests.
+    """
+    title = models.CharField(
+        _("Lab Diagnosis Title"),
+        max_length=200,
+        null=True,
+        blank=True
+    )
+    beneficiary = models.ForeignKey(
+        Beneficiary,
+        on_delete=models.CASCADE,
+    )
+    service_provider = models.ForeignKey(
+        ServiceProviderPersonel,
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True
+    )
+    facility = models.ForeignKey(
+        Facility,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL
+    )
+    date = models.DateTimeField(
+        auto_now_add=False,
+        null=True,
+        blank=True
+    )
+    comment = models.TextField(
+        _("Extra Details/Comment"),
+        null=True,
+        blank=True
+    )
+    class Meta:
+        verbose_name = _("Prescription")
+        verbose_name_plural = _("Prescription")
+    
+    def __str__(self):
+        return f"{self.title} Prescription for: {self.beneficiary}"
+
+HTS = 1
+LAB = 2
+PHARMACY = 2
+SERVICE_TYPES =  (
+    (HTS, _('HTS (HIV Testing Services)')),
+    (LAB, _('LAB')),
+    (PHARMACY, _('PHARMACY')),
+)
+
+OPD = 1
+ART = 2
+CLIENT_TYPES =  (
+    (OPD, _('OPD (Outpatient Departments )')),
+    (ART, _('ART (Antiretroviral Therapy)')),
+)
+
+
+class Service(models.Model):
+    """
+    Service provision to Beneficiary.
+    """
+    title = models.CharField(
+        _("Service Title"),
+        max_length=255,
+    )
+    service_personnel = models.ForeignKey(
+        ServiceProviderPersonel,
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True
+    )
+    client_type = models.CharField(
+        _("Client Type"),
+        max_length=255,
+        null=True,
+        blank=True,
+        choices=CLIENT_TYPES
+    )
+    service_type = models.CharField(
+        _("Service Type"),
+        max_length=255,
+        null=True,
+        blank=True,
+        choices=SERVICE_TYPES
+    )
+    document = models.FileField(
+        _("Supporting Document"),
+        null=True,
+        blank=True,
+        upload_to="lab_documents/%Y/%m/%d/"
+    )
+    datetime = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    comments = models.TextField(
+        _("Comments"),
+        null=True,
+        blank=True,
+        help_text=_("Extra comments if any."),
+    )
+    class Meta:
+        verbose_name = 'Service'
+        verbose_name_plural = 'Services'
+
+    def __str__(self):
+        return self.title
+

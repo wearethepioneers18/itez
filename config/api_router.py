@@ -14,7 +14,16 @@ from itez.beneficiary.api.views import (
     ProvinceAPIView,
     DistrictAPIView,
     ServiceAreaAPIView,
-    WorkDetailAPIView
+    WorkDetailAPIView,
+    DrugAPIView,
+    LabAPIView,
+    PrescriptionAPIView,
+    FacilityAPIView,
+    FacilityTypeAPIView,
+    ImplementingPartnerAPIView,
+    ServiceAPIView,
+    ServiceProviderPersonelAPIView,
+    ServiceProviderPersonelQualificationAPIView,
 )
 
 if settings.DEBUG:
@@ -23,16 +32,91 @@ else:
     router = SimpleRouter()
 
 
-router.register("users", UserViewSet)
-router.register("users/change_password", ChangePasswordView)
-router.register("roles", RoleAPIView, basename="roles")
-router.register("agents", AgentDetailAPIView)
-router.register("beneficiaries", BeneficiaryAPIView)
-router.register("beneficiary_parents", BeneficiaryParentAPIView)
-router.register("provinces", ProvinceAPIView)
-router.register("districts", DistrictAPIView)
-router.register('service_area', ServiceAreaAPIView)
-router.register('work_detail', WorkDetailAPIView)
+router.register(
+    "user", 
+    UserViewSet
+    )
+router.register(
+    "users/change_password", 
+    ChangePasswordView
+    )
+router.register(
+    "role", 
+    RoleAPIView, 
+    basename="role"
+    )
+router.register(
+    "drug", 
+    DrugAPIView, 
+    basename='drug'
+    )
+router.register(
+    "labs", 
+    LabAPIView, 
+    basename='lab'
+    )
+router.register(
+    "prescription", 
+    PrescriptionAPIView, 
+    basename='prescriptions'
+    )
+router.register(
+    "facility_type", 
+    FacilityTypeAPIView, 
+    )
+router.register(
+    "facility", 
+    FacilityAPIView, 
+    basename='facicility'
+    )
+router.register(
+    "implementing_partner", 
+    ImplementingPartnerAPIView, 
+    basename='implementing_partner'
+    )
+router.register(
+    "service", 
+    ServiceAPIView, 
+    basename='service'
+    )
+router.register(
+    "service_provider_personnel", 
+    ServiceProviderPersonelAPIView, 
+    basename='service_provider_personnel'
+    )
+router.register(
+    "service_provider_personnel_qualification", 
+    ServiceProviderPersonelQualificationAPIView, 
+    basename='service_provider_personnel_qualification'
+    )
+router.register(
+    "agent", 
+    AgentDetailAPIView
+    )
+router.register(
+    "beneficiarie", 
+    BeneficiaryAPIView
+    )
+router.register(
+    "beneficiary_parent", 
+    BeneficiaryParentAPIView
+    )
+router.register(
+    "province", 
+    ProvinceAPIView
+    )
+router.register(
+    "district", 
+    DistrictAPIView
+    )
+router.register(
+    "service_area", 
+    ServiceAreaAPIView
+    )
+router.register(
+    "work_detail", 
+    WorkDetailAPIView
+    )
 
 app_name = "api"
 urlpatterns = router.urls
