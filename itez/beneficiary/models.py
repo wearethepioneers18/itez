@@ -624,7 +624,7 @@ class Lab(models.Model):
 
 HTS = 1
 LAB = 2
-PHARMACY = 2
+PHARMACY = 3
 SERVICE_TYPES =  (
     (HTS, _('HTS (HIV Testing Services)')),
     (LAB, _('LAB')),
