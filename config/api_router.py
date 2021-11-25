@@ -14,9 +14,8 @@ from itez.beneficiary.api.views import (
     ProvinceAPIView,
     DistrictAPIView,
     ServiceAreaAPIView,
-    WorkDetailAPIView,
-
-)
+    WorkDetailAPIView
+    )
 
 if settings.DEBUG:
     router = DefaultRouter()
