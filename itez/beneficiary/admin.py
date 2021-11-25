@@ -29,8 +29,17 @@ class LabResource(resources.ModelResource):
 @admin.register(Lab)
 class LabAdmin(ImportExportModelAdmin):
     resource_class = LabResource
-    list_display = ('title', 'beneficiary__beneficiary_id', 'facility__name', 'date')
 
+    list_display = (
+        'title', 
+        'date'
+        )
+
+    search_fields = (
+        'title', 
+        'facility__name', 
+        'beneficiary__beneficiary_id', 
+        )
 
 class DrugResource(resources.ModelResource):
     class Meta:
@@ -39,7 +48,17 @@ class DrugResource(resources.ModelResource):
 @admin.register(Drug)
 class DrugAdmin(ImportExportModelAdmin):
     resource_class = DrugResource
-    list_display = ('name', 'beneficiary__beneficiary_id', 'manufacturer', 'expiry_date')
+
+    list_display = (
+        'name', 
+        'manufacturer', 
+        'expiry_date'
+        )
+
+    search_fields = (
+        'name', 
+        'beneficiary__beneficiary_id', 
+        )
 
 class PrescriptionResource(resources.ModelResource):
     class Meta:
@@ -48,7 +67,17 @@ class PrescriptionResource(resources.ModelResource):
 @admin.register(Prescription)
 class PrescriptionAdmin(ImportExportModelAdmin):
     resource_class = PrescriptionResource
-    list_display = ('title', 'beneficiary__beneficiary_id', 'service_provider__first_name', 'facility__name')
+    list_display = (
+        'title', 
+        'date'
+        )
+
+    search_fields = (
+        'title', 
+        'beneficiary__beneficiary_id', 
+        'service_provider__first_name', 
+        'facility__name'
+        )
 
 class ServiceResource(resources.ModelResource):
     class Meta:
@@ -57,21 +86,19 @@ class ServiceResource(resources.ModelResource):
 @admin.register(Service)
 class ServiceAdmin(ImportExportModelAdmin):
     resource_class = ServiceResource
-    list_display = ('title', 'client_type', 'service_type', 'datetime')
+
+    list_display = (
+        'title', 
+        'client_type', 
+        'service_type', 
+        'datetime'
+        )
 
 class FacilityResource(resources.ModelResource):
 
     class Meta:
         model = Facility
 
-class BeneficiaryAdmin(admin.ModelAdmin):
-    list_display = [
-        "first_name",
-        "last_name",
-        "beneficiary_id",
-        "created",
-        "parent_details"
-    ]
 
 class BeneficiaryResource(resources.ModelResource):
     class Meta:
@@ -80,13 +107,30 @@ class BeneficiaryResource(resources.ModelResource):
 @admin.register(Beneficiary)
 class BeneficiaryAdmin(ImportExportModelAdmin):
     resource_class = BeneficiaryResource
+
     list_display = [
-        "father_first_name",
-        "father_last_name",
-        "mother_first_name", 
-        "mother_last_name"
+        "beneficiary_id",
+        "first_name",
+        "last_name",
+        "gender", 
+        "sex",
+        "phone_number",
+        "email",
+        "date_of_birth",
+        "education_level",
+    ]
+    search_fields = [
+        "sex",
+        "phone_number",
+        "email",
+        "beneficiary_id",
+        "first_name",
+        "last_name",
     ]
 
+class BeneficiaryResource(resources.ModelResource):
+    class Meta:
+        model = Beneficiary
 
 class BeneficiaryParentAdmin(admin.ModelAdmin):
     list_display = [
@@ -170,9 +214,7 @@ admin.site.register(District, DistrictAdmin)
 admin.site.register(ServiceArea, ServiceAreaAdmin)
 admin.site.register(AgentDetail, AgentDetailAdmin)
 admin.site.register(WorkDetail, WorkDetailAdmin)
-admin.site.register(Beneficiary, BeneficiaryAdmin)
 admin.site.register(BeneficiaryParent, BeneficiaryParentAdmin)
-admin.site.register(Facility, FacilityAdmin)
 admin.site.register(FacilityType, FacilityTypeAdmin)
 admin.site.register(ImplementingPartner, ImplementingPartnerAdmin)
 admin.site.register(ServiceProviderPersonel, ServiceProviderAdmin)

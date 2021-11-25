@@ -86,6 +86,7 @@ THIRD_PARTY_APPS = [
     "rolepermissions",
     "rest_framework_simplejwt",
     "drf_spectacular",
+    "import_export",
 ]
 
 LOCAL_APPS = [

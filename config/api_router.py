@@ -14,7 +14,8 @@ from itez.beneficiary.api.views import (
     ProvinceAPIView,
     DistrictAPIView,
     ServiceAreaAPIView,
-    WorkDetailAPIView
+    WorkDetailAPIView,
+
 )
 
 if settings.DEBUG:
@@ -23,16 +24,48 @@ else:
     router = SimpleRouter()
 
 
-router.register("users", UserViewSet)
-router.register("users/change_password", ChangePasswordView)
-router.register("roles", RoleAPIView, basename="roles")
-router.register("agents", AgentDetailAPIView)
-router.register("beneficiaries", BeneficiaryAPIView)
-router.register("beneficiary_parents", BeneficiaryParentAPIView)
-router.register("provinces", ProvinceAPIView)
-router.register("districts", DistrictAPIView)
-router.register('service_area', ServiceAreaAPIView)
-router.register('work_detail', WorkDetailAPIView)
+router.register(
+    "user", 
+    UserViewSet
+    )
+router.register(
+    "users/change_password", 
+    ChangePasswordView
+    )
+router.register(
+    "role", 
+    RoleAPIView, 
+    basename="role"
+    )
+
+router.register(
+    "agent", 
+    AgentDetailAPIView
+    )
+router.register(
+    "beneficiarie", 
+    BeneficiaryAPIView
+    )
+router.register(
+    "beneficiary_parent", 
+    BeneficiaryParentAPIView
+    )
+router.register(
+    "province", 
+    ProvinceAPIView
+    )
+router.register(
+    "district", 
+    DistrictAPIView
+    )
+router.register(
+    "service_area", 
+    ServiceAreaAPIView
+    )
+router.register(
+    "work_detail", 
+    WorkDetailAPIView
+    )
 
 app_name = "api"
 urlpatterns = router.urls

@@ -15,7 +15,17 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
-
+from itez.beneficiary.api.views import (
+    DrugAPIView,
+    LabAPIView,
+    PrescriptionAPIView,
+    FacilityAPIView,
+    FacilityTypeAPIView,
+    ImplementingPartnerAPIView,
+    ServiceAPIView,
+    ServiceProviderPersonelAPIView,
+    ServiceProviderPersonelQualificationAPIView
+)
 
 urlpatterns = [
 
@@ -42,6 +52,53 @@ urlpatterns += [
     # Optional UI:
     path("", SpectacularRedocView.as_view(url_name="schema"), name="redoc"),
     path("swagger/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
+
+    # Additional APIViews
+    path(
+        "lab/", 
+        LabAPIView.as_view(), 
+        name='lab'
+        ),
+    path(
+        "drug/", 
+        DrugAPIView.as_view(), 
+        name='drug'
+        ),
+    path(
+        "service/", 
+        ServiceAPIView.as_view(), 
+        name='service'
+        ),
+    path(
+        "facility/", 
+        FacilityAPIView.as_view(), 
+        name='facility'
+        ),
+    path(
+        "prescription/", 
+        PrescriptionAPIView.as_view(), 
+        name='prescription'
+        ),
+    path(
+        "facility_type/", 
+        FacilityTypeAPIView.as_view(), 
+        name='facility_type'
+        ),
+    path(
+        "implementing_partner/", 
+        ImplementingPartnerAPIView.as_view(), 
+        name='implementing_partner'
+        ),
+    path(
+        "service_provider_personnel/", 
+        ServiceProviderPersonelAPIView.as_view(), 
+        name='service_provider_personnel'
+        ),
+    path(
+        "service_provider_personnel_qualification/", 
+        ServiceProviderPersonelQualificationAPIView.as_view(), 
+        name='service_provider_personnel_qualification'
+        ),
 
     # DRF auth token
     path("auth-token/", obtain_auth_token),
