@@ -173,6 +173,7 @@ class Beneficiary(models.Model):
         blank=True,
         choices=EDUCATION_LEVEL
     )
+    service_provider = models.ManyToManyField('ServiceProviderPersonel')
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -307,7 +308,6 @@ class ServiceArea(models.Model):
     def __str__(self):
         return self.name
 
-
 class WorkDetail(models.Model):
     """
     Include Work Detail properties.
@@ -343,3 +343,151 @@ class WorkDetail(models.Model):
 
     def __str__(self):
         return self.company
+
+
+NGO = 1
+COMPANY = 2
+GOVERNMENT = 3
+OTHER = 4
+IP_TYPES =  (
+    (NGO, _('Non-Profit Organization')),
+    (COMPANY, _('Company')),
+    (GOVERNMENT, _('Government')),
+    (OTHER, _('Other')),
+)
+class ImplementingPartner(models.Model):
+    name = models.CharField(
+        _('Name'),
+        max_length=200,
+    )
+
+    ip_type = models.IntegerField(
+        _('Type'),
+        choices=IP_TYPES,
+        default=NGO,
+    )
+
+    is_active = models.BooleanField(
+        _('Is Active'),
+        default=True,
+        help_text=_('Is still an active Implementing Partner'),
+    )
+
+    def __str__(self):
+        return self.name
+
+class FacilityType(models.Model):
+    name = models.CharField(
+        _('Facility Type Name'),
+        max_length=200,
+    )
+
+    def __str__(self):
+        return self.name.title()
+
+
+class Facility(models.Model):
+    hmis_code = models.CharField(
+        _('HMIS Code'),
+        max_length=100,
+        null=True,
+        blank=True
+    )
+    province = models.ForeignKey(
+        Province,
+        default="",
+        on_delete=models.CASCADE,
+        verbose_name=_("Province"),
+    )
+
+    district = models.ForeignKey(
+        District,
+        default=1,
+        on_delete=models.CASCADE,
+        help_text=_("District in which the facility is located"),
+        max_length=250,
+    )
+
+    name = models.CharField(
+        _('Name'),
+        max_length=200,
+        help_text=_(
+            "Just enter name without 'Hostpial' or 'Clinic`, i.e for `Kitwe General Hospital` just enter `Kitwe General`.")
+    )
+
+    facility_type = models.ForeignKey(
+        FacilityType,
+        default=1,
+        on_delete=models.CASCADE,
+        help_text=_("Facility Type, i.e 'Hospital, Clinic etc"),
+        max_length=250,
+    )
+
+    implementing_partner = models.ForeignKey(
+        ImplementingPartner,
+        on_delete=models.SET_NULL,
+        help_text=_("Related Implementing Partner."),
+        max_length=250,
+        null=True,
+        blank=True
+    )
+
+    class Meta:
+        verbose_name = 'Facility'
+        verbose_name_plural = 'Facilities'
+
+    def save(self):
+        if self.facility_type.name.lower() in self.name.lower():
+            self.name = (self.name).title()
+        else:
+            f"{self.name.title()} {self.facility_type.name.title()}"
+        super(Facility, self).save()
+
+    def __str__(self):
+        return str(self.name)
+
+class ServiceProviderPersonelQualification(models.Model):
+    name = models.CharField(
+        max_length=200
+    )
+    def __str__(self):
+        return self.name
+
+class ServiceProviderPersonel(models.Model):
+    first_name = models.CharField(
+        _("First Name"),
+        max_length=200
+    )
+    last_name = models.CharField(
+        _("Last Name"),
+        max_length=200
+    )
+    date_of_birth = models.DateField(
+        _("Date of Birth"),
+        null=True,
+        blank=True
+    )
+    department = models.CharField(
+        _("Department"),
+        max_length=200,
+        null=True,
+        blank=True
+    )
+    facility = models.ForeignKey(
+        Facility,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL
+    )
+    qualification = models.ForeignKey(
+        ServiceProviderPersonelQualification,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL
+    )
+    class Meta:
+        verbose_name = _("Service Provider")
+        verbose_name_plural = _("Service Providers")
+    
+    def __str__(self):
+        return f"Service Provider: {self.first_name} {self.last_name}"
