@@ -95,7 +95,6 @@ class UserSerializer(serializers.ModelSerializer):
             "id",
             "email", 
             "username", 
-            "name", 
             "password", 
             "roles", 
             "assigned_roles", 
@@ -108,7 +107,6 @@ class UserSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'email': {'required': False, 'min_length': 8}, 
             'username': {'required': True, 'min_length': 4},
-            'name': {'required': True, 'min_length': 8},
             'password': {'required': True, "write_only": True, 'min_length': 8},
         }
 
@@ -118,7 +116,7 @@ class UserSerializer(serializers.ModelSerializer):
         user = User.objects.create(
             username=validated_data['username'],
             email=validated_data['username'],
-            name=validated_data['username']
+            username=validated_data['username']
         )
         user.set_password(validated_data['password'])
         user.save()
