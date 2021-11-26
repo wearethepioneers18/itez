@@ -7,7 +7,7 @@ from itez.users.models import User
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(min_length=4, max_length=128, write_only=True)
     username = serializers.CharField(max_length=255, required=True)
-    email = serializers.EmailField(required=True)
+    email = serializers.EmailField(required=False)
 
     class Meta:
         model = User

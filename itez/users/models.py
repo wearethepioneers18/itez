@@ -22,10 +22,10 @@ class UserManager(BaseUserManager):
         """Create and return a `User` with an email, username and password."""
         if username is None:
             raise TypeError("Users must have a username.")
-        if email is None:
-            raise TypeError("Users may have an email.")
+        # if email is None:
+        #     raise TypeError("Users may have an email.")
 
-        user = self.model(username=username, email=self.normalize_email(email))
+        user = self.model(username=username, email=self.normalize_email(email) or '')
         user.set_password(password)
         user.save(using=self._db)
 
@@ -58,7 +58,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         )
     email = models.EmailField(
         db_index=True, 
-        unique=True
+        null=True,
+        blank=True
         )
     is_active = models.BooleanField(default=True)
     date = models.DateTimeField(auto_now_add=True)

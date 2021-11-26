@@ -3,8 +3,8 @@ import jwt
 from rest_framework import authentication, exceptions
 from django.conf import settings
 
-from api.user.models import User
-from api.authentication.models import ActiveSession
+from itez.users.models import User
+from itez.authentication.models import ActiveSession
 
 
 class ActiveSessionAuthentication(authentication.BaseAuthentication):

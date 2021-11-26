@@ -80,8 +80,6 @@ class UserWorkDetailSerializer(serializers.ModelSerializer):
         model = UserWorkDetail
         exclude = ('user',)
 
-
-
 class UserSerializer(serializers.ModelSerializer):
     roles = ListField(required=False, default=[], write_only=True)
     assigned_roles = serializers.SerializerMethodField(read_only=True)
@@ -114,7 +112,7 @@ class UserSerializer(serializers.ModelSerializer):
     
     def create(self, validated_data):
         user = User.objects.create(
-            email=validated_data['email'],
+            # email=validated_data['email'],
             username=validated_data['username'],
         )
         user.set_password(validated_data['password'])
