@@ -13,6 +13,7 @@ from rest_framework.mixins import (
     DestroyModelMixin
 )
 from rest_framework.response import Response
+from rest_framework.exceptions import ValidationError
 from rest_framework.viewsets import GenericViewSet, ViewSet
 from rest_framework.parsers import MultiPartParser, FormParser, FileUploadParser, JSONParser
 
@@ -29,12 +30,31 @@ from .serializers import (
 User = get_user_model()
 
 
-class UserViewSet(RetrieveModelMixin, ListModelMixin, CreateModelMixin, UpdateModelMixin, GenericViewSet):
-    permission_classes = [IsAuthenticated]
+class UserViewSet(
+    GenericViewSet, RetrieveModelMixin, 
+    ListModelMixin, CreateModelMixin, UpdateModelMixin
+    ):
+    permission_classes = (IsAuthenticated,)
     serializer_class = UserSerializer
     queryset = User.objects.all()
     parser_classes = (JSONParser, MultiPartParser, FormParser)
     lookup_field = "id"
+
+    error_message = {"success": False, "msg": "Error updating user"}
+
+    def create(self, request, *args, **kwargs):
+        user_id = request.data.get("userID")
+
+        if not user_id:
+            raise ValidationError(self.error_message)
+
+        if self.request.user.pk != int(user_id) and not self.request.user.is_superuser:
+            raise ValidationError(self.error_message)
+
+        self.update(request)
+
+        return Response({"success": True}, status.HTTP_200_OK)
+
     def list(self, request):
         queryset = User.objects.all()
         serializer = UserSerializer(queryset, many=True)
@@ -45,21 +65,24 @@ class UserViewSet(RetrieveModelMixin, ListModelMixin, CreateModelMixin, UpdateMo
         serializer = UserSerializer(user)
         return Response(serializer.data)
     
-    def update(self, request, id=None):
-        user_to_update = get_object_or_404(User, id=id)
-        data = request.data
-        user_to_update.email = data.get('email', user_to_update.email)
-        user_to_update.username = data.get('username', user_to_update.username)
-        user_to_update.name = data.get('name', user_to_update.name)
-        roles_to_assign = data.get("roles", [group.name for group in user_to_update.groups.all()])
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop("partial", True)
+        instance = User.objects.get(id=request.data.get("userID"))
+        roles_to_assign = request.data.get("roles", [group.name for group in instance.groups.all()])
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
         
-        user_to_update.groups.clear()
+        instance.groups.clear()
         for role in roles_to_assign:
-            assign_role(user_to_update, role)
+            assign_role(instance, role)
         
-        user_to_update.save()
-        serializer = UserSerializer(user_to_update)
+        self.perform_update(serializer)
+
+        if getattr(instance, "_prefetched_objects_cache", None):
+            instance._prefetched_objects_cache = {}
+
         return Response(serializer.data, status=status.HTTP_200_OK)
+
 
     @action(detail=True, methods=["get", "put", "patch"])
     def profile(self, request, id=None):

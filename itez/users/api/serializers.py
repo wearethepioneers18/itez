@@ -87,9 +87,12 @@ class UserSerializer(serializers.ModelSerializer):
     assigned_roles = serializers.SerializerMethodField(read_only=True)
     profile = UserProfileSerializer(required=False)
     user_work_detail = UserWorkDetailSerializer(required=False)
+    date = serializers.DateTimeField(read_only=True)
+
     class Meta:
         model = User
         fields = [
+            "id",
             "email", 
             "username", 
             "name", 
@@ -97,14 +100,18 @@ class UserSerializer(serializers.ModelSerializer):
             "roles", 
             "assigned_roles", 
             "profile", 
-            "user_work_detail"
+            "user_work_detail",
+            "date",
         ]
+        read_only_field = ["id"]
+
         extra_kwargs = {
             'email': {'required': False, 'min_length': 8}, 
             'username': {'required': True, 'min_length': 4},
             'name': {'required': True, 'min_length': 8},
             'password': {'required': True, "write_only": True, 'min_length': 8},
         }
+
         depth = 2
     
     def create(self, validated_data):

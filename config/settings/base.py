@@ -91,6 +91,7 @@ THIRD_PARTY_APPS = [
 
 LOCAL_APPS = [
     "itez.users.apps.UsersConfig",
+    "itez.authentication.apps.AuthenticationConfig",
     "itez.beneficiary.apps.BeneficiaryConfig"
     # Your stuff: custom apps go here
 ]
