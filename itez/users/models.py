@@ -1,5 +1,7 @@
 from django.db import models
 from django.urls import reverse
+from django.utils import timezone
+from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
 
 from imagekit.models import ProcessedImageField
@@ -18,37 +20,47 @@ from django.contrib.auth.models import (
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, username, email, password=None, **kwargs):
+    def create_user(self, username, password, email=None, **kwargs):
         """Create and return a `User` with an email, username and password."""
-        if username is None:
+        if not username:
             raise TypeError("Users must have a username.")
-        # if email is None:
-        #     raise TypeError("Users may have an email.")
 
-        user = self.model(username=username, email=self.normalize_email(email) or '')
+        if not password:
+            raise TypeError("User must have a  papssword.")
+
+        user = self.model(
+            username=username, 
+            password=password,
+            email=self.normalize_email(email)
+            )
         user.set_password(password)
         user.save(using=self._db)
 
         return user
 
-    def create_superuser(self, username, password):
+    def create_superuser(self, username, password, email=None, **kwargs):
         """
         Create and return a `User` with superuser (admin) permissions.
         """
-        if password is None:
+        if not password:
             raise TypeError("Superusers must have a password.")
         # if email is None:
         #     raise TypeError("Superusers may have an email.")
-        if username is None:
+        if not username:
             raise TypeError("Superusers must have a unique username.")
 
-        user = self.create_user(username, password)
+        user = self.create_user(
+            username=username, 
+            password=password, 
+            email=email, 
+            **kwargs
+            )
         user.is_superuser = True
         user.is_staff = True
+        user.is_active = True
         user.save(using=self._db)
 
         return user
-
 
 class User(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(
@@ -57,15 +69,20 @@ class User(AbstractBaseUser, PermissionsMixin):
         max_length=255
         )
     email = models.EmailField(
-        db_index=True, 
+        db_index=False, 
         null=True,
         blank=True
         )
+    is_superuser = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+    date_joined = models.DateTimeField(default=timezone.now)
+
     is_active = models.BooleanField(default=True)
     date = models.DateTimeField(auto_now_add=True)
 
     USERNAME_FIELD = "username"
-    # REQUIRED_FIELDS = ["username"]
+    REQUIRED_FIELDS = []
 
     objects = UserManager()
 
@@ -186,9 +203,7 @@ class Profile(models.Model):
     )
 
     def __str__(self):
-        if not self.user.name:
-            return f"Profile: {self.user.username}"
-        return f"Profile: {self.user.name}"
+        return f"{self.user.username}'s Profile"
 
     class Meta:
         verbose_name = "User Profile"

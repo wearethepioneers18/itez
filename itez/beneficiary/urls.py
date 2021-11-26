@@ -1,7 +1,14 @@
-from django.urls import path
+# -*- encoding: utf-8 -*-
 
-from . import views
+from django.urls import path, re_path
+from itez.beneficiary import views
 
+urlpatterns = [
 
-app_name = "beneficiary"
-urlpatterns = []
+    # The home page
+    path("", views.index, name='home'),
+
+    # Matches any html file
+    # re_path(r'^.*\.*', views.pages, name='pages'),
+
+]
