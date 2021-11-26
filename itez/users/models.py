@@ -31,14 +31,14 @@ class UserManager(BaseUserManager):
 
         return user
 
-    def create_superuser(self, username, email, password):
+    def create_superuser(self, username, password):
         """
         Create and return a `User` with superuser (admin) permissions.
         """
         if password is None:
             raise TypeError("Superusers must have a password.")
-        if email is None:
-            raise TypeError("Superusers may have an email.")
+        # if email is None:
+        #     raise TypeError("Superusers may have an email.")
         if username is None:
             raise TypeError("Superusers must have a unique username.")
 
