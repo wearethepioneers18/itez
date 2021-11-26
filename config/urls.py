@@ -98,14 +98,7 @@ urlpatterns += [
         "service_provider_personnel_qualification/", 
         ServiceProviderPersonelQualificationAPIView.as_view(), 
         name='service_provider_personnel_qualification'
-        ),
-
-    # DRF auth token
-    path("auth-token/", obtain_auth_token),
-    # JWT auth token
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    
+        )    
 ]
 
 admin.site.site_header = "ITEZ"                   
