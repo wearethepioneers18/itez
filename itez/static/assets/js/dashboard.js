@@ -463,7 +463,7 @@
       var marketingOverviewDataDark = {
           labels: ["JAN","FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"],
           datasets: [{
-              label: 'Last week',
+              label: 'OPD',
               data: [110, 220, 200, 190, 220, 110, 210, 110, 205, 202, 201, 150],
               backgroundColor: "#52CDFF",
               borderColor: [
@@ -473,7 +473,7 @@
               fill: true, // 3: no fill
               
           },{
-            label: 'This week',
+            label: 'ART',
             data: [215, 290, 210, 250, 290, 230, 290, 210, 280, 220, 190, 300],
             backgroundColor: "#1F3BB3",
             borderColor: [
