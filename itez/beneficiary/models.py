@@ -574,7 +574,7 @@ class Prescription(models.Model):
     )
     class Meta:
         verbose_name = _("Prescription")
-        verbose_name_plural = _("Prescription")
+        verbose_name_plural = _("Prescriptions")
     
     def __str__(self):
         return f"{self.title} Prescription for: {self.beneficiary}"
@@ -616,11 +616,11 @@ class Lab(models.Model):
         blank=True
     )
     class Meta:
-        verbose_name = _("Prescription")
-        verbose_name_plural = _("Prescription")
+        verbose_name = _("Lab")
+        verbose_name_plural = _("Labs")
     
     def __str__(self):
-        return f"{self.title} Prescription for: {self.beneficiary}"
+        return f"Lab: {self.title} for: {self.beneficiary.first_name} {self.beneficiary.first_name}"
 
 HTS = 1
 LAB = 2

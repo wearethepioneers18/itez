@@ -70,6 +70,7 @@ DJANGO_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # "django.contrib.humanize", # Handy template tags
+    "djangocms_admin_style",
     "django.contrib.admin",    
     "django.contrib.gis",
     "django.forms"
@@ -107,7 +108,6 @@ MIGRATION_MODULES = {"sites": "itez.contrib.sites.migrations"}
 # https://docs.djangoproject.com/en/dev/ref/settings/#authentication-backends
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
-    "allauth.account.auth_backends.AuthenticationBackend",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-user-model
 AUTH_USER_MODEL = "users.User"
@@ -116,6 +116,7 @@ LOGIN_REDIRECT_URL = "users:redirect"
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-url
 LOGIN_URL = "account_login"
 
+LOGOUT_REDIRECT_URL = '/login'
 # PASSWORDS
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#password-hashers
@@ -346,3 +347,5 @@ SPECTACULAR_SETTINGS = {
     'DESCRIPTION': "Comprehensive data management of Intersex and Trans-persons in Zambia",
     'VERSION': '1.0.0',
 }
+
+CMS_ENABLE_UPDATE_CHECK = False
