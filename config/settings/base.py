@@ -349,3 +349,25 @@ SPECTACULAR_SETTINGS = {
 }
 
 CMS_ENABLE_UPDATE_CHECK = False
+
+# API CONFIGS
+
+SPECTACULAR_SETTINGS = {
+    # available SwaggerUI configuration parameters
+    # https://swagger.io/docs/open-source-tools/swagger-ui/usage/configuration/
+    "SWAGGER_UI_SETTINGS": {
+        "deepLinking": True,
+        "persistAuthorization": True,
+        "displayOperationId": True,
+    },
+    'TITLE': 'ITEZ API',
+    'DESCRIPTION': 'Comprehensive data management of Intersex and Trans-persons in Zambia',
+    # Statically set schema version. May also be an empty string. When used together with
+    # view versioning, will become '0.0.0 (v2)' for 'v2' versioned requests.
+    # Set VERSION to None if only the request version should be rendered.
+    'VERSION': '1.3.0',
+    # available SwaggerUI versions: https://github.com/swagger-api/swagger-ui/releases
+    # "SWAGGER_UI_DIST": "//unpkg.com/swagger-ui-dist@2.0", 
+    # "REDOC_DIST": "https://cdn.jsdelivr.net/npm/redoc@latest",
+    # "SWAGGER_UI_FAVICON_HREF": settings.STATIC_URL + "your_company_favicon.png", # default is swagger favicon
+}
