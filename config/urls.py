@@ -39,9 +39,9 @@ urlpatterns += [
     path("api/", include("config.api_router")),
 
    # YOUR PATTERNS
-    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('api/', SpectacularAPIView.as_view(), name='schema'),
     # Optional UI:
-    path("", SpectacularRedocView.as_view(url_name="schema"), name="redoc"),
+    path("api/docs/", SpectacularRedocView.as_view(url_name="schema"), name="redoc"),
     path("swagger/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
 
     # Additional APIViews
