@@ -68,6 +68,18 @@ class User(AbstractBaseUser, PermissionsMixin):
         unique=True, 
         max_length=255
         )
+    first_name = models.CharField(
+        max_length=255,
+        null=True,
+        blank=True
+
+        )
+    last_name = models.CharField(
+        max_length=255,
+        null=True,
+        blank=True
+
+        )
     email = models.EmailField(
         db_index=False, 
         null=True,
@@ -96,7 +108,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         return reverse("users:detail", kwargs={"username": self.username})
 
     def __str__(self):
-        return f"{self.email}"
+        return f"{self.first_name} {self.last_name}"
 
 
 class Profile(models.Model):
