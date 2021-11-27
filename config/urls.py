@@ -29,6 +29,10 @@ urlpatterns = [
     path("", include("itez.authentication.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
+admin.site.site_header = "ITEZ Administration"                   
+admin.site.site_title = "ITEZ Administration" 
+admin.site.index_title = "Data management of Intersex and Trans-persons in Zambia."                 
+
 # API URLS
 urlpatterns += [
     # API base url
@@ -87,10 +91,6 @@ urlpatterns += [
         name='service_provider_personnel_qualification'
         )    
 ]
-
-admin.site.site_header = "ITEZ"                   
-admin.site.index_title = "Data management of Intersex and Trans-persons in Zambia."                 
-admin.site.site_title = "ITEZ Administration" 
 
 if settings.DEBUG:
     # This allows the error pages to be debugged during development, just visit

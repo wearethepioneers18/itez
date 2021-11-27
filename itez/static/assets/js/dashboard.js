@@ -465,9 +465,9 @@
           datasets: [{
               label: 'OPD',
               data: [110, 220, 200, 190, 220, 110, 210, 110, 205, 202, 201, 150],
-              backgroundColor: "#52CDFF",
+              backgroundColor: "#26A69A",
               borderColor: [
-                  '#52CDFF',
+                  '#26A69A',
               ],
               borderWidth: 0,
               fill: true, // 3: no fill
@@ -475,9 +475,9 @@
           },{
             label: 'ART',
             data: [215, 290, 210, 250, 290, 230, 290, 210, 280, 220, 190, 300],
-            backgroundColor: "#1F3BB3",
+            backgroundColor: "#8D6E63",
             borderColor: [
-                '#1F3BB3',
+                '#8D6E63',
             ],
             borderWidth: 0,
             fill: true, // 3: no fill
@@ -554,27 +554,21 @@
       var doughnutChartCanvas = $("#doughnutChart").get(0).getContext("2d");
       var doughnutPieData = {
         datasets: [{
-          data: [40, 20, 30, 10],
+          data: [30, 10],
           backgroundColor: [
-            "#1F3BB3",
-            "#FDD0C7",
-            "#52CDFF",
-            "#81DADA"
+            "#FF6E40",
+            "#EEEEEE"
           ],
           borderColor: [
-            "#1F3BB3",
-            "#FDD0C7",
-            "#52CDFF",
-            "#81DADA"
+            "#FF6E40",
+            "#EEEEEE"
           ],
         }],
   
         // These labels appear in the legend and in the tooltips when hovering different arcs
         labels: [
-          'Total',
-          'Net',
-          'Gross',
-          'AVG',
+          "Male",
+          "Female"
         ]
       };
       var doughnutPieOptions = {

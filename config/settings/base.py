@@ -70,6 +70,7 @@ DJANGO_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # "django.contrib.humanize", # Handy template tags
+    "djangocms_admin_style",
     "django.contrib.admin",    
     "django.contrib.gis",
     "django.forms"
@@ -115,6 +116,7 @@ LOGIN_REDIRECT_URL = "users:redirect"
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-url
 LOGIN_URL = "account_login"
 
+LOGOUT_REDIRECT_URL = '/login'
 # PASSWORDS
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#password-hashers
@@ -345,3 +347,5 @@ SPECTACULAR_SETTINGS = {
     'DESCRIPTION': "Comprehensive data management of Intersex and Trans-persons in Zambia",
     'VERSION': '1.0.0',
 }
+
+CMS_ENABLE_UPDATE_CHECK = False

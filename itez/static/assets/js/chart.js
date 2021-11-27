@@ -5,7 +5,7 @@ $(function() {
    */
   'use strict';
   var data = {
-    labels: ["2013", "2014", "2014", "2015", "2016", "2017"],
+    labels: ["Southern Province", "Northern Province", "Eastern Province", "Western Province", "Lusaka Province", "Central Province"],
     datasets: [{
       label: '# of Votes',
       data: [10, 19, 3, 5, 2, 3],
@@ -101,9 +101,9 @@ $(function() {
 
     // These labels appear in the legend and in the tooltips when hovering different arcs
     labels: [
-      'Pink',
-      'Blue',
-      'Yellow',
+      'Female',
+      'Male',
+      'Other',
     ]
   };
   var doughnutPieOptions = {
@@ -114,9 +114,9 @@ $(function() {
     }
   };
   var areaData = {
-    labels: ["2013", "2014", "2015", "2016", "2017"],
+    labels: ["2017", "2018", "2019", "2020", "2021"],
     datasets: [{
-      label: '# of Votes',
+      label: 'Total Beneficiaries',
       data: [12, 19, 3, 5, 2, 3],
       backgroundColor: [
         'rgba(255, 99, 132, 0.2)',
@@ -203,7 +203,7 @@ $(function() {
 
   var scatterChartData = {
     datasets: [{
-        label: 'First Dataset',
+        label: 'Female',
         data: [{
             x: -10,
             y: 0
@@ -230,7 +230,7 @@ $(function() {
         borderWidth: 1
       },
       {
-        label: 'Second Dataset',
+        label: 'Male',
         data: [{
             x: 10,
             y: 5
