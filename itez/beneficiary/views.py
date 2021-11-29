@@ -9,14 +9,23 @@ from django.urls import reverse
 from django.views.generic import TemplateView
 
 from itez.beneficiary.models import Beneficiary
+from itez.beneficiary.models import Service
 
 
 @login_required(login_url="/login/")
 def index(request):
-    context = {'segment': 'index'}
+    opd = Service.objects.filter(client_type='OPD').count()
+    hts = Service.objects.filter(service_type='HTS').count()
+    vl = Service.objects.filter(service_type='VL').count()
+    art = Service.objects.filter(client_type='ART').count()    
+    labs = Service.objects.filter(service_type='LAB').count()
+    pharmacy = Service.objects.filter(service_type='PHARMACY').count()
+    context = {'segment': 'index', "opd": opd, "hts": hts, "vl": vl, "art": art, "lab": labs, "pharmacy": pharmacy}
+    print("LAB", labs)
 
     html_template = loader.get_template('home/index.html')
     return HttpResponse(html_template.render(context, request))
+    
 
 @login_required(login_url="/login/")
 def list_beneficiary(request):
@@ -68,3 +77,5 @@ def pages(request):
     except:
         html_template = loader.get_template('home/page-500.html')
         return HttpResponse(html_template.render(context, request))
+
+

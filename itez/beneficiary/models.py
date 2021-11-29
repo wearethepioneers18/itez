@@ -622,20 +622,20 @@ class Lab(models.Model):
     def __str__(self):
         return f"Lab: {self.title} for: {self.beneficiary.first_name} {self.beneficiary.first_name}"
 
-HTS = 1
-LAB = 2
-PHARMACY = 3
+# HTS = 1
+# LAB = 2
+# PHARMACY = 3
 SERVICE_TYPES =  (
-    (HTS, _('HTS (HIV Testing Services)')),
-    (LAB, _('LAB')),
-    (PHARMACY, _('PHARMACY')),
+    ("HTS", _('HTS (HIV Testing Services)')),
+    ("LAB", _('LAB')),
+    ("PHARMACY", _('PHARMACY')),
 )
 
-OPD = 1
-ART = 2
+# OPD = 1
+# ART = 2
 CLIENT_TYPES =  (
-    (OPD, _('OPD (Outpatient Departments )')),
-    (ART, _('ART (Antiretroviral Therapy)')),
+    ("OPD", _('OPD (Outpatient Departments )')),
+    ("ART", _('ART (Antiretroviral Therapy)')),
 )
 
 
