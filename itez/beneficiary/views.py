@@ -31,24 +31,42 @@ def index(request):
 def list_beneficiary(request):
     beneficiaries = Beneficiary.objects.all()
     beneficiary_list = [beneficiary for beneficiary in beneficiaries]
+    opd = Service.objects.filter(client_type='OPD').count()
+    hts = Service.objects.filter(service_type='HTS').count()
+    vl = Service.objects.filter(service_type='VL').count()
+    art = Service.objects.filter(client_type='ART').count()    
+    labs = Service.objects.filter(service_type='LAB').count()
+    pharmacy = Service.objects.filter(service_type='PHARMACY').count()
 
-    context = {"beneficiaries": beneficiary_list}
+    context = {"beneficiaries": beneficiary_list, "opd": opd, "hts": hts, "vl": vl, "art": art, "lab": labs, "pharmacy": pharmacy}
 
     html_template = loader.get_template('home/list_beneficiary.html')
     return HttpResponse(html_template.render(context, request))
 
 @login_required(login_url="/login/")
 def user_events(request):
+    opd = Service.objects.filter(client_type='OPD').count()
+    hts = Service.objects.filter(service_type='HTS').count()
+    vl = Service.objects.filter(service_type='VL').count()
+    art = Service.objects.filter(client_type='ART').count()    
+    labs = Service.objects.filter(service_type='LAB').count()
+    pharmacy = Service.objects.filter(service_type='PHARMACY').count()
 
-    context = {"events": []}
+    context = {"events": [], "opd": opd, "hts": hts, "vl": vl, "art": art, "lab": labs, "pharmacy": pharmacy}
 
     html_template = loader.get_template('home/events.html')
     return HttpResponse(html_template.render(context, request))
 
 @login_required(login_url="/login/")
 def beneficiary_report(request):
+    opd = Service.objects.filter(client_type='OPD').count()
+    hts = Service.objects.filter(service_type='HTS').count()
+    vl = Service.objects.filter(service_type='VL').count()
+    art = Service.objects.filter(client_type='ART').count()    
+    labs = Service.objects.filter(service_type='LAB').count()
+    pharmacy = Service.objects.filter(service_type='PHARMACY').count()
 
-    context = {"data": []}
+    context = {"data": [], "opd": opd, "hts": hts, "vl": vl, "art": art, "lab": labs, "pharmacy": pharmacy}
 
     html_template = loader.get_template('home/reports.html')
     return HttpResponse(html_template.render(context, request))
