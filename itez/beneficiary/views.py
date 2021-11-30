@@ -8,7 +8,7 @@ from django.urls import reverse
 
 from django.views.generic import TemplateView
 
-from itez.beneficiary.models import Beneficiary
+from itez.beneficiary.models import Beneficiary, BeneficiaryParent
 from itez.beneficiary.models import Service
 
 
@@ -20,8 +20,13 @@ def index(request):
     art = Service.objects.filter(client_type='ART').count()    
     labs = Service.objects.filter(service_type='LAB').count()
     pharmacy = Service.objects.filter(service_type='PHARMACY').count()
-    context = {'segment': 'index', "opd": opd, "hts": hts, "vl": vl, "art": art, "lab": labs, "pharmacy": pharmacy}
-    print("LAB", labs)
+    male = Beneficiary.objects.filter(gender = 'Male').count()
+    female = Beneficiary.objects.filter(gender = 'Female').count()
+    transgender = Beneficiary.objects.filter(gender = 'Transgender').count
+    other = Beneficiary.objects.filter(gender = 'Other').count()
+   
+    context = {'segment': 'index', "opd": opd, "hts": hts, "vl": vl, "art": art, "lab": labs, "pharmacy": pharmacy, "male": male, "female": female, "transgender": transgender, "other": other}
+    
 
     html_template = loader.get_template('home/index.html')
     return HttpResponse(html_template.render(context, request))
@@ -37,6 +42,9 @@ def list_beneficiary(request):
     art = Service.objects.filter(client_type='ART').count()    
     labs = Service.objects.filter(service_type='LAB').count()
     pharmacy = Service.objects.filter(service_type='PHARMACY').count()
+    
+
+    
 
     context = {"beneficiaries": beneficiary_list, "opd": opd, "hts": hts, "vl": vl, "art": art, "lab": labs, "pharmacy": pharmacy}
 
@@ -95,5 +103,15 @@ def pages(request):
     except:
         html_template = loader.get_template('home/page-500.html')
         return HttpResponse(html_template.render(context, request))
+
+
+def doughnutChart(request):
+    femaleSex = Beneficiary.objects.filter(sex = 'Female')
+    maleSex = Beneficiary.objects.filter(sex = 'Male')
+
+
+    
+
+
 
 

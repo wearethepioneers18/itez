@@ -777,6 +777,7 @@
     }
     if ($("#doughnutChart").length) {
       var doughnutChartCanvas = $("#doughnutChart").get(0).getContext("2d");
+
       var doughnutPieData = {
         datasets: [
           {
