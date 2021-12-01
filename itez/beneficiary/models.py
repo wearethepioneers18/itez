@@ -1,3 +1,5 @@
+from datetime import date
+
 from django.contrib.gis.db import models
 from django.contrib.gis.db.models import fields
 from django.utils.translation import gettext_lazy as _
@@ -182,6 +184,14 @@ class Beneficiary(models.Model):
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
 
+    def get_age(self):
+        """
+        Calculates the Beneficiaries age from birth date.
+        """
+        days_in_year = 365.2425   
+        age = int((date.today() - self.date_of_birth).days / days_in_year)
+        return age
+
     class Meta:
         verbose_name = "Beneficiary"
         verbose_name_plural = "Beneficiaries"
@@ -254,7 +264,6 @@ class BeneficiaryParent(models.Model):
         return f"Beneficiary Parents are \
             Father: {self.father_first_name} {self.father_last_name}, \
             Mother: {self.mother_first_name} {self.mother_last_name}"
-
 
 class Province(models.Model):
     """
@@ -622,20 +631,20 @@ class Lab(models.Model):
     def __str__(self):
         return f"Lab: {self.title} for: {self.beneficiary.first_name} {self.beneficiary.first_name}"
 
-HTS = 1
-LAB = 2
-PHARMACY = 3
+# HTS = 1
+# LAB = 2
+# PHARMACY = 3
 SERVICE_TYPES =  (
-    (HTS, _('HTS (HIV Testing Services)')),
-    (LAB, _('LAB')),
-    (PHARMACY, _('PHARMACY')),
+    ("HTS", _('HTS (HIV Testing Services)')),
+    ("LAB", _('LAB')),
+    ("PHARMACY", _('PHARMACY')),
 )
 
-OPD = 1
-ART = 2
+# OPD = 1
+# ART = 2
 CLIENT_TYPES =  (
-    (OPD, _('OPD (Outpatient Departments )')),
-    (ART, _('ART (Antiretroviral Therapy)')),
+    ("OPD", _('OPD (Outpatient Departments )')),
+    ("ART", _('ART (Antiretroviral Therapy)')),
 )
 
 

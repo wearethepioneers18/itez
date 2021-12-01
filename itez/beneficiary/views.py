@@ -1,10 +1,14 @@
 # -*- encoding: utf-8 -*-
 
 from django import template
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 from django.urls import reverse
+from django.core.paginator import Paginator
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import ListView
 
 from django.views.generic import TemplateView
 
@@ -18,15 +22,16 @@ def index(request):
     html_template = loader.get_template('home/index.html')
     return HttpResponse(html_template.render(context, request))
 
-@login_required(login_url="/login/")
-def list_beneficiary(request):
-    beneficiaries = Beneficiary.objects.all()
-    beneficiary_list = [beneficiary for beneficiary in beneficiaries]
 
-    context = {"beneficiaries": beneficiary_list}
+class BeneficiaryListView(LoginRequiredMixin, ListView):
+    model = Beneficiary
+    template_name = 'home/list_beneficiary.html'
+    context_object_name = 'beneficiaries'
+    paginate_by = settings.ITEMS_PER_PAGE
 
-    html_template = loader.get_template('home/list_beneficiary.html')
-    return HttpResponse(html_template.render(context, request))
+    def get_queryset(self):
+        return Beneficiary.objects.all()
+
 
 @login_required(login_url="/login/")
 def user_events(request):
