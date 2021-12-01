@@ -242,6 +242,8 @@ EMAIL_BACKEND = env(
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-timeout
 EMAIL_TIMEOUT = 5
 
+# Pagination
+ITEMS_PER_PAGE = 10
 # ADMIN
 # ------------------------------------------------------------------------------
 # Django Admin URL.

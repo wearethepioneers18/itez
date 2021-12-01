@@ -1,10 +1,14 @@
 # -*- encoding: utf-8 -*-
 
 from django import template
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 from django.urls import reverse
+from django.core.paginator import Paginator
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import ListView
 
 from django.views.generic import TemplateView
 
@@ -63,8 +67,6 @@ def list_beneficiary(request):
 
     context = {"beneficiaries": beneficiary_list, "opd": opd, "hts": hts, "vl": vl, "art": art, "lab": labs, "pharmacy": pharmacy}
 
-    html_template = loader.get_template('home/list_beneficiary.html')
-    return HttpResponse(html_template.render(context, request))
 
 @login_required(login_url="/login/")
 def user_events(request):
