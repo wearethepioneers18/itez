@@ -31,6 +31,21 @@ def index(request):
     html_template = loader.get_template('home/index.html')
     return HttpResponse(html_template.render(context, request))
     
+@login_required(login_url="/login/")
+def uielements(request):    
+    context = {'title': 'UI Elements'}
+    html_template = loader.get_template('home/basic_elements.html')
+    return HttpResponse(html_template.render(context, request))
+
+
+@login_required(login_url="/login/")
+def medical_record(request):
+
+    context = {'title': 'medical record'}
+    
+    html_template = loader.get_template('home/medical_record.html')
+    return HttpResponse(html_template.render(context, request))
+
 
 @login_required(login_url="/login/")
 def list_beneficiary(request):

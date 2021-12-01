@@ -1,5 +1,7 @@
+from typing import Set
 from django.contrib.gis.db import models
 from django.contrib.gis.db.models import fields
+from django.db.models.deletion import SET, SET_NULL
 from django.utils.translation import gettext_lazy as _
 
 from imagekit.processors import ResizeToFill
@@ -605,7 +607,18 @@ class Lab(models.Model):
         blank=True,
         on_delete=models.SET_NULL
     )
-    date = models.DateTimeField(
+    results = models.TextField(
+        _("Lab Results"),
+        null=True,
+        blank=True
+    )
+    results_status = models.CharField(
+        _("Lab Results Status"),
+        max_length=200,
+        null=True,
+        blank=True
+    )
+    requested_date = models.DateTimeField(
         auto_now_add=False,
         null=True,
         blank=True
@@ -615,6 +628,7 @@ class Lab(models.Model):
         null=True,
         blank=True
     )
+    created = models.DateTimeField(auto_now_add=True)
     class Meta:
         verbose_name = _("Lab")
         verbose_name_plural = _("Labs")
@@ -683,6 +697,11 @@ class Service(models.Model):
         blank=True,
         help_text=_("Extra comments if any."),
     )
+    facility = models.ForeignKey(Facility,
+    null=True,
+    blank=True,
+    on_delete=models.SET_NULL
+    )
     class Meta:
         verbose_name = 'Service'
         verbose_name_plural = 'Services'
@@ -690,3 +709,71 @@ class Service(models.Model):
     def __str__(self):
         return self.title
 
+class BeneficiaryService(models.Model):
+    """
+    Beneficiary's Service.
+    """
+    beneficiary = models.ForeignKey(
+        Beneficiary,
+        on_delete=models.CASCADE,
+    )
+    service = models.ForeignKey(
+        Service,
+        on_delete=models.CASCADE,
+    )
+    service_provider = models.ForeignKey(
+        ServiceProviderPersonel,
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True
+    )
+    provider_comments = models.TextField(
+        _("Extra Details/Comment"),
+        null=True,
+        blank=True
+    )
+    facility = models.ForeignKey(
+        Facility,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL
+    )
+    interaction_date = models.DateTimeField(
+        auto_now_add=False,
+        null=True,
+        blank=True
+    )
+    prescription = models.ForeignKey(
+        Prescription,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL
+    )
+    no_of_days = models.IntegerField(
+        _("No of Days"),
+        null=True,
+        blank=True
+    )
+    when_to_take = models.TextField(
+        _("When to Take"),
+        max_length=500,
+        null=True,
+        blank=True
+    )
+    lab = models.ForeignKey(
+        Lab,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL
+    )
+    creeated = models.DateTimeField(
+        auto_now_add=False,
+        null=True,
+        blank=True
+    )   
+    class Meta:
+        verbose_name = _("Beneficiary Service")
+        verbose_name_plural = _("Beneficiary Services")
+    
+    def __str__(self):
+        return f"{self.beneficiary} {self.service}"

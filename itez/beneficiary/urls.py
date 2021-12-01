@@ -8,9 +8,11 @@ urlpatterns = [
     # The home page
     path("", views.index, name='home'),
     path("events", views.user_events, name='user_events'),
+    path("uielements", views.uielements, name='uielements'),
     
     path("report", views.beneficiary_report, name='report'),
     path("list_beneficiary", views.list_beneficiary, name='list_beneficiary'),
+    path("medical_record", views.medical_record, name='medical_record'),
 
     # Matches any html file
     # re_path(r'^.*\.*', views.pages, name='pages'),
