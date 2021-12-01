@@ -730,7 +730,7 @@ class BeneficiaryService(models.Model):
     )
     service_provider = models.ForeignKey(
         ServiceProviderPersonel,
-        on_delete=models.PROTECT,
+        on_delete=models.CASCADE,
         null=True,
         blank=True
     )
@@ -743,7 +743,7 @@ class BeneficiaryService(models.Model):
         Facility,
         null=True,
         blank=True,
-        on_delete=models.SET_NULL
+        on_delete=models.CASCADE
     )
     interaction_date = models.DateTimeField(
         auto_now_add=False,
@@ -754,7 +754,7 @@ class BeneficiaryService(models.Model):
         Prescription,
         null=True,
         blank=True,
-        on_delete=models.SET_NULL
+        on_delete=models.CASCADE
     )
     no_of_days = models.IntegerField(
         _("No of Days"),
@@ -771,13 +771,10 @@ class BeneficiaryService(models.Model):
         Lab,
         null=True,
         blank=True,
-        on_delete=models.SET_NULL
+        on_delete=models.CASCADE
     )
-    creeated = models.DateTimeField(
-        auto_now_add=False,
-        null=True,
-        blank=True
-    )   
+    created = models.DateTimeField(auto_now_add=True)
+
     class Meta:
         verbose_name = _("Beneficiary Service")
         verbose_name_plural = _("Beneficiary Services")

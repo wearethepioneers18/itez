@@ -1,19 +1,22 @@
 # -*- encoding: utf-8 -*-
 
 from django import template
-from django.conf import settings
+from django.contrib.gis.db.models import fields
+from django.views.generic import CreateView, FormView
+from django.views.generic.edit import CreateView
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 from django.urls import reverse
-from django.core.paginator import Paginator
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import ListView
+from django.shortcuts import render
 
 from django.views.generic import TemplateView
+from django.views.generic.list import ListView
 
-from itez.beneficiary.models import Beneficiary, BeneficiaryParent
+from itez.beneficiary.models import Beneficiary, BeneficiaryParent, BeneficiaryService
 from itez.beneficiary.models import Service
+
+from itez.beneficiary.forms import MedicalRecordForm
 
 
 @login_required(login_url="/login/")
@@ -42,13 +45,50 @@ def uielements(request):
     return HttpResponse(html_template.render(context, request))
 
 
-@login_required(login_url="/login/")
-def medical_record(request):
+class FormActionMixin(object):
+    """
+    Add 'cancel' button redirect to medical record list.
+    """
+    def post(self, request, *args, **kwargs):
+        if 'cancel' in request.POST:
+            medical_record_list_url = reverse('medical_record_list')
+            return HttpResponseRedirect(medical_record_list_url)
 
-    context = {'title': 'medical record'}
+        else:
+            return super(FormActionMixin, self).post(request, *args, **kwargs)
+
+
+class MedicalRecordListView(ListView):
+    template_name = 'beneficiary/medical_record_list.html'
+    model = BeneficiaryService
+
+    def  get_queryset(self):
+        return BeneficiaryService.objects.filter(beneficiary=self.kwargs['beneficiary_id'])
+
+    def get_context_data(self, **kwargs):
+        # Benenficiary-098123hjkf/medical_record_list
+        context = super(MedicalRecordListView, self).get_context_data(**kwargs)
+        context['beneficiary'] = Beneficiary.objects.get(pk=self.kwargs['beneficiary_id'])
+        context['title'] = 'Medical Records'
+        return context
+
+class  MedicalRecordCreateView(FormActionMixin, CreateView):
+    """
+    Create a new MedicalRecord
+    """
+    model = BeneficiaryService
+    form_class = MedicalRecordForm
+    template_name = 'beneficiary/medical_record_create.html'
+
+    def get_success_url(self):
+        return reverse('beneficiary:medical_record_list')
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super(MedicalRecordCreateView, self).form_valid(form)
     
-    html_template = loader.get_template('home/medical_record.html')
-    return HttpResponse(html_template.render(context, request))
+    
+    
 
 
 @login_required(login_url="/login/")
@@ -67,6 +107,8 @@ def list_beneficiary(request):
 
     context = {"beneficiaries": beneficiary_list, "opd": opd, "hts": hts, "vl": vl, "art": art, "lab": labs, "pharmacy": pharmacy}
 
+    html_template = loader.get_template('beneficiary/list_beneficiary.html')
+    return HttpResponse(html_template.render(context, request))
 
 @login_required(login_url="/login/")
 def user_events(request):
