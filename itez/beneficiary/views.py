@@ -14,11 +14,13 @@ from django.shortcuts import render
 from django.views.generic import TemplateView
 from django.views.generic.list import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.paginator import Paginator
 
 from itez.beneficiary.models import Beneficiary, BeneficiaryParent, MedicalRecord
 from itez.beneficiary.models import Service
 
 from itez.beneficiary.forms import BeneficiaryForm, MedicalRecordForm
+from itez.users.models import User
 
 
 @login_required(login_url="/login/")
@@ -34,7 +36,7 @@ def index(request):
     transgender = Beneficiary.objects.filter(gender = 'Transgender').count
     other = Beneficiary.objects.filter(gender = 'Other').count()
    
-    context = {'segment': 'index', "opd": opd, "hts": hts, "vl": vl, "art": art, "lab": labs, "pharmacy": pharmacy, "male": male, "female": female, "transgender": transgender, "other": other}
+    context = {'segment': 'index', "opd": opd, "hts": hts, "vl": vl, "art": art, "labs": labs, "pharmacy": pharmacy, "male": male, "female": female, "transgender": transgender, "other": other}
     
 
     html_template = loader.get_template('home/index.html')
@@ -144,7 +146,6 @@ class BenenficiaryListView(LoginRequiredMixin, ListView):
         return context
 
 
-
 class BeneficiaryDetailView(LoginRequiredMixin, DetailView):
     """
     Beneficiary Details view.
@@ -162,18 +163,16 @@ class BeneficiaryDetailView(LoginRequiredMixin, DetailView):
         context['lab_title'] = 'labs'
         
         return context
-
-
+ 
 @login_required(login_url="/login/")
 def user_events(request):
-    opd = Service.objects.filter(client_type='OPD').count()
-    hts = Service.objects.filter(service_type='HTS').count()
-    vl = Service.objects.filter(service_type='VL').count()
-    art = Service.objects.filter(client_type='ART').count()    
-    labs = Service.objects.filter(service_type='LAB').count()
-    pharmacy = Service.objects.filter(service_type='PHARMACY').count()
-
-    context = {"events": [], "opd": opd, "hts": hts, "vl": vl, "art": art, "lab": labs, "pharmacy": pharmacy}
+    users = User.objects.all()
+    # users_list = [user for user in users]
+    page_num =  request.GET.get('page', 1)
+    p = Paginator(users, 2)
+    
+    page_obj = p.get_page(page_num)
+    context = {"users_list": page_obj}
 
     html_template = loader.get_template('home/events.html')
     return HttpResponse(html_template.render(context, request))
@@ -187,7 +186,7 @@ def beneficiary_report(request):
     labs = Service.objects.filter(service_type='LAB').count()
     pharmacy = Service.objects.filter(service_type='PHARMACY').count()
 
-    context = {"data": [], "opd": opd, "hts": hts, "vl": vl, "art": art, "lab": labs, "pharmacy": pharmacy}
+    context = {"data": [], "opd": opd, "hts": hts, "vl": vl, "art": art, "labs": labs, "pharmacy": pharmacy}
 
     html_template = loader.get_template('home/reports.html')
     return HttpResponse(html_template.render(context, request))

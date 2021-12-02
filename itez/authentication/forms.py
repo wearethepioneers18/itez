@@ -3,6 +3,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from django.utils.translation import  gettext_lazy as _
 
 
 class LoginForm(forms.Form):
@@ -20,9 +21,16 @@ class LoginForm(forms.Form):
                 "class": "form-control form-control-lg"
             }
         ))
+    
+class UserCreationForm(forms.Form):
+    class Meta:
+        model = User
 
+        error_messages = {
+            "username": {"unique": _("This username has already been taken.")}
+        }
 
-class SignUpForm(UserCreationForm):
+class SignUpForm(forms.Form):
     username = forms.CharField(
         widget=forms.TextInput(
             attrs={
