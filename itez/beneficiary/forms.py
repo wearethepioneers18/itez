@@ -24,26 +24,26 @@ class MedicalRecordForm(ModelForm):
             Fieldset(
                 'Service',
                 Row(
-                    Column('beneficiary', css_class='form-group col-md-6  mb-0'),
-                    Column('service', css_class='form-group col-md-6  mb-0'),
-                    Column('provider_comments', css_class='form-group col-md-6  mb-0'),
-                    Column('interaction_date', css_class='form-group col-md-6  mb-0'),
+                    Column('beneficiary', css_class='form-group col-md-6 mb-0'),
+                    Column('service', css_class='form-group col-md-6 mb-0'),
+                    Column('provider_comments', css_class='form-group col-md-6 mb-0'),
+                    Column('interaction_date', css_class='form-group col-md-6 mb-0'),
                     css_class='form-row'
                 ),
             ),
             Fieldset(
                 'Medication',
                 Row(
-                    Column('prescription', css_class='form-group col-md-4  mb-0'),
-                    Column('no_of_days', css_class='form-group col-md-4  mb-0'),
-                    Column('when_to_take', css_class='form-group col-md-4  mb-0'),
+                    Column('prescription', css_class='form-group col-md-4 mb-0'),
+                    Column('no_of_days', css_class='form-group col-md-4 mb-0'),
+                    Column('when_to_take', css_class='form-group col-md-4 mb-0'),
                     css_class='form-row'
                 ),
             ),
             Fieldset(
                 'Lab',
                 Row(
-                    Column('lab', css_class='form-group col-md-6  mb-0'),
+                    Column('lab', css_class='form-group col-md-12  mb-0'),
                     css_class='form-row'
                 ),
             ),
@@ -73,40 +73,40 @@ class BeneficiaryForm(ModelForm):
             Fieldset(
                 'Personal Information',
                 Row(
-                    Column('first_name', css_class='form-group col-md-6  mb-0'),
-                    Column('last_name', css_class='form-group col-md-6  mb-0'),
-                    Column('other_name', css_class='form-group col-md-6  mb-0'),
-                    Column('gender', css_class='form-group col-md-6  mb-0'),
-                    Column('sex', css_class='form-group col-md-6  mb-0'),
-                    Column('profile_photo', css_class='form-group col-md-6  mb-0'),
-                    Column('phone_number', css_class='form-group col-md-6  mb-0'),
-                    Column('email', css_class='form-group col-md-6  mb-0'),
-                    Column('date_of_birth', css_class='form-group col-md-6  mb-0'),
-                    Column('marital_status', css_class='form-group col-md-6  mb-0'),
+                    Column('first_name', css_class='form-group col-md-6 mb-0'),
+                    Column('last_name', css_class='form-group col-md-6 mb-0'),
+                    Column('other_name', css_class='form-group col-md-6 mb-0'),
+                    Column('gender', css_class='form-group col-md-6 mb-0'),
+                    Column('sex', css_class='form-group col-md-6 mb-0'),
+                    Column('profile_photo', css_class='form-group col-md-6 mb-0'),
+                    Column('phone_number', css_class='form-group col-md-6 mb-0'),
+                    Column('email', css_class='form-group col-md-6 mb-0'),
+                    Column('date_of_birth', css_class='form-group col-md-6 mb-0'),
+                    Column('marital_status', css_class='form-group col-md-6 mb-0'),
                     css_class='form-row'
                 ),
             ),
             Fieldset(
                 'Family Information',
                 Row(
-                    Column('name_of_spouse', css_class='form-group col-md-4  mb-0'),
-                    Column('number_of_children', css_class='form-group col-md-4  mb-0'),
-                    Column('number_of_siblings', css_class='form-group col-md-4  mb-0'),
-                    Column('parent_details', css_class='form-group col-md-4  mb-0'),
+                    Column('name_of_spouse', css_class='form-group col-md-4 mb-0'),
+                    Column('number_of_children', css_class='form-group col-md-4 mb-0'),
+                    Column('number_of_siblings', css_class='form-group col-md-4 mb-0'),
+                    Column('parent_details', css_class='form-group col-md-4 mb-0'),
                     css_class='form-row'
                 ),
             ),
             Fieldset(
                 'Other Meta Data',
                 Row(
-                    Column('registered_facility', css_class='form-group col-md-4  mb-0'),
-                    Column('service_facility', css_class='form-group col-md-4  mb-0'),
-                    Column('alive', css_class='form-group col-md-4  mb-0'),
-                    Column('education_level', css_class='form-group col-md-4  mb-0'),
-                    Column('alive', css_class='form-group col-md-4  mb-0'),
-                    Column('hiv_status', css_class='form-group col-md-4  mb-0'),
-                    Column('art_status', css_class='form-group col-md-4  mb-0'),
-                    Column('last_vl', css_class='form-group col-md-4  mb-0'),
+                    Column('registered_facility', css_class='form-group col-md-4 mb-0'),
+                    Column('service_facility', css_class='form-group col-md-4 mb-0'),
+                    Column('alive', css_class='form-group col-md-4 mb-0'),
+                    Column('education_level', css_class='form-group col-md-4 mb-0'),
+                    Column('hiv_status', css_class='form-group col-md-4 mb-0'),
+                    Column('art_status', css_class='form-group col-md-4 mb-0'),
+                    Column('last_vl', css_class='form-group col-md-4 mb-0'),
+                    Column('alive', css_class='form-group col-md-4 mb-0'),
                     css_class='form-row'
                 ),
             ),
