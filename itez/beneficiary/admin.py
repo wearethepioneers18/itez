@@ -6,8 +6,6 @@ from itez.beneficiary.models import (
     Province,
     District,
     Prescription,
-    
-
     ServiceArea,
     WorkDetail,
     AgentDetail,
@@ -76,9 +74,6 @@ class PrescriptionAdmin(ImportExportModelAdmin):
 
     search_fields = (
         'title', 
-        'beneficiary__beneficiary_id', 
-        'service_provider__first_name', 
-        'facility__name'
         )
 
 class ServiceResource(resources.ModelResource):
@@ -94,7 +89,6 @@ class ServiceAdmin(ImportExportModelAdmin):
         'client_type', 
         'service_type', 
         'datetime',
-        'facility'
         )
 
 class FacilityResource(resources.ModelResource):
@@ -117,6 +111,8 @@ class BeneficiaryAdmin(ImportExportModelAdmin):
         "last_name",
         "gender", 
         "sex",
+        "registered_facility",
+        "service_facility",
         "phone_number",
         "email",
         "date_of_birth",
@@ -203,7 +199,6 @@ class ServiceProviderAdmin(admin.ModelAdmin):
         'last_name',
         'qualification',
         'department',
-        'facility'
     ]
 
 class ServiceProviderPersonelQualificationAdmin(admin.ModelAdmin):
@@ -217,8 +212,6 @@ class MedicalRecordAdmin(admin.ModelAdmin):
     list_display = [
         'beneficiary',
         'service',
-        'service_provider',
-        'facility',
         'prescription',
         'lab',
     ]
@@ -226,12 +219,7 @@ class MedicalRecordAdmin(admin.ModelAdmin):
     list_filter = [
         'beneficiary',
         'service',
-        'service_provider',
-        'facility',        
     ]
-
-   
-
     list_per_page = 30
 
 
