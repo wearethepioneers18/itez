@@ -5,6 +5,7 @@ from django.contrib.gis.db.models import fields
 from django.views.generic import CreateView, FormView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView
+
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
@@ -19,6 +20,7 @@ from itez.beneficiary.models import Beneficiary, BeneficiaryParent, MedicalRecor
 from itez.beneficiary.models import Service
 
 from itez.beneficiary.forms import BeneficiaryForm, MedicalRecordForm
+
 
 
 @login_required(login_url="/login/")
@@ -162,18 +164,16 @@ class BeneficiaryDetailView(LoginRequiredMixin, DetailView):
         context['lab_title'] = 'labs'
         
         return context
-
-
+ 
 @login_required(login_url="/login/")
 def user_events(request):
-    opd = Service.objects.filter(client_type='OPD').count()
-    hts = Service.objects.filter(service_type='HTS').count()
-    vl = Service.objects.filter(service_type='VL').count()
-    art = Service.objects.filter(client_type='ART').count()    
-    labs = Service.objects.filter(service_type='LAB').count()
-    pharmacy = Service.objects.filter(service_type='PHARMACY').count()
-
-    context = {"events": [], "opd": opd, "hts": hts, "vl": vl, "art": art, "lab": labs, "pharmacy": pharmacy}
+    users = User.objects.all()
+    # users_list = [user for user in users]
+    page_num =  request.GET.get('page', 1)
+    p = Paginator(users, 2)
+    
+    page_obj = p.get_page(page_num)
+    context = {"users_list": page_obj}
 
     html_template = loader.get_template('home/events.html')
     return HttpResponse(html_template.render(context, request))

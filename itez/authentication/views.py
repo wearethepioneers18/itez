@@ -2,8 +2,25 @@
 
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
-from itez.authentication.forms import LoginForm, SignUpForm
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
+from django.template import loader
+from itez.authentication.forms import LoginForm, SignUpForm, UserCreationForm
 
+
+@login_required(login_url="/login/")
+def create_user(request):
+    user_form = UserCreationForm()
+    if request.method == "POST":
+        user_form = UserCreationForm(request.POST)
+        if user_form.is_valid():
+            user_form.save()
+            return redirect('users_list')
+
+    context = {"form": user_form}
+
+    html_template = loader.get_template('home/user_edit.html')
+    return HttpResponse(html_template.render(context, request))
 
 def login_view(request):
     form = LoginForm(request.POST or None)
