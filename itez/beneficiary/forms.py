@@ -52,7 +52,12 @@ class MedicalRecordForm(ModelForm):
                 HTML('<a class="btn btn-danger" href="/beneficiary/list">Cancel</a>'),
             )
         )
-       
+
+    def save(self, commit=True):
+        instance = super(BeneficiaryForm, self).save(commit=False)
+        instance.save()
+        self.save_m2m()  
+        return instance
 
 class BeneficiaryForm(ModelForm):   
     class Meta:
@@ -107,4 +112,10 @@ class BeneficiaryForm(ModelForm):
                 HTML('<a class="btn btn-danger" href="/beneficiary/list">Cancel</a>'),
             )
         )
+
+    def save(self, commit=True):
+        instance = super(BeneficiaryForm, self).save(commit=False)
+        instance.save()
+        # self.save_m2m()  # we  can use this if we have many to many field on the model i.e Service
+        return instance
        
