@@ -20,9 +20,20 @@ django-crispy-forms==1.13.0  # https://github.com/django-crispy-forms/django-cri
 django-compressor==2.4.1  # https://github.com/django-compressor/django-compressor
 django-redis==5.0.0  # https://github.com/jazzband/django-redis
 django-role-permissions==3.1.1 # https://github.com/vintasoftware/django-role-permissions
+django-imagekit==4.1.0 # https://github.com/matthewwithanm/django-imagekit
+django-import-export==2.5.0
+djangocms-admin-style==2.0.2
+# Common
+# ------------------------------------------------------------------------------
+python-decouple==3.4
+pytz==2021.3
+sqlparse==0.4.2
+toml==0.10.2
+Unipath==1.1
 
 # Django REST Framework
 djangorestframework==3.12.4  # https://github.com/encode/django-rest-framework
 django-cors-headers==3.10.0 # https://github.com/adamchainz/django-cors-headers
 djangorestframework-simplejwt==5.0.0  # https://github.com/jazzband/djangorestframework-simplejwt
 drf-spectacular==0.20.2     # https://drf-spectacular.readthedocs.io/en/latest/index.html
+PyJWT==2.1.0

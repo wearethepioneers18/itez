@@ -1,0 +1,99 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Sign UP {% endblock %} 
+
+<!-- Specific CSS Plugins goes HERE  -->
+{% block css_plugins %}{% endblock css_plugins %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %} 
+
+    <div class="container-fluid page-body-wrapper full-page-wrapper">
+      <div class="content-wrapper d-flex align-items-center auth px-0">
+        <div class="row w-100 mx-0">
+          <div class="col-lg-4 mx-auto">
+            <div class="auth-form-light text-left py-5 px-4 px-sm-5">
+              <div class="brand-logo">
+                <h1 style="padding-left:2.5em">ITEZ</h1>
+                <!-- <img src="/static/assets/images/logo.svg" alt="logo"> -->
+              </div>
+              <h4>
+                Sign UP 
+              </h4>
+              <br />
+              <h6 class="fw-light">
+                  {% if msg %}
+                      {{ msg | safe }}
+                  {% else %}
+                      Add your credentials
+                  {% endif %} 
+              </h6>
+              <form method="post" action="" class="pt-3">
+
+                {% csrf_token %}
+
+                <div class="form-group">
+                  {{ form.username }}
+                </div>
+                <span class="text-error">{{ form.username.errors }}</span>
+
+                <div class="form-group">
+                  {{ form.email }}
+                </div>
+                <span class="text-error">{{ form.email.errors }}</span>
+
+                <div class="form-group">
+                  {{ form.password1 }}
+                </div>
+                <span class="text-error">{{ form.password1.errors }}</span>
+
+                <div class="form-group">
+                  {{ form.password2 }}
+                </div>
+                <span class="text-error">{{ form.password2.errors }}</span>
+
+                <div class="col-md-12 grid-margin stretch-card">
+                  <div class="card">
+                    <div class="card-body">
+                      <div class="form-group">
+                        <label style="color: grey;">Select user Role</label>
+                        <select class="/static/assets/js-example-basic-multiple w-100" multiple="multiple">
+                          <option value="DA">Database Admin</option>
+                          <option value="PM">Project Manager</option>
+                          <option value="DR">Donor Representative</option>
+                          <option value="RM">Report Manager</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mt-3">
+                  <button type="submit" name="register" class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn"  style="width: 100%;">Register</button>
+                </div>
+                
+                <div class="text-center mt-4 fw-light">
+
+                  <h1>&#128151;</h1>
+                  <br/>
+
+                  &copy; <a target="_blank" href="http://digiprophets.com/">DigitalProphets</a>
+                  <br/>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- content-wrapper ends -->
+    </div>
+  
+{% endblock content %}
+
+<!-- Specific JS Plugins goes HERE  -->
+{% block js_plugins %}{% endblock js_plugins %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

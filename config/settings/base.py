@@ -70,6 +70,7 @@ DJANGO_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # "django.contrib.humanize", # Handy template tags
+    "djangocms_admin_style",
     "django.contrib.admin",    
     "django.contrib.gis",
     "django.forms"
@@ -84,12 +85,13 @@ THIRD_PARTY_APPS = [
     "rest_framework.authtoken",
     "corsheaders",
     "rolepermissions",
-    "rest_framework_simplejwt",
     "drf_spectacular",
+    "import_export",
 ]
 
 LOCAL_APPS = [
     "itez.users.apps.UsersConfig",
+    "itez.authentication.apps.AuthenticationConfig",
     "itez.beneficiary.apps.BeneficiaryConfig"
     # Your stuff: custom apps go here
 ]
@@ -106,7 +108,6 @@ MIGRATION_MODULES = {"sites": "itez.contrib.sites.migrations"}
 # https://docs.djangoproject.com/en/dev/ref/settings/#authentication-backends
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
-    "allauth.account.auth_backends.AuthenticationBackend",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-user-model
 AUTH_USER_MODEL = "users.User"
@@ -115,6 +116,7 @@ LOGIN_REDIRECT_URL = "users:redirect"
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-url
 LOGIN_URL = "account_login"
 
+LOGOUT_REDIRECT_URL = '/login'
 # PASSWORDS
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#password-hashers
@@ -134,6 +136,8 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
+
+SECRET_KEY = "$gv-^zw_=h6&!z!@r1aua#p52-$sb90bca0u%(g+3kdt4!$q&o"
 
 # MIDDLEWARE
 # ------------------------------------------------------------------------------
@@ -205,6 +209,7 @@ TEMPLATES = [
     }
 ]
 
+
 # https://docs.djangoproject.com/en/dev/ref/settings/#form-renderer
 FORM_RENDERER = "django.forms.renderers.TemplatesSetting"
 
@@ -237,6 +242,8 @@ EMAIL_BACKEND = env(
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-timeout
 EMAIL_TIMEOUT = 5
 
+# Pagination
+ITEMS_PER_PAGE = 10
 # ADMIN
 # ------------------------------------------------------------------------------
 # Django Admin URL.
@@ -316,15 +323,21 @@ STATICFILES_FINDERS += ["compressor.finders.CompressorFinder"]
 # django-rest-framework - https://www.django-rest-framework.org/api-guide/settings/
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        "itez.authentication.backends.ActiveSessionAuthentication",
     ),
-    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
+    "DEFAULT_RENDERER_CLASSES": (
+        "rest_framework.renderers.JSONRenderer",
+        ),
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
+    "PAGE_SIZE": 10
 }
 
-# django-cors-headers - https://github.com/adamchainz/django-cors-headers#setup
+
+CORS_ORIGIN_ALLOW_ALL = True
+# CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_HEADERS = ['*']
 CORS_URLS_REGEX = r"^/api/.*$"
-# Your stuff...
 # ------------------------------------------------------------------------------
 
 # django-role-permissions
@@ -337,34 +350,26 @@ SPECTACULAR_SETTINGS = {
     'VERSION': '1.0.0',
 }
 
-# Settings for JWT Token Authentication.
-SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
-    'ROTATE_REFRESH_TOKENS': False,
-    'BLACKLIST_AFTER_ROTATION': False,
-    'UPDATE_LAST_LOGIN': False,
+CMS_ENABLE_UPDATE_CHECK = False
 
-    'ALGORITHM': 'HS256',
-    # 'SIGNING_KEY': settings.SECRET_KEY,
-    'VERIFYING_KEY': None,
-    'AUDIENCE': None,
-    'ISSUER': None,
-    'JWK_URL': None,
-    'LEEWAY': 0,
+# API CONFIGS
 
-    'AUTH_HEADER_TYPES': ('Bearer',),
-    'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
-    'USER_ID_FIELD': 'id',
-    'USER_ID_CLAIM': 'user_id',
-    'USER_AUTHENTICATION_RULE': 'rest_framework_simplejwt.authentication.default_user_authentication_rule',
-
-    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
-    'TOKEN_TYPE_CLAIM': 'token_type',
-
-    'JTI_CLAIM': 'jti',
-
-    'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
-    'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
-    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
+SPECTACULAR_SETTINGS = {
+    # available SwaggerUI configuration parameters
+    # https://swagger.io/docs/open-source-tools/swagger-ui/usage/configuration/
+    "SWAGGER_UI_SETTINGS": {
+        "deepLinking": True,
+        "persistAuthorization": True,
+        "displayOperationId": True,
+    },
+    'TITLE': 'ITEZ API',
+    'DESCRIPTION': 'Comprehensive data management of Intersex and Trans-persons in Zambia',
+    # Statically set schema version. May also be an empty string. When used together with
+    # view versioning, will become '0.0.0 (v2)' for 'v2' versioned requests.
+    # Set VERSION to None if only the request version should be rendered.
+    'VERSION': '1.3.0',
+    # available SwaggerUI versions: https://github.com/swagger-api/swagger-ui/releases
+    # "SWAGGER_UI_DIST": "//unpkg.com/swagger-ui-dist@2.0", 
+    # "REDOC_DIST": "https://cdn.jsdelivr.net/npm/redoc@latest",
+    # "SWAGGER_UI_FAVICON_HREF": settings.STATIC_URL + "your_company_favicon.png", # default is swagger favicon
 }
