@@ -72,7 +72,11 @@
                               </form>
                             </div>
                             <div>
-                              <button class="btn btn-primary btn-lg text-white mb-0 me-0" type="button"><i class="mdi mdi-account-plus"></i>Add new Beneficiary</button>
+                              <button class="btn btn-primary btn-lg text-white mb-0 me-0" type="button">
+                                
+                                <a href="{% url 'beneficiary:create' %}" class="text-white" style="text-decoration: none;">
+                                <i class="mdi mdi-account-plus"></i >Add new Beneficiary</button>
+                                </a>
                             </div>
                           </div>
                           <div class="table-responsive  mt-1">
@@ -105,7 +109,7 @@
                                     </div>
                                   </td>
                                   <td>
-                                    <a style="text-decoration: none;" href="#">{{ beneficiary.beneficiary_id }}</a>
+                                    <a style="text-decoration: none;" href="{{ beneficiary.get_absolute_url }}">{{ beneficiary.beneficiary_id }}</a>
                                   </td>
                                   <td>
                                     <div class="d-flex ">

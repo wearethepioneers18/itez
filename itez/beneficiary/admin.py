@@ -1,10 +1,12 @@
 from django.contrib import admin
 from itez.beneficiary.models import (
+    MedicalRecord,
     Lab,
     Drug,
     Province,
     District,
     Prescription,
+    
 
     ServiceArea,
     WorkDetail,
@@ -32,7 +34,7 @@ class LabAdmin(ImportExportModelAdmin):
 
     list_display = (
         'title', 
-        'date'
+        'requested_date'
         )
 
     search_fields = (
@@ -91,7 +93,8 @@ class ServiceAdmin(ImportExportModelAdmin):
         'title', 
         'client_type', 
         'service_type', 
-        'datetime'
+        'datetime',
+        'facility'
         )
 
 class FacilityResource(resources.ModelResource):
@@ -207,6 +210,29 @@ class ServiceProviderPersonelQualificationAdmin(admin.ModelAdmin):
     list_display = [
         'name'
     ]
+
+# register MedicalRecord class
+@admin.register(MedicalRecord)
+class MedicalRecordAdmin(admin.ModelAdmin):
+    list_display = [
+        'beneficiary',
+        'service',
+        'service_provider',
+        'facility',
+        'prescription',
+        'lab',
+    ]
+
+    list_filter = [
+        'beneficiary',
+        'service',
+        'service_provider',
+        'facility',        
+    ]
+
+   
+
+    list_per_page = 30
 
 
 admin.site.register(Province, ProvinceAdmin)

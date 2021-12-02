@@ -1,39 +1,61 @@
 <div class="row">
-    <small class="welcome-text">Beneficiary segments, <span class="fw-bold">in the past 24 hours</span></small>
-    <br/><br/>
+  <small class="welcome-text"
+    >Beneficiary segments,
+    <span class="fw-bold">in the past 24 hours</span></small
+  >
+  <br /><br />
 
-    <div class="col-sm-12">
-      <div class="statistics-details d-flex align-items-center justify-content-between">
-        <div> 
-          <p class="statistics-title">OPD (Outpatient Departments) </p>
-          <h3 class="rate-percentage">324</h3>
-          <p class="text-danger d-flex"><i class="mdi mdi-menu-down"></i><span>-0.5%</span></p>
-        </div>
-        <div>
-          <p class="statistics-title">HTS (HIV Testing Services)</p>
-          <h3 class="rate-percentage">682</h3>
-          <p class="text-success d-flex"><i class="mdi mdi-menu-up"></i><span>+0.1%</span></p>
-        </div>
-        <div>
-          <p class="statistics-title">VL (Viral Load)</p>
-          <h3 class="rate-percentage">583</h3>
-          <p class="text-danger d-flex"><i class="mdi mdi-menu-down"></i><span>68.8</span></p>
-        </div>
-        <div class="d-none d-md-block">
-          <p class="statistics-title">ART (Antiretroviral Therapy) </p>
-          <h3 class="rate-percentage">1,203</h3>
-          <p class="text-success d-flex"><i class="mdi mdi-menu-down"></i><span>+0.8%</span></p>
-        </div>
-        <div class="d-none d-md-block">
-          <p class="statistics-title">Labs</p>
-          <h3 class="rate-percentage">256</h3>
-          <p class="text-danger d-flex"><i class="mdi mdi-menu-down"></i><span>68.8</span></p>
-        </div>
-        <div class="d-none d-md-block">
-          <p class="statistics-title">Pharmacy</p>
-          <h3 class="rate-percentage">982</h3>
-          <p class="text-success d-flex"><i class="mdi mdi-menu-down"></i><span>+0.8%</span></p>
-        </div>
+  <div class="col-sm-12">
+    <div
+      class="
+        statistics-details
+        d-flex
+        align-items-center
+        justify-content-between
+      "
+    >
+      <div>
+        <p class="statistics-title">OPD (Outpatient Departments)</p>
+        <h3 class="rate-percentage">{{opd}}</h3>
+        <p class="text-danger d-flex">
+          <i class="mdi mdi-menu-down"></i><span>-0.5%</span>
+        </p>
+      </div>
+      <div>
+        <p class="statistics-title">HTS (HIV Testing Services)</p>
+        <h3 class="rate-percentage">{{hts}}</h3>
+        <p class="text-success d-flex">
+          <i class="mdi mdi-menu-up"></i><span>+0.1%</span>
+        </p>
+      </div>
+      <div>
+        <p class="statistics-title">VL (Viral Load)</p>
+        <h3 class="rate-percentage">{{vl}}</h3>
+        <p class="text-danger d-flex">
+          <i class="mdi mdi-menu-down"></i><span>68.8</span>
+        </p>
+      </div>
+      <div class="d-none d-md-block">
+        <p class="statistics-title">ART (Antiretroviral Therapy)</p>
+        <h3 class="rate-percentage">{{art}}</h3>
+        <p class="text-success d-flex">
+          <i class="mdi mdi-menu-down"></i><span>+0.8%</span>
+        </p>
+      </div>
+      <div class="d-none d-md-block">
+        <p class="statistics-title">Labs</p>
+        <h3 class="rate-percentage">{{lab}}</h3>
+        <p class="text-danger d-flex">
+          <i class="mdi mdi-menu-down"></i><span>68.8</span>
+        </p>
+      </div>
+      <div class="d-none d-md-block">
+        <p class="statistics-title">Pharmacy</p>
+        <h3 class="rate-percentage">{{pharmacy}}</h3>
+        <p class="text-success d-flex">
+          <i class="mdi mdi-menu-down"></i><span>+0.8%</span>
+        </p>
       </div>
     </div>
-  </div> 
+  </div>
+</div>
