@@ -69,6 +69,11 @@ class Beneficiary(models.Model):
     """
     Implements the Beneficiary properties and required methods.
     """
+    ART_STATUS = (
+        ("enrolled", _("Enrolled")),
+        ("not_enrolled", _("Not Enrolled")),
+    )
+
     MARITAL_STATUS = (
         ("single", _("Single")),
         ("married", _("Married")),
@@ -139,18 +144,50 @@ class Beneficiary(models.Model):
         max_length=100,
         editable=False
     )
+    art_status = models.CharField(
+        _("ART Status"),
+        max_length=100,
+        null=True,
+        blank=True,
+        choices=ART_STATUS
+    )
+    last_vl = models.IntegerField(
+        _("Last Viral Load"),
+        null=True,
+        blank=True
+    )
+    hiv_status = models.BooleanField(
+        _("HIV Status"),
+        default=False,
+        null=True,
+        blank=True
+    )
     agent = models.ForeignKey(
         AgentDetail,
         on_delete=models.PROTECT,
         null=True,
         blank=True
     )
+    registered_facility = models.ForeignKey(
+        'Facility',
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        related_name="registerd_facility"
+    )
+    service_facility = models.ForeignKey(
+        'Facility',
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True
+    )
     date_of_birth = models.DateField(_("Date of Birth"))
-
     marital_status = models.CharField(
         _("Marital Status"),
         choices=MARITAL_STATUS,
-        max_length=100
+        max_length=100,
+        null=True,
+        blank=True
     )
     name_of_spouse = models.CharField(
         _("Phone Number"),
@@ -170,7 +207,9 @@ class Beneficiary(models.Model):
     )
     parent_details = models.ForeignKey(
         'BeneficiaryParent',
-        on_delete=models.PROTECT
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True
     )
     education_level = models.CharField(
         _("Education level"),
@@ -179,8 +218,12 @@ class Beneficiary(models.Model):
         blank=True,
         choices=EDUCATION_LEVEL
     )
+    address = models.TextField(
+        _("Address"),
+        null=True,
+        blank=True,
+    )
     alive = models.BooleanField(default=True)
-    service_provider = models.ManyToManyField('ServiceProviderPersonel')
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -559,24 +602,8 @@ class Prescription(models.Model):
         null=True,
         blank=True
     )
-    beneficiary = models.ForeignKey(
-        Beneficiary,
-        on_delete=models.CASCADE,
-    )
     drugs = models.ManyToManyField(
         Drug
-    )
-    service_provider = models.ForeignKey(
-        ServiceProviderPersonel,
-        on_delete=models.PROTECT,
-        null=True,
-        blank=True
-    )
-    facility = models.ForeignKey(
-        Facility,
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL
     )
     date = models.DateTimeField(
         auto_now_add=False,
@@ -593,7 +620,7 @@ class Prescription(models.Model):
         verbose_name_plural = _("Prescriptions")
     
     def __str__(self):
-        return f"{self.title} Prescription for: {self.beneficiary}"
+        return f"{self.title}"
 
 class Lab(models.Model):
     """
@@ -604,22 +631,6 @@ class Lab(models.Model):
         max_length=200,
         null=True,
         blank=True
-    )
-    beneficiary = models.ForeignKey(
-        Beneficiary,
-        on_delete=models.CASCADE,
-    )
-    service_provider = models.ForeignKey(
-        ServiceProviderPersonel,
-        on_delete=models.PROTECT,
-        null=True,
-        blank=True
-    )
-    facility = models.ForeignKey(
-        Facility,
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL
     )
     results = models.TextField(
         _("Lab Results"),
@@ -648,7 +659,7 @@ class Lab(models.Model):
         verbose_name_plural = _("Labs")
     
     def __str__(self):
-        return f"Lab: {self.title} for: {self.beneficiary.first_name} {self.beneficiary.first_name}"
+        return f"Lab: {self.title}"
 
 # HTS = 1
 # LAB = 2
@@ -711,11 +722,6 @@ class Service(models.Model):
         blank=True,
         help_text=_("Extra comments if any."),
     )
-    facility = models.ForeignKey(Facility,
-    null=True,
-    blank=True,
-    on_delete=models.SET_NULL
-    )
     class Meta:
         verbose_name = 'Service'
         verbose_name_plural = 'Services'
@@ -735,22 +741,10 @@ class MedicalRecord(models.Model):
         Service,
         on_delete=models.CASCADE,
     )
-    service_provider = models.ForeignKey(
-        ServiceProviderPersonel,
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True
-    )
     provider_comments = models.TextField(
         _("Extra Details/Comment"),
         null=True,
         blank=True
-    )
-    facility = models.ForeignKey(
-        Facility,
-        null=True,
-        blank=True,
-        on_delete=models.CASCADE
     )
     interaction_date = models.DateTimeField(
         auto_now_add=False,
@@ -787,7 +781,7 @@ class MedicalRecord(models.Model):
         verbose_name_plural = _("Medical Records")
     
     def __str__(self):
-        return f"{self.beneficiary} {self.service}"
+        return f"Medical Record for: {self.beneficiary}, service: {self.service}"
     
     def  get_absolute_url(self):
         return reverse('beneficiary:medical_record_list', kwargs={'pk': self.pk})

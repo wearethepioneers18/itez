@@ -33,7 +33,7 @@
 
           <form class="form-sample" action="/medical_record" method="post">
             {% csrf_token %} 
-            {% crispy form %}
+            {% crispy form form.helper %}
             
           </form>
 

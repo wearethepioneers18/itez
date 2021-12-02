@@ -5,6 +5,7 @@
 {% block css_plugins %}
 
 <link rel="stylesheet" href="/static/assets/js/select.dataTables.min.css" />
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" />
 
 {% endblock css_plugins %}
 
@@ -20,8 +21,7 @@
 
           <form class="form-sample" action="/create" method="post" >
             {% csrf_token %}
-            
-            {% crispy form %}
+            {% crispy form form.helper %}
           </form>
 
           <!-- <form class="form-sample" method="post">
