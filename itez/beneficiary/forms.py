@@ -104,6 +104,9 @@ class BeneficiaryForm(ModelForm):
                     Column('alive', css_class='form-group col-md-4  mb-0'),
                     Column('education_level', css_class='form-group col-md-4  mb-0'),
                     Column('alive', css_class='form-group col-md-4  mb-0'),
+                    Column('hiv_status', css_class='form-group col-md-4  mb-0'),
+                    Column('art_status', css_class='form-group col-md-4  mb-0'),
+                    Column('last_vl', css_class='form-group col-md-4  mb-0'),
                     css_class='form-row'
                 ),
             ),

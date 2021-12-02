@@ -69,6 +69,11 @@ class Beneficiary(models.Model):
     """
     Implements the Beneficiary properties and required methods.
     """
+    ART_STATUS = (
+        ("enrolled", _("Enrolled")),
+        ("not_enrolled", _("Not Enrolled")),
+    )
+
     MARITAL_STATUS = (
         ("single", _("Single")),
         ("married", _("Married")),
@@ -138,6 +143,24 @@ class Beneficiary(models.Model):
     beneficiary_id = models.CharField(
         max_length=100,
         editable=False
+    )
+    art_status = models.CharField(
+        _("ART Status"),
+        max_length=100,
+        null=True,
+        blank=True,
+        choices=ART_STATUS
+    )
+    last_vl = models.IntegerField(
+        _("Last Viral Load"),
+        null=True,
+        blank=True
+    )
+    hiv_status = models.BooleanField(
+        _("HIV Status"),
+        default=False,
+        null=True,
+        blank=True
     )
     agent = models.ForeignKey(
         AgentDetail,
