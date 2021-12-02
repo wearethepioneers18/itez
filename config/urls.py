@@ -25,7 +25,7 @@ from itez.beneficiary.api.views import (
 urlpatterns = [
 
     path(settings.ADMIN_URL, admin.site.urls),
-    path("", include("itez.beneficiary.urls")),          
+    path("", include("itez.beneficiary.urls", namespace="beneficiary")),          
     path("", include("itez.authentication.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

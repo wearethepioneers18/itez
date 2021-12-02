@@ -3,15 +3,26 @@
 from django.urls import path, re_path
 from itez.beneficiary import views
 
+app_name = 'beneficiary'
+
 urlpatterns = [
 
     # The home page
     path("", views.index, name='home'),
     path("events", views.user_events, name='user_events'),
+    path("uielements", views.uielements, name='uielements'),
     
+    # Beneficiary
     path("report", views.beneficiary_report, name='report'),
-    path("list_beneficiary", views.list_beneficiary, name='list_beneficiary'),
+    path("beneficiary/list", views.BenenficiaryListView.as_view(), name='list'),
+    path("beneficiary/create", views.BeneficiaryCreateView.as_view(), name='create'),
+    path("beneficiary/<int:pk>/detail", views.BeneficiaryDetailView.as_view(), name='detail'),
+    path("benefficiary/<int:pk>/medical_record_list", views.MedicalRecordListView.as_view(), name='medical_record_list'),
 
+    # Medical Record `beneficiary:medical_record_list`
+    path("medical_record_list", views.MedicalRecordListView.as_view(), name='medical_record_list'),
+    path("medical_record/<int:pk>/details", views.MedicalRecordDetailView.as_view(), name='medical_record_detail'),
+    path("medical_record_create", views.MedicalRecordCreateView.as_view(), name='medical_record_create'),
     # Matches any html file
     # re_path(r'^.*\.*', views.pages, name='pages'),
 

@@ -54,8 +54,6 @@
             <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview"> 
               
               {% include "includes/header_stats.html" %}
-              
-             
               <div class="row">
                 <div class="col-lg-12 d-flex flex-column">
                   <div class="row flex-grow">
@@ -74,7 +72,11 @@
                               </form>
                             </div>
                             <div>
-                              <button class="btn btn-primary btn-lg text-white mb-0 me-0" type="button"><i class="mdi mdi-account-plus"></i>Add new Beneficiary</button>
+                              <button class="btn btn-primary btn-lg text-white mb-0 me-0" type="button">
+                                
+                                <a href="{% url 'beneficiary:create' %}" class="text-white" style="text-decoration: none;">
+                                <i class="mdi mdi-account-plus"></i >Add new Beneficiary</button>
+                                </a>
                             </div>
                           </div>
                           <div class="table-responsive  mt-1">
@@ -87,6 +89,7 @@
                                         <input type="checkbox" class="form-check-input" aria-checked="false"><i class="input-helper"></i></label>
                                     </div>
                                   </th>
+                                  <th>Beneficiary  ID</th>
                                   <th>Full Name</th>
                                   <th>Gender & Sex</th>
                                   <th>Completed Treatment</th>
@@ -96,6 +99,8 @@
                                 </tr>
                               </thead>
                               <tbody>
+                                {% if beneficiaries %}
+                                {% for beneficiary in beneficiaries %}
                                 <tr>
                                   <td>
                                     <div class="form-check form-check-flat mt-0">
@@ -104,18 +109,29 @@
                                     </div>
                                   </td>
                                   <td>
+                                    <a style="text-decoration: none;" href="{{ beneficiary.get_absolute_url }}">{{ beneficiary.beneficiary_id }}</a>
+                                  </td>
+                                  <td>
                                     <div class="d-flex ">
-                                      <img src="/static/assets/images/faces/male.jpeg" alt="">
-                                      <!-- <img src="/static/assets/images/faces/face1.jpg" alt=""> -->
-                                      <div>
-                                        <h6>James Phiri</h6>
-                                        <p>34 years Old</p>
-                                      </div>
+                                      {% if beneficiary.profile_photo %}
+                                        <img src="{{ beneficiary.profile_photo.url }}">
+                                      {% elif beneficiary.sex == "Male" %}
+                                        <img src="/static/assets/images/faces/male.jpeg" alt="">
+                                      {% else %}
+                                        <img src="/static/assets/images/faces/female.jpeg" alt="">
+                                      {% endif %}
+                                        <!-- <img src="/static/assets/images/faces/face1.jpg" alt=""> -->
+                                        <div>
+                                          <a style="text-decoration: none;" href="#">
+                                            <h6>{{ beneficiary.first_name }} {{ beneficiary.last_name }}</h6>
+                                            <p>{{beneficiary.get_age }} years old</p>
+                                          </a>
+                                        </div>
                                     </div>
                                   </td>
                                   <td>
-                                    <h6>Male</h6>
-                                    <p>female</p>
+                                    <h6>{{ beneficiary.sex }}</h6>
+                                    <p>{{ beneficiary.gender }}</p>
                                   </td>
                                   <td>
                                     <div>
@@ -128,7 +144,7 @@
                                       </div>
                                     </div>
                                   </td>
-                                  <td>Western Province</td>
+                                  <td>{{ beneficiary.province}}</td>
                                   <td><div class="badge badge-opacity-warning">OPD</div></td>
                                   <td>
                                     <div class="badge badge-opacity-warning">
@@ -144,103 +160,35 @@
                                       </div>
                                   </td>
                                 </tr>
-                                
-                                <tr>
-                                  <td>
-                                    <div class="form-check form-check-flat mt-0">
-                                      <label class="form-check-label">
-                                      <input type="checkbox" class="form-check-input" aria-checked="false"><i class="input-helper"></i></label>
-                                    </div>
-                                  </td>
-                                  <td>
-                                    <div class="d-flex">
-                                      <img src="/static/assets/images/faces/male.jpeg" alt="">
-                                      <div>
-                                        <h6>Matthew Mwale</h6>
-                                        <p>45 Years Old</p>
-                                      </div>
-                                    </div>
-                                  </td>
-                                  <td>
-                                    <h6>Male</h6>
-                                    <p>male</p>
-                                  </td>
-                                  <td>
-                                    <div>
-                                      <div class="d-flex justify-content-between align-items-center mb-1 max-width-progress-wrap">
-                                        <p class="text-success">65%</p>
-                                        <p>85/162</p>
-                                      </div>
-                                      <div class="progress progress-md">
-                                        <div class="progress-bar bg-danger" role="progressbar" style="width: 15%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100"></div>
-                                      </div>
-                                    </div>
-                                  </td>
-                                  <td>Southern Province</td>
-                                  <td><div class="badge badge-opacity-danger">ART</div></td>
-                                  <td>
-                                    <div class="badge badge-opacity-warning">
-                                      <a href="#">
-                                          <i class="menu-icon mdi mdi-pencil"></i>
-                                        </a>
-                                      </div>
-                                    
-                                      <div class="badge badge-opacity-danger">
-                                        <a href="#">
-                                          <i class="menu-icon mdi mdi-delete-forever"></i>
-                                        </a>
-                                      </div>
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <td>
-                                    <div class="form-check form-check-flat mt-0">
-                                      <label class="form-check-label">
-                                      <input type="checkbox" class="form-check-input" aria-checked="false"><i class="input-helper"></i></label>
-                                    </div>
-                                  </td>
-                                  <td>
-                                    <div class="d-flex">
-                                      <img src="/static/assets/images/faces/female.jpeg" alt="">
-                                      <div>
-                                        <h6>Monica Nayame</h6>
-                                        <p>39 Years Old</p>
-                                      </div>
-                                    </div>
-                                  </td>
-                                  <td>
-                                    <h6>Female</h6>
-                                    <p>male</p>
-                                  </td>
-                                  <td>
-                                    <div>
-                                      <div class="d-flex justify-content-between align-items-center mb-1 max-width-progress-wrap">
-                                        <p class="text-success">65%</p>
-                                        <p>85/162</p>
-                                      </div>
-                                      <div class="progress progress-md">
-                                        <div class="progress-bar bg-success" role="progressbar" style="width: 65%" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
-                                      </div>
-                                    </div>
-                                  </td>
-                                  <td>Lusaka Province</td>
-                                  <td><div class="badge badge-opacity-success">Pharmacy</div></td>
-                                  <td>
-                                    <div class="badge badge-opacity-warning">
-                                        <a href="#">
-                                          <i class="menu-icon mdi mdi-pencil"></i>
-                                        </a>
-                                      </div>
-                                    
-                                      <div class="badge badge-opacity-danger">
-                                        <a href="#">
-                                          <i class="menu-icon mdi mdi-delete-forever"></i>
-                                        </a>
-                                      </div>
-                                  </td>
-                                </tr>
+                                {% endfor %}
+                                {% else %}
+                                <h3>No Beneficiaries Available</h3>
+                                {% endif %}
                               </tbody>
                             </table>
+                          </div>
+                          <div class="m-3">
+
+                            {% if is_paginated %}
+
+                              {% if page_obj.has_previous %}
+                                <a class="btn btn-primary btn-lg text-white mb-0 me-0" href="?page=1">First</a>
+                                <a class="btn btn-primary btn-lg text-white mb-0 me-0" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                              {% endif %}
+
+                              {% for num in page_obj.paginator.page_range %}
+                                {% if page_obj.number == num %}
+                                  <a class="btn btn-lg mb-0 me-0" href="?page={{ num }}">{{ num }}</a>
+                                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                  <a class="btn btn-primary btn-lg text-white mb-0 me-0" href="?page={{ num }}">{{ num }}</a>
+                                {% endif %}
+                              {% endfor %}
+
+                              {% if page_obj.has_next %}
+                                <a class="btn btn-primary btn-lg text-white mb-0 me-0" href="?page={{ page_obj.next_page_number }}">Next</a>
+                                <a class="btn btn-primary btn-lg text-white mb-0 me-0" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+                              {% endif %}
+                            {% endif %}
                           </div>
                         </div>
                       </div>

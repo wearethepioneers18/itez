@@ -1,5 +1,8 @@
+from datetime import date
+from  django.urls import reverse
 from django.contrib.gis.db import models
 from django.contrib.gis.db.models import fields
+from django.db.models.deletion import SET, SET_NULL
 from django.utils.translation import gettext_lazy as _
 
 from imagekit.processors import ResizeToFill
@@ -176,16 +179,30 @@ class Beneficiary(models.Model):
         blank=True,
         choices=EDUCATION_LEVEL
     )
+    alive = models.BooleanField(default=True)
     service_provider = models.ManyToManyField('ServiceProviderPersonel')
     created = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.first_name} {self.last_name}"
 
     class Meta:
         verbose_name = "Beneficiary"
         verbose_name_plural = "Beneficiaries"
         ordering = ["created"]
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
+
+    def get_age(self):
+        """
+        Calculates the Beneficiaries age from birth date.
+        """
+        days_in_year = 365.2425   
+        age = int((date.today() - self.date_of_birth).days / days_in_year)
+        return age
+
+
+    def  get_absolute_url(self):
+        return reverse('beneficiary:detail', kwargs={'pk': self.pk})
+ 
 
 
 class BeneficiaryParent(models.Model):
@@ -254,7 +271,6 @@ class BeneficiaryParent(models.Model):
         return f"Beneficiary Parents are \
             Father: {self.father_first_name} {self.father_last_name}, \
             Mother: {self.mother_first_name} {self.mother_last_name}"
-
 
 class Province(models.Model):
     """
@@ -605,7 +621,18 @@ class Lab(models.Model):
         blank=True,
         on_delete=models.SET_NULL
     )
-    date = models.DateTimeField(
+    results = models.TextField(
+        _("Lab Results"),
+        null=True,
+        blank=True
+    )
+    results_status = models.CharField(
+        _("Lab Results Status"),
+        max_length=200,
+        null=True,
+        blank=True
+    )
+    requested_date = models.DateTimeField(
         auto_now_add=False,
         null=True,
         blank=True
@@ -615,6 +642,7 @@ class Lab(models.Model):
         null=True,
         blank=True
     )
+    created = models.DateTimeField(auto_now_add=True)
     class Meta:
         verbose_name = _("Lab")
         verbose_name_plural = _("Labs")
@@ -622,20 +650,20 @@ class Lab(models.Model):
     def __str__(self):
         return f"Lab: {self.title} for: {self.beneficiary.first_name} {self.beneficiary.first_name}"
 
-HTS = 1
-LAB = 2
-PHARMACY = 3
+# HTS = 1
+# LAB = 2
+# PHARMACY = 3
 SERVICE_TYPES =  (
-    (HTS, _('HTS (HIV Testing Services)')),
-    (LAB, _('LAB')),
-    (PHARMACY, _('PHARMACY')),
+    ("HTS", _('HTS (HIV Testing Services)')),
+    ("LAB", _('LAB')),
+    ("PHARMACY", _('PHARMACY')),
 )
 
-OPD = 1
-ART = 2
+# OPD = 1
+# ART = 2
 CLIENT_TYPES =  (
-    (OPD, _('OPD (Outpatient Departments )')),
-    (ART, _('ART (Antiretroviral Therapy)')),
+    ("OPD", _('OPD (Outpatient Departments )')),
+    ("ART", _('ART (Antiretroviral Therapy)')),
 )
 
 
@@ -683,6 +711,11 @@ class Service(models.Model):
         blank=True,
         help_text=_("Extra comments if any."),
     )
+    facility = models.ForeignKey(Facility,
+    null=True,
+    blank=True,
+    on_delete=models.SET_NULL
+    )
     class Meta:
         verbose_name = 'Service'
         verbose_name_plural = 'Services'
@@ -690,3 +723,71 @@ class Service(models.Model):
     def __str__(self):
         return self.title
 
+class MedicalRecord(models.Model):
+    """
+    Beneficiary's Service.
+    """
+    beneficiary = models.ForeignKey(
+        Beneficiary,
+        on_delete=models.CASCADE,
+    )
+    service = models.ForeignKey(
+        Service,
+        on_delete=models.CASCADE,
+    )
+    service_provider = models.ForeignKey(
+        ServiceProviderPersonel,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True
+    )
+    provider_comments = models.TextField(
+        _("Extra Details/Comment"),
+        null=True,
+        blank=True
+    )
+    facility = models.ForeignKey(
+        Facility,
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE
+    )
+    interaction_date = models.DateTimeField(
+        auto_now_add=False,
+        null=True,
+        blank=True
+    )
+    prescription = models.ForeignKey(
+        Prescription,
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE
+    )
+    no_of_days = models.IntegerField(
+        _("No of Days"),
+        null=True,
+        blank=True
+    )
+    when_to_take = models.TextField(
+        _("When to Take"),
+        max_length=500,
+        null=True,
+        blank=True
+    )
+    lab = models.ForeignKey(
+        Lab,
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE
+    )
+    created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = _("Medical Record")
+        verbose_name_plural = _("Medical Records")
+    
+    def __str__(self):
+        return f"{self.beneficiary} {self.service}"
+    
+    def  get_absolute_url(self):
+        return reverse('beneficiary:medical_record_list', kwargs={'pk': self.pk})
