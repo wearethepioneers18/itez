@@ -118,7 +118,7 @@ class BeneficiaryForm(ModelForm):
 
     def save(self, commit=True):
         instance = super(BeneficiaryForm, self).save(commit=False)
-        instance.save()
+        if commit:
+            instance.save()
         # self.save_m2m()  # we  can use this if we have many to many field on the model i.e Service
         return instance
-       
