@@ -620,7 +620,7 @@ class Prescription(models.Model):
         verbose_name_plural = _("Prescriptions")
     
     def __str__(self):
-        return f"{self.title} Prescription for: {self.beneficiary}"
+        return f"{self.title}"
 
 class Lab(models.Model):
     """
@@ -659,7 +659,7 @@ class Lab(models.Model):
         verbose_name_plural = _("Labs")
     
     def __str__(self):
-        return f"Lab: {self.title} for: {self.beneficiary.first_name} {self.beneficiary.first_name}"
+        return f"Lab: {self.title}"
 
 # HTS = 1
 # LAB = 2
@@ -781,7 +781,7 @@ class MedicalRecord(models.Model):
         verbose_name_plural = _("Medical Records")
     
     def __str__(self):
-        return f"{self.beneficiary} {self.service}"
+        return f"Medical Record for: {self.beneficiary}, service: {self.service}"
     
     def  get_absolute_url(self):
         return reverse('beneficiary:medical_record_list', kwargs={'pk': self.pk})
