@@ -20,7 +20,7 @@ from itez.beneficiary.models import Beneficiary, BeneficiaryParent, MedicalRecor
 from itez.beneficiary.models import Service
 
 from itez.beneficiary.forms import BeneficiaryForm, MedicalRecordForm
-from itez.beneficiary.users.models import User
+from itez.users.models import User
 
 
 @login_required(login_url="/login/")
