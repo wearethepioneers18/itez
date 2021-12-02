@@ -15,6 +15,7 @@ from django.shortcuts import render
 from django.views.generic import TemplateView
 from django.views.generic.list import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.paginator import Paginator
 
 from itez.beneficiary.models import Beneficiary, BeneficiaryParent, MedicalRecord
 from itez.beneficiary.models import Service
