@@ -1,6 +1,6 @@
 from django.contrib import admin
 from itez.beneficiary.models import (
-    BeneficiaryService,
+    MedicalRecord,
     Lab,
     Drug,
     Province,
@@ -211,9 +211,9 @@ class ServiceProviderPersonelQualificationAdmin(admin.ModelAdmin):
         'name'
     ]
 
-# register beneficiaryService class
-@admin.register(BeneficiaryService)
-class BeneficiaryServiceAdmin(admin.ModelAdmin):
+# register MedicalRecord class
+@admin.register(MedicalRecord)
+class MedicalRecordAdmin(admin.ModelAdmin):
     list_display = [
         'beneficiary',
         'service',

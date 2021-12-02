@@ -1,4 +1,5 @@
-from typing import Set
+from datetime import date
+from  django.urls import reverse
 from django.contrib.gis.db import models
 from django.contrib.gis.db.models import fields
 from django.db.models.deletion import SET, SET_NULL
@@ -178,8 +179,14 @@ class Beneficiary(models.Model):
         blank=True,
         choices=EDUCATION_LEVEL
     )
+    alive = models.BooleanField(default=True)
     service_provider = models.ManyToManyField('ServiceProviderPersonel')
     created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Beneficiary"
+        verbose_name_plural = "Beneficiaries"
+        ordering = ["created"]
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
@@ -192,10 +199,10 @@ class Beneficiary(models.Model):
         age = int((date.today() - self.date_of_birth).days / days_in_year)
         return age
 
-    class Meta:
-        verbose_name = "Beneficiary"
-        verbose_name_plural = "Beneficiaries"
-        ordering = ["created"]
+
+    def  get_absolute_url(self):
+        return reverse('beneficiary:detail', kwargs={'pk': self.pk})
+ 
 
 
 class BeneficiaryParent(models.Model):
@@ -716,7 +723,7 @@ class Service(models.Model):
     def __str__(self):
         return self.title
 
-class BeneficiaryService(models.Model):
+class MedicalRecord(models.Model):
     """
     Beneficiary's Service.
     """
@@ -776,8 +783,11 @@ class BeneficiaryService(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = _("Beneficiary Service")
-        verbose_name_plural = _("Beneficiary Services")
+        verbose_name = _("Medical Record")
+        verbose_name_plural = _("Medical Records")
     
     def __str__(self):
         return f"{self.beneficiary} {self.service}"
+    
+    def  get_absolute_url(self):
+        return reverse('beneficiary:medical_record_list', kwargs={'pk': self.pk})

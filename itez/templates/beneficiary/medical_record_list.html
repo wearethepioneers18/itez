@@ -1,0 +1,56 @@
+{% extends "layouts/base.html" %} 
+
+{% block title %} 
+
+{{ title|title }}
+
+{% endblock title %}
+
+<!-- Specific CSS Plugins goes HERE  -->
+{% block css_plugins %}
+
+<link rel="stylesheet" href="/static/assets/js/select.dataTables.min.css" />
+
+{% endblock css_plugins %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+
+{% endblock stylesheets %}
+
+{% block content %}
+
+<form action="/medical_record/" method="post">
+  <h1>Simple form</h1>
+</form>
+
+<div class="content-wrapper">
+  <div class="row">
+    <div class="col-12 grid-margin">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">{{ title|title }}</h4>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
+
+<!-- Specific JS Plugins goes HERE  -->
+{% block js_plugins %}
+
+<script src="/static/assets/vendors/chart.js/Chart.min.js"></script>
+<script src="/static/assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+<script src="/static/assets/vendors/progressbar.js/progressbar.min.js"></script>
+
+{% endblock js_plugins %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+<script src="/static/assets/js/dashboard.js"></script>
+<script src="/static/assets/js/Chart.roundedBarCharts.js"></script>
+
+{% endblock javascripts %}
