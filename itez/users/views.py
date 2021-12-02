@@ -3,10 +3,16 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import DetailView, RedirectView, UpdateView
+from django.views.generic import DetailView, RedirectView, UpdateView, CreateView
+from itez.users.forms import UserCreationForm
 
 User = get_user_model()
 
+
+class UserCreateView(LoginRequiredMixin, CreateView):
+    model = User
+    slug_field = "username"
+    slug_url_kwarg = "username"
 
 class UserDetailView(LoginRequiredMixin, DetailView):
 

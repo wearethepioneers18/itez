@@ -14,34 +14,34 @@
 
 {% block content %}
 
-  <div class="content-wrapper">
+  <div class="content-wrapper ">
     <div class="row">
       <div class="col-sm-12">
         <div class="home-tab">
-          <div class="d-sm-flex align-items-center justify-content-between border-bottom">
+          <div class="d-sm-flex align-items-center justify-content-betweencontent border-bottom">
             <ul class="nav nav-tabs" role="tablist">
-                <li class="nav-item">
-                  <a class="nav-link active ps-0" id="home-tab" data-bs-toggle="tab" href="#overview" role="tab" aria-controls="overview" aria-selected="true">Overview</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#audiences" role="tab" aria-selected="false">OPD</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" id="contact-tab" data-bs-toggle="tab" href="#demographics" role="tab" aria-selected="false">HTS</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link border-0" id="more-tab" data-bs-toggle="tab" href="#more" role="tab" aria-selected="false">VL</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link border-0" id="more-tab" data-bs-toggle="tab" href="#more" role="tab" aria-selected="false">ART</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link border-0" id="more-tab" data-bs-toggle="tab" href="#more" role="tab" aria-selected="false">Labs</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link border-0" id="more-tab" data-bs-toggle="tab" href="#more" role="tab" aria-selected="false">Pharmacy</a>
-                </li>
-              </ul>
+              <li class="nav-item">
+                <a class="nav-link active ps-0" id="home-tab" data-bs-toggle="tab" href="#overview" role="tab" aria-controls="overview" aria-selected="true">Overview</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#audiences" role="tab" aria-selected="false">OPD</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="contact-tab" data-bs-toggle="tab" href="#demographics" role="tab" aria-selected="false">HTS</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link border-0" id="more-tab" data-bs-toggle="tab" href="#more" role="tab" aria-selected="false">VL</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link border-0" id="more-tab" data-bs-toggle="tab" href="#more" role="tab" aria-selected="false">ART</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link border-0" id="more-tab" data-bs-toggle="tab" href="#more" role="tab" aria-selected="false">Labs</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link border-0" id="more-tab" data-bs-toggle="tab" href="#more" role="tab" aria-selected="false">Pharmacy</a>
+              </li>
+            </ul>
             <div>
               <div class="btn-wrapper">
                 <a href="#" class="btn btn-otline-dark align-items-center"><i class="icon-share"></i> Share</a>
@@ -54,154 +54,118 @@
             <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview"> 
               
               {% include "includes/header_stats.html" %}
-              
-             
-                <div class="row">
-                    <div class="col-lg-12 d-flex flex-column">
-
-                        <div class="row flex-grow">
-                            <div class="col-md-6 col-lg-8 grid-margin stretch-card">
-                                <div class="card card-rounded">
-                                    <div class="card-body">
-                                        <div class="row">
-                                        <div class="col-lg-12">
-                                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                            <div>
-                                                <h4 class="card-title card-title-dash">System Users</h4>
-                                            </div>
-                                            </div>
-                                            <div class="mt-3">
-                                            <div class="wrapper d-flex align-items-center justify-content-between py-2 border-bottom">
-                                                <div class="d-flex">
-                                                <img class="img-sm rounded-10" src="/static/assets/images/faces/male.jpeg" alt="profile">
-                                                <div class="wrapper ms-3">
-                                                    <p class="ms-1 mb-1 fw-bold">Cephas Zulu</p>
-                                                    <small class="text-muted mb-0">Database Admin</small>
-                                                </div>
-                                                </div>
-                                                <div class="text-muted text-small">
-                                                1h ago
-                                                </div>
-                                            </div>
-                                            <div class="wrapper d-flex align-items-center justify-content-between py-2 border-bottom">
-                                                <div class="d-flex">
-                                                <img class="img-sm rounded-10" src="/static/assets/images/faces/male.jpeg" alt="profile">
-                                                <div class="wrapper ms-3">
-                                                    <p class="ms-1 mb-1 fw-bold">Jachnie Manda </p>
-                                                    <small class="text-muted mb-0">Beneficiary Admin</small>
-                                                </div>
-                                                </div>
-                                                <div class="text-muted text-small">
-                                                1h ago
-                                                </div>
-                                            </div>
-                                            <div class="wrapper d-flex align-items-center justify-content-between py-2 border-bottom">
-                                                <div class="d-flex">
-                                                <img class="img-sm rounded-10" src="/static/assets/images/faces/female.jpeg" alt="profile">
-                                                <div class="wrapper ms-3">
-                                                    <p class="ms-1 mb-1 fw-bold">Olipa Tembo</p>
-                                                    <small class="text-muted mb-0">Report admin</small>
-                                                </div>
-                                                </div>
-                                                <div class="text-muted text-small">
-                                                1h ago
-                                                </div>
-                                            </div>
-                                            <div class="wrapper d-flex align-items-center justify-content-between py-2 border-bottom">
-                                                <div class="d-flex">
-                                                <img class="img-sm rounded-10" src="/static/assets/images/faces/male.jpeg" alt="profile">
-                                                <div class="wrapper ms-3">
-                                                    <p class="ms-1 mb-1 fw-bold">Chriford Siame</p>
-                                                    <small class="text-muted mb-0">Agent Supervisor</small>
-                                                </div>
-                                                </div>
-                                                <div class="text-muted text-small">
-                                                1h ago
-                                                </div>
-                                            </div>
-                                            <div class="wrapper d-flex align-items-center justify-content-between pt-2">
-                                                <div class="d-flex">
-                                                <img class="img-sm rounded-10" src="/static/assets/images/faces/female.jpeg" alt="profile">
-                                                <div class="wrapper ms-3">
-                                                    <p class="ms-1 mb-1 fw-bold">Bupe Mulenga</p>
-                                                    <small class="text-muted mb-0">Database Admin</small>
-                                                </div>
-                                                </div>
-                                                <div class="text-muted text-small">
-                                                1h ago
-                                                </div>
-                                            </div>
-                                            </div>
-                                        </div>
-                                        </div>
-                                    </div>
-                                </div>
+              <div class="row">
+                <div class="col-lg-12 d-flex flex-column">
+                  <div class="row flex-grow">
+                    <div class="col-12 grid-margin stretch-card">
+                      <div class="card card-rounded">
+                        <div class="card-body">
+                          <div class="d-sm-flex justify-content-between align-items-start">
+                            <div>
+                              <h4 class="card-title card-title-dash">System Users</h4>
                             </div>
+                          </div>
+                          <div class="table-responsive  mt-1">
+                            <table class="table select-table">
+                              <thead>
+                                <tr>
+                                  <th>
+                                    <div class="form-check form-check-flat mt-0">
+                                      <label class="form-check-label">
+                                        <input type="checkbox" class="form-check-input" aria-checked="false"><i class="input-helper"></i></label>
+                                    </div>
+                                  </th>
+                                  <th>Full Name</th>
+                                  <th>Username</th>
+                                  <th>Gender</th>
+                                  <th>Role</th>
+                                  <th>Status</th>
+                                  <th>Last Login</th>
+                                  <th>Action</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {% if users_list %}
+                                {% for user in users_list %}
+                                <tr>
+                                  <td>
+                                    <div class="form-check form-check-flat mt-0">
+                                      <label class="form-check-label">
+                                      <input type="checkbox" class="form-check-input" aria-checked="false"><i class="input-helper"></i></label>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div class="d-flex ">
+                                     <img src="/static/assets/images/faces/male.jpeg" alt="">
+                                      <!-- <img src="/static/assets/images/faces/face1.jpg" alt=""> -->
+                                      <div>
+                                        <h6>{{user.first_name}} {{user.last_name}}</h6>
+                                      </div>
+                                    </div>
+                                  </td>
+                                   <td>
+                                    <h6>{{user.username}}</h6>
+                                  </td>
+                                  <td>
+                                    <h6>{{user.profile.gender}}</h6>
+                                  </td>
+                                  <td>Database Admin</td>
+                                  {%if user.is_active %}
+                                  <td><div class="badge badge-opacity-warning"></div>Active</td>
+                                  {%else %}
+                                  <td><div class="badge badge-opacity-warning"></div>Inactive</td>
+                                  {%endif%}
+                                 <td>
+                                    <h6>{{user.last_login}}</h6>
+                                  </td>
+                                  
+                                   <td><div class="badge badge-opacity-warning">
+                                    <a href="http://localhost:8000/admin/users/user/{{user.id}}/change/">
+                                          <i class="menu-icon mdi mdi-pencil"></i>
+                                        </a>
+                                    </div>
+                                    <div class="badge badge-opacity-danger">
+                                    <a href="#">
+                                          <i class="menu-icon mdi mdi-delete-forever"></i>
+                                        </a>
+                                      </div>
+                                      </td>
+                                  </td>
+                                </tr>
+                                {%endfor%}
+                                {% endif %}
+                              </tbody>
+                            </table>
+                          </div>
+                          <div class="m-3">
 
-                            <div class="col-md-6 col-lg-4 grid-margin stretch-card">
-                                <div class="card card-rounded">
-                                    <div class="card-body">
-                                    <div class="d-flex align-items-center justify-content-between mb-3">
-                                        <h4 class="card-title card-title-dash">Activities</h4>
-                                        <p class="mb-0">20 updated, 55 new</p>
-                                    </div>
-                                    <ul class="bullet-line-list">
-                                        <li>
-                                        <div class="d-flex justify-content-between">
-                                            <div><span class="text-light-green">Alison Mukoma</span> Added new beneficiary ...</div>
-                                            <p>Just now</p>
-                                        </div>
-                                        </li>
-                                        <li>
-                                        <div class="d-flex justify-content-between">
-                                            <div><span class="text-light-green">Alison Mukoma</span> Added new beneficiary ...</div>
-                                            <p>1h</p>
-                                        </div>
-                                        </li>
-                                        <li>
-                                        <div class="d-flex justify-content-between">
-                                            <div><span class="text-light-green">Alison Mukoma</span> Added new beneficiary ...</div>
-                                            <p>1h</p>
-                                        </div>
-                                        </li>
-                                        <li>
-                                        <div class="d-flex justify-content-between">
-                                            <div><span class="text-light-green">Alison Mukoma</span> Added new beneficiary ...</div>
-                                            <p>1h</p>
-                                        </div>
-                                        </li>
-                                        <li>
-                                        <div class="d-flex justify-content-between">
-                                            <div><span class="text-light-green">Alison Mukoma</span> Added new beneficiary ...</div>
-                                            <p>1h</p>
-                                        </div>
-                                        </li>
-                                        <li>
-                                        <div class="d-flex justify-content-between">
-                                            <div><span class="text-light-green">Alison Mukoma</span> Added new beneficiary ...</div>
-                                            <p>1h</p>
-                                        </div>
-                                        </li>
-                                        <li>
-                                        <div class="d-flex justify-content-between">
-                                            <div><span class="text-light-green">Alison Mukoma</span> Added new beneficiary ...</div>
-                                            <p>1h</p>
-                                        </div>
-                                        </li>
-                                    </ul>
-                                    <div class="list align-items-center pt-3">
-                                        <div class="wrapper w-100">
-                                        <p class="mb-0">
-                                            <a href="/admin" class="fw-bold text-primary">Manage users and roles <i class="mdi mdi-arrow-right ms-2"></i></a>
-                                        </p>
-                                        </div>
-                                    </div>
-                                    </div>
-                                </div>
-                            </div>
-    
+                            {% if not is_paginated %}
+                              {% if page_obj.has_previous %}
+
+                                <a class="btn btn-outline-info mb-4" href="?page=1">First</a>
+                                <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                              {% endif %}
+
+                              {% for num in page_obj.paginator.page_range %}
+                              {{page_obj.paginator.page_range}}
+                                {% if page_obj.number == num %}
+                                  <a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
+                                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                  <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
+                                {% endif %}
+                              {% endfor %}
+
+                              {% if page_obj.has_next %}
+                                <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.next_page_number }}">Next</a>
+                                <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+                              {% endif %}
+                            {% endif %}
+                          </div>
                         </div>
+                      </div>
                     </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

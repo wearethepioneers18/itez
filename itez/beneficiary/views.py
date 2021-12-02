@@ -1,6 +1,7 @@
 # -*- encoding: utf-8 -*-
 
 from django import template
+from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
@@ -9,6 +10,7 @@ from django.urls import reverse
 from django.views.generic import TemplateView
 
 from itez.beneficiary.models import Beneficiary
+from itez.users.models import User
 
 
 @login_required(login_url="/login/")
@@ -30,8 +32,13 @@ def list_beneficiary(request):
 
 @login_required(login_url="/login/")
 def user_events(request):
-
-    context = {"events": []}
+    users = User.objects.all()
+    # users_list = [user for user in users]
+    page_num =  request.GET.get('page', 1)
+    p = Paginator(users, 2)
+    
+    page_obj = p.get_page(page_num)
+    context = {"users_list": page_obj}
 
     html_template = loader.get_template('home/events.html')
     return HttpResponse(html_template.render(context, request))
