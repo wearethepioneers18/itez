@@ -5,7 +5,6 @@ from django.contrib.gis.db.models import fields
 from django.views.generic import CreateView, FormView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView
-from django.contrib.auth.models import User
 
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
@@ -21,7 +20,7 @@ from itez.beneficiary.models import Beneficiary, BeneficiaryParent, MedicalRecor
 from itez.beneficiary.models import Service
 
 from itez.beneficiary.forms import BeneficiaryForm, MedicalRecordForm
-
+from itez.beneficiary.users.models import User
 
 
 @login_required(login_url="/login/")
