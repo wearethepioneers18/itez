@@ -83,7 +83,7 @@ def user_profile(request):
         user_province.save()
         return redirect("/user/profile")
 
-    education_levels = [level[1] for level in EDUCATION_LEVELS]
+    education_levels = [level[1] for level in EDUCATION_LEVEL]
     sex_array = [sex[1] for sex in SEX_CHOICES]
     gender_array = [gender[1] for gender in GENDER_CHOICES]
     
