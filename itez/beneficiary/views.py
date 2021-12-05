@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 from django.urls import reverse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from django.views.generic import TemplateView
 from django.views.generic.list import ListView
@@ -20,7 +20,8 @@ from itez.beneficiary.models import Beneficiary, BeneficiaryParent, MedicalRecor
 from itez.beneficiary.models import Service
 
 from itez.beneficiary.forms import BeneficiaryForm, MedicalRecordForm
-from itez.users.models import User
+from itez.users.models import User, Profile
+from itez.beneficiary.models import Drug, Prescription, Lab, District, Province
 
 
 @login_required(login_url="/login/")
