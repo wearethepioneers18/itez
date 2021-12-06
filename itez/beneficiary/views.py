@@ -2,6 +2,7 @@
 
 from django import template
 from django.contrib.gis.db.models import fields
+from django.db.models.functions.datetime import TruncMonth, TruncWeek
 from django.views.generic import CreateView, FormView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView
@@ -11,6 +12,7 @@ from django.template import loader
 from django.urls import reverse
 from django.shortcuts import render
 
+
 from django.views.generic import TemplateView
 from django.views.generic.list import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -18,6 +20,8 @@ from django.core.paginator import Paginator
 
 from itez.beneficiary.models import Beneficiary, BeneficiaryParent, MedicalRecord
 from itez.beneficiary.models import Service
+from django.db.models import Count
+from django.db.models.functions import ExtractYear,ExtractWeek,ExtractMonth
 
 from itez.beneficiary.forms import BeneficiaryForm, MedicalRecordForm
 from itez.users.models import User
@@ -33,7 +37,7 @@ def index(request):
     pharmacy = Service.objects.filter(service_type="PHARMACY").count()
     male = Beneficiary.objects.filter(gender="Male").count()
     female = Beneficiary.objects.filter(gender="Female").count()
-    transgender = Beneficiary.objects.filter(gender="Transgender").count
+    transgender = Beneficiary.objects.filter(gender="Transgender").count()
     other = Beneficiary.objects.filter(gender="Other").count()
 
     context = {
@@ -57,7 +61,7 @@ def index(request):
 @login_required(login_url="/login/")
 def uielements(request):
     context = {"title": "UI Elements"}
-    html_template = loader.get_template("home/basic-table.html")
+    html_template = loader.get_template("home/basic_elements.html")
     return HttpResponse(html_template.render(context, request))
 
 
@@ -103,7 +107,7 @@ class MedicalRecordCreateView(LoginRequiredMixin, CreateView):
     template_name = "beneficiary/medical_record_create.html"
 
     def get_success_url(self):
-        return reverse("beneficiary:list")
+        return reverse("beneficiary:details", kwargs={"pk": self.kwargs["pk"]})
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -120,11 +124,7 @@ class BeneficiaryCreateView(LoginRequiredMixin, CreateView):
     template_name = "beneficiary/beneficiary_create.html"
 
     def get_success_url(self):
-        return reverse("beneficiary:beneficiary_list")
-
-    def form_valid(self, form):
-        form.instance.author = self.request.user
-        return super(BeneficiaryCreateView, self).form_valid(form)
+        return reverse("beneficiary:list")
 
     def get_context_data(self, **kwargs):
         context = super(BeneficiaryCreateView, self).get_context_data(**kwargs)
@@ -148,7 +148,9 @@ class BenenficiaryListView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super(BenenficiaryListView, self).get_context_data(**kwargs)
 
-        beneficiaries = Beneficiary.objects.all()
+        # # Hospital Weekly visits
+
+        # Header stats
         context["opd"] = Service.objects.filter(client_type="OPD").count()
         context["hts"] = Service.objects.filter(service_type="HTS").count()
         context["vl"] = Service.objects.filter(service_type="VL").count()
@@ -156,6 +158,7 @@ class BenenficiaryListView(LoginRequiredMixin, ListView):
         context["labs"] = Service.objects.filter(service_type="LAB").count()
         context["pharmacy"] = Service.objects.filter(service_type="PHARMACY").count()
         context["title"] = "Beneficiaries"
+
         return context
 
 
@@ -195,12 +198,29 @@ def user_events(request):
 
 @login_required(login_url="/login/")
 def beneficiary_report(request):
+    # Graphs
+    # Number of beneficiaries by year
+    year1 = Beneficiary.objects.filter(created__year=2017).values("created__year").count()
+    year2 = Beneficiary.objects.filter(created__year=2018).values("created__year").count()
+    year3 = Beneficiary.objects.filter(created__year=2019).values("created__year").count()
+    year4 = Beneficiary.objects.filter(created__year=2020).values("created__year").count()
+    year5 = Beneficiary.objects.filter(created__year=2021).values("created__year").count()
+
+
+
+    # Dashboar Cards Stats
     opd = Service.objects.filter(client_type="OPD").count()
     hts = Service.objects.filter(service_type="HTS").count()
     vl = Service.objects.filter(service_type="VL").count()
     art = Service.objects.filter(client_type="ART").count()
     labs = Service.objects.filter(service_type="LAB").count()
     pharmacy = Service.objects.filter(service_type="PHARMACY").count()
+    male = Beneficiary.objects.filter(gender='Male').count()
+    female = Beneficiary.objects.filter(gender='Female').count()
+    transgender = Beneficiary.objects.filter(gender='Transgender').count
+    other = Beneficiary.objects.filter(gender='Other').count()
+    male_sex = Beneficiary.objects.filter(sex='Male').count
+    female_sex = Beneficiary.objects.filter(sex='Female')
 
     context = {
         "data": [],
@@ -210,6 +230,16 @@ def beneficiary_report(request):
         "art": art,
         "labs": labs,
         "pharmacy": pharmacy,
+        "male": male,
+        "female": female,
+        "transgender": transgender, 
+        "other": other,
+         "male_sex": male_sex, "female_sex": female_sex,
+         "year1" : year1,
+         "year2" : year2,
+         "year3" : year3,
+         "year4" : year4,
+         "year5" : year5
     }
 
     html_template = loader.get_template("home/reports.html")

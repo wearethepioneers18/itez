@@ -17,7 +17,7 @@ urlpatterns = [
     path(
         "beneficiary/<int:pk>/detail",
         views.BeneficiaryDetailView.as_view(),
-        name="detail",
+        name="details",
     ),
     path(
         "benefficiary/<int:pk>/medical_record_list",

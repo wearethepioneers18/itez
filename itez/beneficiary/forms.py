@@ -19,6 +19,7 @@ class MedicalRecordForm(ModelForm):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_tag = False
+        self.helper.form_method = 'post'
         self.helper.layout = Layout(
             Fieldset(
                 "Service",
@@ -66,9 +67,10 @@ class BeneficiaryForm(ModelForm):
         exclude = ["created", "beneficiary_id"]
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        # super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_tag = False
+        self.helper.form_method = 'post'
         self.helper.layout = Layout(
             Fieldset(
                 "Personal Information",
@@ -115,7 +117,8 @@ class BeneficiaryForm(ModelForm):
                 HTML('<a class="btn btn-danger" href="/beneficiary/list">Cancel</a>'),
             ),
         )
-
+        super(BeneficiaryForm, self).__init__(*args, **kwargs)
+    
     def save(self, commit=True):
         instance = super(BeneficiaryForm, self).save(commit=False)
         instance.save()
