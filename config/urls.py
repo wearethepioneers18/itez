@@ -27,6 +27,7 @@ urlpatterns = [
     path(settings.ADMIN_URL, admin.site.urls),
     path("", include("itez.beneficiary.urls", namespace="beneficiary")),          
     path("", include("itez.authentication.urls")),
+    path("", include("itez.users.urls", namespace="user")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 admin.site.site_header = "ITEZ Administration"                   

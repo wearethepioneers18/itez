@@ -87,6 +87,7 @@ THIRD_PARTY_APPS = [
     "rolepermissions",
     "drf_spectacular",
     "import_export",
+    "django_celery_results"
 ]
 
 LOCAL_APPS = [

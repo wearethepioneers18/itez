@@ -219,6 +219,7 @@ class MedicalRecordAdmin(admin.ModelAdmin):
         "service",
         "prescription",
         "lab",
+        "service_facility",
     ]
 
     list_filter = [

@@ -9,7 +9,6 @@
 <title>
     ITEZ - {% block title %}{% endblock %} | UNDP
 </title>
-
   <!-- plugins:css -->
   <link rel="stylesheet" href="/static/assets/vendors/feather/feather.css">
   <link rel="stylesheet" href="/static/assets/vendors/mdi/css/materialdesignicons.min.css">
@@ -23,6 +22,7 @@
 
   <link rel="stylesheet" href="/static/assets/css/vertical-layout-light/style.css">
   <link rel="shortcut icon" href="/static/assets/images/favicon.png" />
+  <link rel="stylesheet" href="/static/assets/css/jquery.notifyBar.css">
 
   <!-- Specific Page CSS goes HERE  -->
   {% block stylesheets %}{% endblock stylesheets %}
@@ -56,15 +56,18 @@
 
   <!-- Specific JS Plugins goes HERE  -->
   {% block js_plugins %}{% endblock js_plugins %}
-
+  
   <script src="/static/assets/js/off-canvas.js"></script>
   <script src="/static/assets/js/hoverable-collapse.js"></script>
   <script src="/static/assets/js/template.js"></script>
   <script src="/static/assets/js/settings.js"></script>
   <script src="/static/assets/js/todolist.js"></script>
+  <script src="/static/assets/js/jquery.notifyBar.js"></script>
 
   <!-- Specific Page JS goes HERE  -->
-  {% block javascripts %}{% endblock javascripts %}
+  {% block javascripts %}
+  </script>
+  {% endblock javascripts %}
 
 </body>
 </html>

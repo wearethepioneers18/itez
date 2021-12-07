@@ -3,12 +3,12 @@ import json
 from django import template
 from django.contrib.gis.db.models import fields
 from django.db.models.expressions import OrderBy
-from django.db.models.functions.datetime import TruncMonth, TruncWeek
+from django.db.models.functions.datetime import TruncMonth, TruncWeek, TruncDay
 from django.views.generic import CreateView, FormView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.template import loader
 from django.urls import reverse
 from django.shortcuts import render
@@ -16,16 +16,24 @@ from django.shortcuts import render
 
 from django.views.generic import TemplateView
 from django.views.generic.list import ListView
+from django.views.generic import base
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
+from django.conf import settings
+
+from celery.result import AsyncResult
 
 from itez.beneficiary.models import Beneficiary, BeneficiaryParent, MedicalRecord, Province
 from itez.beneficiary.models import Service
 from django.db.models import Count
 from django.db.models.functions import ExtractYear,ExtractWeek,ExtractMonth
 
+from .tasks import generate_export_file
+
 from itez.beneficiary.forms import BeneficiaryForm, MedicalRecordForm
-from itez.users.models import User
+from itez.users.models import User, Profile
+from itez.beneficiary.models import Drug, Prescription, Lab, District, Province
 
 
 @login_required(login_url="/login/")
@@ -41,6 +49,15 @@ def index(request):
     transgender = Beneficiary.objects.filter(gender="Transgender").count()
     other = Beneficiary.objects.filter(gender="Other").count()
 
+    # Weekly Visits
+    sun_day = MedicalRecord.objects.filter(interaction_date__week_day = 1).count()
+    mon_day = MedicalRecord.objects.filter(interaction_date__week_day = 2).count()
+    tue_day = MedicalRecord.objects.filter(interaction_date__week_day = 3).count()
+    wed_day = MedicalRecord.objects.filter(interaction_date__week_day = 4).count()
+    thu_day = MedicalRecord.objects.filter(interaction_date__week_day = 5).count()
+    fri_day = MedicalRecord.objects.filter(interaction_date__week_day = 6).count()
+    sat_day = MedicalRecord.objects.filter(interaction_date__week_day = 7).count()
+   
     context = {
         "segment": "index",
         "opd": opd,
@@ -53,6 +70,13 @@ def index(request):
         "female": female,
         "transgender": transgender,
         "other": other,
+        "sunday" : sun_day,
+        "monday" : mon_day,
+        "tuesday" : tue_day,
+        "wednesday" : wed_day,
+        "thursday" : thu_day,
+        "friday" : fri_day,
+        "saturday" : sat_day,
     }
 
     html_template = loader.get_template("home/index.html")
@@ -60,9 +84,46 @@ def index(request):
 
 
 @login_required(login_url="/login/")
+def export_beneficiary_data(request):
+    """
+    This view handles the request for exporting Beneficiary data. The task is
+    call to generate a export file, the task returns an ID which is used by 
+    the client to poll the status of the task.
+    """
+    task = generate_export_file.delay()
+
+    # returns the task_id with the response
+    response = {"task_id": task.task_id}
+    return JsonResponse(response)
+
+
+@login_required(login_url="/login/")
+def poll_async_resullt(request, task_id):
+    """
+    This view handles the polling of state of the task the generates
+    the export file. If the task is finnished, the appropriate response
+    returned, which includes the download url for the file.
+    """
+    task = AsyncResult(task_id)
+
+    media_url = settings.MEDIA_URL
+    
+    if task.state == "SUCCESS":
+        download_url = f"{media_url}exports/{task.result}"
+        body = {"state": task.state, "location": download_url}
+        return JsonResponse(body, status=201)
+    
+    elif task.state == "PENDING":
+        body = {"state": task.state}
+        return JsonResponse(body, status=200)
+    else:
+        return JsonResponse({"error": f"No task with id {task_id}"}, status=400)
+
+
+@login_required(login_url="/login/")
 def uielements(request):
     context = {"title": "UI Elements"}
-    html_template = loader.get_template("home/basic_elements.html")
+    html_template = loader.get_template("home/icons-mdi.html")
     return HttpResponse(html_template.render(context, request))
 
 
@@ -148,16 +209,13 @@ class BenenficiaryListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super(BenenficiaryListView, self).get_context_data(**kwargs)
-
-        # # Hospital Weekly visits
-
-        # Header stats
         context["opd"] = Service.objects.filter(client_type="OPD").count()
         context["hts"] = Service.objects.filter(service_type="HTS").count()
         context["vl"] = Service.objects.filter(service_type="VL").count()
         context["art"] = Service.objects.filter(client_type="ART").count()
         context["labs"] = Service.objects.filter(service_type="LAB").count()
         context["pharmacy"] = Service.objects.filter(service_type="PHARMACY").count()
+        context["registered_today"] = Beneficiary.total_registered_today()
         context["title"] = "Beneficiaries"
 
         return context
@@ -232,6 +290,8 @@ def beneficiary_report(request):
         beneficiary_count_data.append(total_province_beneficiaries)
 
         province_label_json_list = json.dumps(province_labels);
+    
+    # Service Counts by Month
      
            
 
@@ -313,3 +373,4 @@ def pages(request):
 def doughnutChart(request):
     femaleSex = Beneficiary.objects.filter(sex="Female")
     maleSex = Beneficiary.objects.filter(sex="Male")
+
