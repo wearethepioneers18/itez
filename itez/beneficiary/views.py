@@ -286,7 +286,7 @@ class BeneficiaryDetailView(LoginRequiredMixin, DetailView):
         context["beneficiary"] = current_beneficiary
         context['services']  = services
         context['labs']  = labs
-        context['facility_name']  = medical_record_object.beneficiary.service_facility.name
+        context['facility_name']  = medical_record_object.service_facility
         context['no_of_days']  = medical_record_object.no_of_days
         context['when_to_take_medication']  = medical_record_object.when_to_take
         
@@ -327,7 +327,7 @@ def beneficiary_report(request):
 
     for province in Province.objects.all():
         total_province_beneficiaries = Beneficiary.objects.filter(registered_facility__province__name=province.name).count()
-        total_province_services = Service.objects.filter(service_personnel__facility__province__name=province.name).count()
+        total_province_services = MedicalRecord.objects.filter(service_facility__province__name=province.name).count()
 
         province_data = {
             province.name: total_province_beneficiaries

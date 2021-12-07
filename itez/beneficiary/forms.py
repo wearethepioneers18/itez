@@ -28,6 +28,7 @@ class MedicalRecordForm(ModelForm):
                     Column("service", css_class="form-group col-md-6 mb-0"),
                     Column("provider_comments", css_class="form-group col-md-6 mb-0"),
                     Column("interaction_date", css_class="form-group col-md-6 mb-0"),
+                    Column("service_facility", css_class="form-group col-md-4 mb-0"),
                     css_class="form-row",
                 ),
             ),
@@ -102,7 +103,6 @@ class BeneficiaryForm(ModelForm):
                 "Other Meta Data",
                 Row(
                     Column("registered_facility", css_class="form-group col-md-4 mb-0"),
-                    Column("service_facility", css_class="form-group col-md-4 mb-0"),
                     Column("alive", css_class="form-group col-md-4 mb-0"),
                     Column("education_level", css_class="form-group col-md-4 mb-0"),
                     Column("hiv_status", css_class="form-group col-md-4 mb-0"),
