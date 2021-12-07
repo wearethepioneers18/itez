@@ -1,0 +1,51 @@
+<div class="card">
+  <div class="card-body">
+    <h4 class="card-title">{{ medication_title|title }}</h4>
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>Medicine</th>
+            <th>No Of Days</th>
+            <th>When to Take</th>
+            <th>Date Prescribed</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for drug in medications %}
+          <tr>
+            <td>{{ drug.drugs.name }}</td>
+            <td>{{ no_of_days }}</td>
+            <td class="text-active">
+              {{ when_to_take_medication }}
+            </td>
+            <td>
+             {{ drug.date }}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <hr />
+    <div style="float: right;">
+      <fieldset class="border p-2">
+        {% if labs.has_previous %}
+        <a href="?page=1">&laquo; first</a>
+        <span class="current">
+          Page {{ medications.number }} of {{ medications.paginator.num_pages }}.
+        </span>
+        <a href="?page={{ medications.previous_page_number }}">previous</a>
+        {% endif %}
+        
+        {% if medications.has_next %}
+        <a href="?page={{ medications.next_page_number }}">next</a>
+          <span class="current">
+            Page {{ medications.number }} of {{ medications.paginator.num_pages }}.
+          </span>
+          <a href="?page={{ medications.paginator.num_pages }}">last &raquo;</a>
+          {% endif %}
+        </fieldset>
+      </div>
+    </div>
+  </div>

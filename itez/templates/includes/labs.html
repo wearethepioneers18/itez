@@ -1,0 +1,51 @@
+<div class="card">
+  <div class="card-body">
+    <h4 class="card-title">{{ lab_title|title }}</h4>
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>Lab Type</th>
+            <th>Request Date</th>
+            <th>Results</th>
+            <th>Result Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for lab in labs %}
+          <tr>
+            <td>{{lab.title}}</td>
+            <td>{{lab.requested_date}}</td>
+            <td class="text-active">
+              {{lab.results}}
+            </td>
+            <td>
+              {{lab.results_status}}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <hr />
+    <div style="float: right;">
+      <fieldset class="border p-2">
+        {% if labs.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <span class="current">
+              Page {{ labs.number }} of {{ labs.paginator.num_pages }}.
+            </span>
+            <a href="?page={{ labs.previous_page_number }}">previous</a>
+        {% endif %}
+    
+        {% if labs.has_next %}
+            <a href="?page={{ labs.next_page_number }}">next</a>
+            <span class="current">
+              Page {{ labs.number }} of {{ labs.paginator.num_pages }}.
+            </span>
+            <a href="?page={{ labs.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+        <fieldset>
+    </div>
+  </div>
+</div>

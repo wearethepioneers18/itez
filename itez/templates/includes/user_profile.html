@@ -195,13 +195,13 @@
                                     <div class="card-body">
                                         <div style="margin-right: 12em;" class="wrapper d-flex align-items-center justify-content-between py-2 border-bottom">
                                             {% if request.user.profile.profile_photo.url %}
-                                                <img height="100" width="100" style="border-radius: 0.6em;"  class="img-md zoom rounded-square  mt-4" src="{{request.user.profile.profile_photo.url}}" alt="Profile image">
+                                                <img height="100" width="100" style="border-radius: 0.6em;" class="img-md zoom rounded-square  mt-4" src="{{request.user.profile.profile_photo.url}}" alt="Profile image">
                                             {% elif not request.user.profile_photo.url and request.user.gender == 'Male' %}
                                                 <img style="border-radius: 0.6em;" class="img-xs rounded-square  mt-4" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
                                             {% elif not request.user.profile_photo.url and request.user.gender == 'Female' %}
                                                 <img style="border-radius: 0.6em;" class="img-xs rounded-square  mt-4" src="/static/assets/images/faces/female.jpeg" alt="Profile image">
                                             {% else %}
-                                                <img class="img-xs rounded-square  mt-4" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
+                                                <img style="border-radius: 0.6em;" class="img-xs rounded-square  mt-4" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
                                             {% endif %}
                                         </div>
                                         <div class="wrapper d-flex align-items-center justify-content-between py-2 border-bottom">

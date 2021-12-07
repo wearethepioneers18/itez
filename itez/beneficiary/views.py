@@ -8,7 +8,11 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.template import loader
 from django.urls import reverse
-from django.shortcuts import render
+from django.shortcuts import (
+    render,
+    redirect, 
+    get_object_or_404
+)
 
 from django.views.generic import TemplateView
 from django.views.generic.list import ListView
@@ -23,11 +27,19 @@ from celery.result import AsyncResult
 from itez.beneficiary.models import Beneficiary, MedicalRecord
 from itez.beneficiary.models import Service
 
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core.paginator import Paginator
 from .tasks import generate_export_file
 
 from itez.beneficiary.forms import BeneficiaryForm, MedicalRecordForm
 from itez.users.models import User, Profile
-from itez.beneficiary.models import Drug, Prescription, Lab, District, Province
+from itez.beneficiary.models import (
+    Drug, 
+    Prescription, 
+    Lab,
+    District, 
+    Province,
+)
 
 
 @login_required(login_url="/login/")
@@ -202,6 +214,7 @@ class BenenficiaryListView(LoginRequiredMixin, ListView):
         return context
 
 
+
 class BeneficiaryDetailView(LoginRequiredMixin, DetailView):
     """
     Beneficiary Details view.
@@ -213,12 +226,53 @@ class BeneficiaryDetailView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(BeneficiaryDetailView, self).get_context_data(**kwargs)
+        current_beneficiary_id = self.kwargs.get('pk')
+        current_beneficiary = Beneficiary.objects.get(id=current_beneficiary_id) 
+        beneficiary_medical_records = MedicalRecord.objects.filter(beneficiary__id=current_beneficiary_id)
+        medical_record_object = get_object_or_404(MedicalRecord, pk=current_beneficiary_id)
+        
+        services = []
+        medications = []
+        labs = []
+        
+        
+        for medical_record in beneficiary_medical_records:
+            service = medical_record.service
+            services.append(service)
+        
+        for lab in beneficiary_medical_records:
+            lab_entry = lab.lab
+            labs.append(lab_entry)
 
+        for medication in beneficiary_medical_records:
+            medication_entry = medication.prescription
+            medications.append(medication_entry)
+        #     medications['no_of_days'] = medication.no_of_days
+        #     medications['when_to_take'] = medication.when_to_take
+        # print("-------------------", medications)
+        medication_paginator = Paginator(medications, 2)
+        page = self.request.GET.get('page')
+        medications = medication_paginator.get_page(page)
+        
+        services_paginator = Paginator(services, 2)
+        services = services_paginator.get_page(page)
+        
+        labs_paginator = Paginator(labs, 2)
+        labs = labs_paginator.get_page(page)
+        
         context["title"] = "Beneficiary Details"
         context["service_title"] = "services"
         context["medication_title"] = "medications"
         context["lab_title"] = "labs"
-
+        context["beneficiary"] = current_beneficiary
+        context['services']  = services
+        context['labs']  = labs
+        context['facility_name']  = medical_record_object.beneficiary.service_facility.name
+        context['no_of_days']  = medical_record_object.no_of_days
+        context['when_to_take_medication']  = medical_record_object.when_to_take
+        
+        context['medications'] = medications
+        
         return context
 
 
