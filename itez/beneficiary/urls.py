@@ -19,7 +19,17 @@ urlpatterns = [
         name="detail",
     ),
     path(
-        "benefficiary/<int:pk>/medical_record_list",
+        "beneficiary/export_beneficiary_data",
+        views.export_beneficiary_data,
+        name="export_beneficiary_data",
+    ),
+    path(
+        "beneficiary/poll_async_results/<task_id>",
+        views.poll_async_resullt,
+        name="export_beneficiary_data",
+    ),
+    path(
+        "beneficiary/<int:pk>/medical_record_list",
         views.MedicalRecordListView.as_view(),
         name="medical_record_list",
     ),
@@ -39,6 +49,4 @@ urlpatterns = [
         views.MedicalRecordCreateView.as_view(),
         name="medical_record_create",
     ),
-    # Matches any html file
-    # re_path(r'^.*\.*', views.pages, name='pages'),
 ]

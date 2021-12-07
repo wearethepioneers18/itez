@@ -134,7 +134,7 @@
   [data-animation="slideInOutDown"].is-visible .modal-dialog,
   [data-animation="slideInOutTop"].is-visible .modal-dialog,
   [data-animation="slideInOutLeft"].is-visible .modal-dialog,
-  [data-animation="slideInOutRight"].is-visible .modal-dialog,
+  [data-animatqion="slideInOutRight"].is-visible .modal-dialog,
   [data-animation="zoomInOut"].is-visible .modal-dialog,
   [data-animation="rotateInOutDown"].is-visible .modal-dialog {
       transform: none;

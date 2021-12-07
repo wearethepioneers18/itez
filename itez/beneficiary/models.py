@@ -1,5 +1,7 @@
-from datetime import date
-from  django.urls import reverse
+import datetime
+
+from django.urls import reverse
+from django.utils import timezone
 from django.contrib.gis.db import models
 from django.contrib.gis.db.models import fields
 from django.db.models.deletion import SET, SET_NULL
@@ -239,8 +241,16 @@ class Beneficiary(models.Model):
         Calculates the Beneficiaries age from birth date.
         """
         days_in_year = 365.2425   
-        age = int((date.today() - self.date_of_birth).days / days_in_year)
+        age = int((datetime.date.today() - self.date_of_birth).days / days_in_year)
         return age
+
+    @classmethod
+    def total_registered_today(cls):
+        """
+        Gets the total number of Beneficiaries registed in a day(24 hours).
+        """
+        time_diff = datetime.datetime.now(timezone.utc) - datetime.timedelta(hours=1)
+        return Beneficiary.objects.filter(created__gt=time_diff).count()
 
 
     def  get_absolute_url(self):
