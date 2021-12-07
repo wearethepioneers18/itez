@@ -1,7 +1,8 @@
 # -*- encoding: utf-8 -*-
-
+import json
 from django import template
 from django.contrib.gis.db.models import fields
+from django.db.models.expressions import OrderBy
 from django.db.models.functions.datetime import TruncMonth, TruncWeek
 from django.views.generic import CreateView, FormView
 from django.views.generic.detail import DetailView
@@ -18,7 +19,7 @@ from django.views.generic.list import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
 
-from itez.beneficiary.models import Beneficiary, BeneficiaryParent, MedicalRecord
+from itez.beneficiary.models import Beneficiary, BeneficiaryParent, MedicalRecord, Province
 from itez.beneficiary.models import Service
 from django.db.models import Count
 from django.db.models.functions import ExtractYear,ExtractWeek,ExtractMonth
@@ -206,8 +207,40 @@ def beneficiary_report(request):
     year4 = Beneficiary.objects.filter(created__year=2020).values("created__year").count()
     year5 = Beneficiary.objects.filter(created__year=2021).values("created__year").count()
 
+    # Number of beneficiaries by province
+    count_records = {}
+    count_services={}
+    province_labels = []
+    beneficiary_count_data = []
 
+    for province in Province.objects.all():
+        total_province_beneficiaries = Beneficiary.objects.filter(registered_facility__province__name=province.name).count()
+        total_province_services = Service.objects.filter(service_personnel__facility__province__name=province.name).count()
 
+        province_data = {
+            province.name: total_province_beneficiaries
+        }
+
+        service_data = {
+            province.name: total_province_services
+        }
+
+        count_records.update(province_data)
+        count_services.update(service_data)
+
+        province_labels.append(province.name)
+        beneficiary_count_data.append(total_province_beneficiaries)
+
+        province_label_json_list = json.dumps(province_labels);
+     
+           
+
+    # Number of total interactions
+    total_interactions = MedicalRecord.objects.all().count()
+  
+
+    
+    
     # Dashboar Cards Stats
     opd = Service.objects.filter(client_type="OPD").count()
     hts = Service.objects.filter(service_type="HTS").count()
@@ -217,10 +250,10 @@ def beneficiary_report(request):
     pharmacy = Service.objects.filter(service_type="PHARMACY").count()
     male = Beneficiary.objects.filter(gender='Male').count()
     female = Beneficiary.objects.filter(gender='Female').count()
-    transgender = Beneficiary.objects.filter(gender='Transgender').count
+    transgender = Beneficiary.objects.filter(gender='Transgender').count()
     other = Beneficiary.objects.filter(gender='Other').count()
-    male_sex = Beneficiary.objects.filter(sex='Male').count
-    female_sex = Beneficiary.objects.filter(sex='Female')
+    male_sex = Beneficiary.objects.filter(sex='Male').count()
+    female_sex = Beneficiary.objects.filter(sex='Female').count()
 
     context = {
         "data": [],
@@ -234,12 +267,17 @@ def beneficiary_report(request):
         "female": female,
         "transgender": transgender, 
         "other": other,
-         "male_sex": male_sex, "female_sex": female_sex,
-         "year1" : year1,
-         "year2" : year2,
-         "year3" : year3,
-         "year4" : year4,
-         "year5" : year5
+        "male_sex": male_sex, 
+        "female_sex": female_sex,
+        "year1" : year1,
+        "year2" : year2,
+        "year3" : year3,
+        "year4" : year4,
+        "year5" : year5,
+        "total_interactions" : total_interactions,
+        "province_label_json_list" : province_label_json_list,
+        "beneficiary_count_data" : beneficiary_count_data
+        
     }
 
     html_template = loader.get_template("home/reports.html")

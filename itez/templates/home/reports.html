@@ -126,6 +126,7 @@
                 <div class="card">
                   <div class="card-body">
                     <h4 class="card-title">Beneficiary count by Province</h4>
+
                     <canvas id="barChart"></canvas>
                   </div>
                 </div>
@@ -183,22 +184,20 @@
   $(function () {
     /* ChartJS
      * -------
-     * Data and config for chartjs
-     */
-    "use strict";
+     * Data and config for chartjs     */
+
+    var json_li = "{{province_label_json_list}}";
+    var ben_data = "{{beneficiary_count_data}}";
+    var prov = json_li.replace(/&quot;/g, '"');
+    var parsed_list = JSON.parse(prov);
+    var parsed_data = JSON.parse(ben_data);
+
     var data = {
-      labels: [
-        "Southern Province",
-        "Northern Province",
-        "Eastern Province",
-        "Western Province",
-        "Lusaka Province",
-        "Central Province",
-      ],
+      labels: parsed_list,
       datasets: [
         {
-          label: "# of Votes",
-          data: [10, 19, 3, 5, 2, 3],
+          label: "# of beneficiaries",
+          data: parsed_data,
           backgroundColor: [
             "rgba(255, 99, 132, 0.2)",
             "rgba(54, 162, 235, 0.2)",
