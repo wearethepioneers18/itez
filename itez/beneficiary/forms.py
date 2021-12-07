@@ -19,6 +19,7 @@ class MedicalRecordForm(ModelForm):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_tag = False
+        self.helper.form_method = 'post'
         self.helper.layout = Layout(
             Fieldset(
                 "Service",
@@ -27,6 +28,7 @@ class MedicalRecordForm(ModelForm):
                     Column("service", css_class="form-group col-md-6 mb-0"),
                     Column("provider_comments", css_class="form-group col-md-6 mb-0"),
                     Column("interaction_date", css_class="form-group col-md-6 mb-0"),
+                    Column("service_facility", css_class="form-group col-md-4 mb-0"),
                     css_class="form-row",
                 ),
             ),
@@ -66,9 +68,10 @@ class BeneficiaryForm(ModelForm):
         exclude = ["created", "beneficiary_id"]
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        # super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_tag = False
+        self.helper.form_method = 'post'
         self.helper.layout = Layout(
             Fieldset(
                 "Personal Information",
@@ -100,7 +103,6 @@ class BeneficiaryForm(ModelForm):
                 "Other Meta Data",
                 Row(
                     Column("registered_facility", css_class="form-group col-md-4 mb-0"),
-                    Column("service_facility", css_class="form-group col-md-4 mb-0"),
                     Column("alive", css_class="form-group col-md-4 mb-0"),
                     Column("education_level", css_class="form-group col-md-4 mb-0"),
                     Column("hiv_status", css_class="form-group col-md-4 mb-0"),
@@ -115,7 +117,8 @@ class BeneficiaryForm(ModelForm):
                 HTML('<a class="btn btn-danger" href="/beneficiary/list">Cancel</a>'),
             ),
         )
-
+        super(BeneficiaryForm, self).__init__(*args, **kwargs)
+    
     def save(self, commit=True):
         instance = super(BeneficiaryForm, self).save(commit=False)
         if commit:

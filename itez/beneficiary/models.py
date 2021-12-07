@@ -71,9 +71,14 @@ class Beneficiary(models.Model):
     """
     Implements the Beneficiary properties and required methods.
     """
-    ART_STATUS = (
-        ("enrolled", _("Enrolled")),
-        ("not_enrolled", _("Not Enrolled")),
+    ART_STATUS_CHOICES = (
+        ("Enrolled", _("Enrolled")),
+        ("Not Enrolled", _("Not Enrolled")),
+    )
+    
+    HIV_STATUS_CHOICES = (
+        ("Positive", _("Positive")),
+        ("Negative", _("Negative")),
     )
 
     MARITAL_STATUS = (
@@ -149,20 +154,21 @@ class Beneficiary(models.Model):
     art_status = models.CharField(
         _("ART Status"),
         max_length=100,
+        choices=ART_STATUS_CHOICES,
         null=True,
-        blank=True,
-        choices=ART_STATUS
+        blank=True
     )
     last_vl = models.IntegerField(
         _("Last Viral Load"),
         null=True,
         blank=True
     )
-    hiv_status = models.BooleanField(
+    hiv_status = models.CharField(
         _("HIV Status"),
-        default=False,
+        max_length=10,
+        choices=HIV_STATUS_CHOICES,
         null=True,
-        blank=True
+        blank=True,
     )
     agent = models.ForeignKey(
         AgentDetail,
@@ -176,12 +182,6 @@ class Beneficiary(models.Model):
         null=True,
         blank=True,
         related_name="registerd_facility"
-    )
-    service_facility = models.ForeignKey(
-        'Facility',
-        on_delete=models.PROTECT,
-        null=True,
-        blank=True
     )
     date_of_birth = models.DateField(_("Date of Birth"))
     marital_status = models.CharField(
@@ -254,7 +254,7 @@ class Beneficiary(models.Model):
 
 
     def  get_absolute_url(self):
-        return reverse('beneficiary:detail', kwargs={'pk': self.pk})
+        return reverse('beneficiary:details', kwargs={'pk': self.pk})
  
 
 
@@ -551,12 +551,6 @@ class ServiceProviderPersonel(models.Model):
         null=True,
         blank=True
     )
-    facility = models.ForeignKey(
-        Facility,
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL
-    )
     qualification = models.ForeignKey(
         ServiceProviderPersonelQualification,
         null=True,
@@ -671,17 +665,14 @@ class Lab(models.Model):
     def __str__(self):
         return f"Lab: {self.title}"
 
-# HTS = 1
-# LAB = 2
-# PHARMACY = 3
+
 SERVICE_TYPES =  (
     ("HTS", _('HTS (HIV Testing Services)')),
     ("LAB", _('LAB')),
     ("PHARMACY", _('PHARMACY')),
 )
 
-# OPD = 1
-# ART = 2
+
 CLIENT_TYPES =  (
     ("OPD", _('OPD (Outpatient Departments )')),
     ("ART", _('ART (Antiretroviral Therapy)')),
@@ -750,6 +741,12 @@ class MedicalRecord(models.Model):
     service = models.ForeignKey(
         Service,
         on_delete=models.CASCADE,
+    )    
+    service_facility = models.ForeignKey(
+        'Facility',
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True
     )
     provider_comments = models.TextField(
         _("Extra Details/Comment"),

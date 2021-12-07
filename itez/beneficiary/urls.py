@@ -16,7 +16,7 @@ urlpatterns = [
     path(
         "beneficiary/<int:pk>/detail",
         views.BeneficiaryDetailView.as_view(),
-        name="detail",
+        name="details",
     ),
     path(
         "beneficiary/export_beneficiary_data",
