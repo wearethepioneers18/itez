@@ -230,8 +230,8 @@ class BenenficiaryListView(LoginRequiredMixin, ListView):
         if "q" in self.request.GET:
             q = self.request.GET["q"]
             beneficiary = Beneficiary.objects.filter(
-                alive=True
-                and Q(first_name__contains=q)
+                alive=True and
+                Q(first_name__contains=q)
                 | Q(last_name__contains=q)
                 | Q(beneficiary_id__contains=q)
             )
@@ -254,7 +254,9 @@ class BenenficiaryListView(LoginRequiredMixin, ListView):
         context["pharmacy"] = Service.objects.filter(service_type="PHARMACY").count()
         context["registered_today"] = Beneficiary.total_registered_today()
         context["title"] = "Beneficiaries"
-        context["search_json_qs"] = export_type
+        context[
+            "search_json_qs"
+        ] = export_type
 
         return context
 
