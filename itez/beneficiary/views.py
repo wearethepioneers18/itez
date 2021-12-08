@@ -2,6 +2,8 @@
 import json
 from django import template
 from django.contrib.gis.db.models import fields
+from django.db.models import query
+from django.db.models import Q
 from django.db.models.expressions import OrderBy
 from django.db.models.functions.datetime import TruncMonth, TruncWeek, TruncDay
 from django.views.generic import CreateView, FormView
@@ -13,6 +15,9 @@ from django.template import loader
 from django.urls import reverse
 from django.shortcuts import render, redirect, get_object_or_404
 
+from rest_framework.filters import SearchFilter, OrderingFilter
+
+import json
 
 from django.views.generic import TemplateView
 from django.views.generic.list import ListView
@@ -24,10 +29,15 @@ from django.conf import settings
 
 from celery.result import AsyncResult
 
-from itez.beneficiary.models import Beneficiary, BeneficiaryParent, MedicalRecord, Province
+from itez.beneficiary.models import (
+    Beneficiary,
+    BeneficiaryParent,
+    MedicalRecord,
+    Province,
+)
 from itez.beneficiary.models import Service
 from django.db.models import Count
-from django.db.models.functions import ExtractYear,ExtractWeek,ExtractMonth
+from django.db.models.functions import ExtractYear, ExtractWeek, ExtractMonth
 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.paginator import Paginator
@@ -42,6 +52,9 @@ from itez.beneficiary.models import (
     District,
     Province,
 )
+
+from .resources import BeneficiaryResource
+from .filters import BeneficiaryFilter
 
 
 @login_required(login_url="/login/")
@@ -58,14 +71,14 @@ def index(request):
     other = Beneficiary.objects.filter(gender="Other").count()
 
     # Weekly Visits
-    sun_day = MedicalRecord.objects.filter(interaction_date__week_day = 1).count()
-    mon_day = MedicalRecord.objects.filter(interaction_date__week_day = 2).count()
-    tue_day = MedicalRecord.objects.filter(interaction_date__week_day = 3).count()
-    wed_day = MedicalRecord.objects.filter(interaction_date__week_day = 4).count()
-    thu_day = MedicalRecord.objects.filter(interaction_date__week_day = 5).count()
-    fri_day = MedicalRecord.objects.filter(interaction_date__week_day = 6).count()
-    sat_day = MedicalRecord.objects.filter(interaction_date__week_day = 7).count()
-   
+    sun_day = MedicalRecord.objects.filter(interaction_date__week_day=1).count()
+    mon_day = MedicalRecord.objects.filter(interaction_date__week_day=2).count()
+    tue_day = MedicalRecord.objects.filter(interaction_date__week_day=3).count()
+    wed_day = MedicalRecord.objects.filter(interaction_date__week_day=4).count()
+    thu_day = MedicalRecord.objects.filter(interaction_date__week_day=5).count()
+    fri_day = MedicalRecord.objects.filter(interaction_date__week_day=6).count()
+    sat_day = MedicalRecord.objects.filter(interaction_date__week_day=7).count()
+
     context = {
         "segment": "index",
         "opd": opd,
@@ -78,13 +91,13 @@ def index(request):
         "female": female,
         "transgender": transgender,
         "other": other,
-        "sunday" : sun_day,
-        "monday" : mon_day,
-        "tuesday" : tue_day,
-        "wednesday" : wed_day,
-        "thursday" : thu_day,
-        "friday" : fri_day,
-        "saturday" : sat_day,
+        "sunday": sun_day,
+        "monday": mon_day,
+        "tuesday": tue_day,
+        "wednesday": wed_day,
+        "thursday": thu_day,
+        "friday": fri_day,
+        "saturday": sat_day,
     }
 
     html_template = loader.get_template("home/index.html")
@@ -213,9 +226,25 @@ class BenenficiaryListView(LoginRequiredMixin, ListView):
     template_name = "beneficiary/beneficiary_list.html"
 
     def get_queryset(self):
-        return Beneficiary.objects.filter(alive=True)
+
+        if "q" in self.request.GET:
+            q = self.request.GET["q"]
+            beneficiary = Beneficiary.objects.filter(
+                alive=True
+                and Q(first_name__contains=q)
+                | Q(last_name__contains=q)
+                | Q(beneficiary_id__contains=q)
+            )
+
+        else:
+            beneficiary = Beneficiary.objects.filter(alive=True)
+        return beneficiary
 
     def get_context_data(self, **kwargs):
+        beneficiary_resource = BeneficiaryResource()
+        export_data = beneficiary_resource.export()
+        export_type = export_data.json
+
         context = super(BenenficiaryListView, self).get_context_data(**kwargs)
         context["opd"] = Service.objects.filter(client_type="OPD").count()
         context["hts"] = Service.objects.filter(service_type="HTS").count()
@@ -225,6 +254,7 @@ class BenenficiaryListView(LoginRequiredMixin, ListView):
         context["pharmacy"] = Service.objects.filter(service_type="PHARMACY").count()
         context["registered_today"] = Beneficiary.total_registered_today()
         context["title"] = "Beneficiaries"
+        context["search_json_qs"] = export_type
 
         return context
 
@@ -280,14 +310,16 @@ class BeneficiaryDetailView(LoginRequiredMixin, DetailView):
         context["medication_title"] = "medications"
         context["lab_title"] = "labs"
         context["beneficiary"] = current_beneficiary
-        context['services']  = services
-        context['labs']  = labs
-        context['facility_name']  = medical_record_object.service_facility
-        context['no_of_days']  = medical_record_object.no_of_days
-        context['when_to_take_medication']  = medical_record_object.when_to_take
-        
-        context['medications'] = medications
-        
+        context["services"] = services
+        context["labs"] = labs
+        context[
+            "facility_name"
+        ] = medical_record_object.beneficiary.service_facility.name
+        context["no_of_days"] = medical_record_object.no_of_days
+        context["when_to_take_medication"] = medical_record_object.when_to_take
+
+        context["medications"] = medications
+
         return context
 
 
@@ -309,29 +341,39 @@ def user_events(request):
 def beneficiary_report(request):
     # Graphs
     # Number of beneficiaries by year
-    year1 = Beneficiary.objects.filter(created__year=2017).values("created__year").count()
-    year2 = Beneficiary.objects.filter(created__year=2018).values("created__year").count()
-    year3 = Beneficiary.objects.filter(created__year=2019).values("created__year").count()
-    year4 = Beneficiary.objects.filter(created__year=2020).values("created__year").count()
-    year5 = Beneficiary.objects.filter(created__year=2021).values("created__year").count()
+    year1 = (
+        Beneficiary.objects.filter(created__year=2017).values("created__year").count()
+    )
+    year2 = (
+        Beneficiary.objects.filter(created__year=2018).values("created__year").count()
+    )
+    year3 = (
+        Beneficiary.objects.filter(created__year=2019).values("created__year").count()
+    )
+    year4 = (
+        Beneficiary.objects.filter(created__year=2020).values("created__year").count()
+    )
+    year5 = (
+        Beneficiary.objects.filter(created__year=2021).values("created__year").count()
+    )
 
     # Number of beneficiaries by province
     count_records = {}
-    count_services={}
+    count_services = {}
     province_labels = []
     beneficiary_count_data = []
 
     for province in Province.objects.all():
-        total_province_beneficiaries = Beneficiary.objects.filter(registered_facility__province__name=province.name).count()
-        total_province_services = MedicalRecord.objects.filter(service_facility__province__name=province.name).count()
+        total_province_beneficiaries = Beneficiary.objects.filter(
+            registered_facility__province__name=province.name
+        ).count()
+        total_province_services = MedicalRecord.objects.filter(
+            service_facility__province__name=province.name
+        ).count()
 
-        province_data = {
-            province.name: total_province_beneficiaries
-        }
+        province_data = {province.name: total_province_beneficiaries}
 
-        service_data = {
-            province.name: total_province_services
-        }
+        service_data = {province.name: total_province_services}
 
         count_records.update(province_data)
         count_services.update(service_data)
@@ -339,8 +381,8 @@ def beneficiary_report(request):
         province_labels.append(province.name)
         beneficiary_count_data.append(total_province_beneficiaries)
 
-        province_label_json_list = json.dumps(province_labels);
-    
+        province_label_json_list = json.dumps(province_labels)
+
     # Number of total interactions
     total_interactions = MedicalRecord.objects.all().count()
     # Dashboar Cards Stats
@@ -350,12 +392,12 @@ def beneficiary_report(request):
     art = Service.objects.filter(client_type="ART").count()
     labs = Service.objects.filter(service_type="LAB").count()
     pharmacy = Service.objects.filter(service_type="PHARMACY").count()
-    male = Beneficiary.objects.filter(gender='Male').count()
-    female = Beneficiary.objects.filter(gender='Female').count()
-    transgender = Beneficiary.objects.filter(gender='Transgender').count()
-    other = Beneficiary.objects.filter(gender='Other').count()
-    male_sex = Beneficiary.objects.filter(sex='Male').count()
-    female_sex = Beneficiary.objects.filter(sex='Female').count()
+    male = Beneficiary.objects.filter(gender="Male").count()
+    female = Beneficiary.objects.filter(gender="Female").count()
+    transgender = Beneficiary.objects.filter(gender="Transgender").count()
+    other = Beneficiary.objects.filter(gender="Other").count()
+    male_sex = Beneficiary.objects.filter(sex="Male").count()
+    female_sex = Beneficiary.objects.filter(sex="Female").count()
 
     context = {
         "data": [],
@@ -367,19 +409,18 @@ def beneficiary_report(request):
         "pharmacy": pharmacy,
         "male": male,
         "female": female,
-        "transgender": transgender, 
+        "transgender": transgender,
         "other": other,
-        "male_sex": male_sex, 
+        "male_sex": male_sex,
         "female_sex": female_sex,
-        "year1" : year1,
-        "year2" : year2,
-        "year3" : year3,
-        "year4" : year4,
-        "year5" : year5,
-        "total_interactions" : total_interactions,
-        "province_label_json_list" : province_label_json_list,
-        "beneficiary_count_data" : beneficiary_count_data
-        
+        "year1": year1,
+        "year2": year2,
+        "year3": year3,
+        "year4": year4,
+        "year5": year5,
+        "total_interactions": total_interactions,
+        "province_label_json_list": province_label_json_list,
+        "beneficiary_count_data": beneficiary_count_data,
     }
 
     html_template = loader.get_template("home/reports.html")
@@ -415,4 +456,3 @@ def pages(request):
 def doughnutChart(request):
     femaleSex = Beneficiary.objects.filter(sex="Female")
     maleSex = Beneficiary.objects.filter(sex="Male")
-    

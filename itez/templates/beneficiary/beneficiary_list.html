@@ -43,12 +43,21 @@
                               <h4 class="card-title card-title-dash">All Beneficiaries</h4>
                               <p class="card-subtitle card-subtitle-dash">{{registered_today}} new beneficicary registrations today</p>
                             </div>
-                            <div class="form-group">
-                              <form class="search-form" action="#">
-                                <input type="search" class="form-control" placeholder="Search beneficiary here" title="Search here">
-                                <!-- <i class="icon-search"></i> -->
+                           
+                            <div class="form-group inline ">
+                            <div class="search">
+                              <form class="search-form flex-column search" autocomplete='off' action="#">
+                                <input type="search" class="form-control search " name="q"
+                                  placeholder="Search beneficiary here" title="Search here" id="search_here"
+                                  >
+                                <div>
+                                  <svg>
+                                    <i class="icon-search"></i>
+                                  </svg>
+                                </div>
                               </form>
-                            </div>
+                            </div></div>
+
                             <div>
                               <button id="download-report-button" type="button" class="btn btn-success btn-icon-text btn-lg text-white mb-0 me-0">
                                 {% comment %} <i class="fa fa-circle-o-notch fa-spin px-2"></i> {% endcomment %}

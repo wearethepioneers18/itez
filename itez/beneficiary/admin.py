@@ -116,6 +116,7 @@ class BeneficiaryAdmin(ImportExportModelAdmin):
         "email",
         "date_of_birth",
         "education_level",
+        "created"
     ]
     search_fields = [
         "sex",
@@ -211,6 +212,8 @@ class ServiceProviderPersonelQualificationAdmin(admin.ModelAdmin):
 
 
 # register MedicalRecord class
+
+
 @admin.register(MedicalRecord)
 class MedicalRecordAdmin(admin.ModelAdmin):
     list_display = [
