@@ -12,40 +12,42 @@
           </tr>
         </thead>
         <tbody>
-          {% for drug in medications %}
+          {% for medication in medications.medications %}
           <tr>
-            <td>{{ drug.drugs.name }}</td>
-            <td>{{ no_of_days }}</td>
-            <td class="text-active">
-              {{ when_to_take_medication }}
-            </td>
-            <td>
-             {{ drug.date }}
-            </td>
+            <td>{{ medication.prescription_title }}</td>
+            <td>{{ medication.no_of_days }}</td>
+            <td>{{ medication.when_to_take }}</td>
+            <td>{{ medication.date_prescribed }}</td>
           </tr>
           {% endfor %}
         </tbody>
       </table>
     </div>
     <hr />
-    <div style="float: right;">
+    <div style="float: right">
       <fieldset class="border p-2">
-        {% if labs.has_previous %}
+        {% if medication_paginator_list.has_previous %}
         <a href="?page=1">&laquo; first</a>
         <span class="current">
-          Page {{ medications.number }} of {{ medications.paginator.num_pages }}.
+          Page {{ medication_paginator_list.number }} of {{
+          medication_paginator_list.paginator.num_pages }}.
         </span>
-        <a href="?page={{ medications.previous_page_number }}">previous</a>
+        <a href="?page={{ medication_paginator_list.previous_page_number }}"
+          >previous</a
+        >
+        {% endif %} {% if medication_paginator_list.has_next %}
+        <a href="?page={{ medication_paginator_list.next_page_number }}"
+          >next</a
+        >
+        <span class="current">
+          Page {{ medication_paginator_list.number }} of {{
+          medication_paginator_list.paginator.num_pages }}.
+        </span>
+        <a href="?page={{ medication_paginator_list.paginator.num_pages }}"
+          >last &raquo;</a
+        >
         {% endif %}
-        
-        {% if medications.has_next %}
-        <a href="?page={{ medications.next_page_number }}">next</a>
-          <span class="current">
-            Page {{ medications.number }} of {{ medications.paginator.num_pages }}.
-          </span>
-          <a href="?page={{ medications.paginator.num_pages }}">last &raquo;</a>
-          {% endif %}
-        </fieldset>
-      </div>
+      </fieldset>
     </div>
   </div>
+</div>

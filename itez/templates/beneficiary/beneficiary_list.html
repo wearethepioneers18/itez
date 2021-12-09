@@ -25,7 +25,7 @@
             border-bottom
           "
         >
-          Beneficiaries
+          <h2>Beneficiaries</h2> 
         </div>
           <div class="tab-content tab-content-basic">
             <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview"> 
@@ -127,22 +127,22 @@
                                       </div>
                                     </div>
                                   </td>
-                                  <td>{{ beneficiary.province}}</td>
+                                  <td>{{ beneficiary.province }}</td>
                                   <td><div class="badge badge-opacity-info">OPD</div></td>
                                   <td>
                                     <div class="badge badge-opacity-danger">
-                                    <a href="{% url 'beneficiary:medical_record_create' %}">
+                                    <a href="{% url 'beneficiary:medical_record_create' %}" data-toggle="tooltip"  title="Add Medical Record"  >
                                           <i class="menu-icon mdi mdi-file"></i>
                                         </a>
                                     </div>
                                     <div class="badge badge-opacity-danger">
-                                    <a href="#">
-                                          <i class="menu-icon mdi mdi-pencil"></i>
+                                    <a href="#" data-toggle="tooltip" title="Edit">
+                                          <i class="menu-icon mdi mdi-pencil" class="tooltiptext"></i>
                                         </a>
                                     </div>                                 
                                     
                                     <div class="badge badge-opacity-danger">
-                                    <a href="#">
+                                    <a href="#" data-toggle="tooltip" title="Delete">
                                           <i class="menu-icon mdi mdi-delete-forever"></i>
                                         </a>
                                       </div>
@@ -282,5 +282,10 @@
         })
     })
   </script>
+  <script>
+    $(document).ready(function(){
+      $('[data-toggle="tooltip"]').tooltip();
+    });
+    </script>
 
 {% endblock javascripts %}

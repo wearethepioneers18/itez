@@ -5,47 +5,47 @@
       <table class="table table-hover">
         <thead>
           <tr>
-            <th>Name</th>
+            <th>Service Name</th>
             <th>Provider Personnel</th>
             <th>Comments</th>
             <th>Facility</th>
           </tr>
         </thead>
         <tbody>
-          {% for service in services %}
+          {% for service in services.services %}
           <tr>
-            <td>{{ service.service_personnel.first_name|title }}</td>
-            <td>{{ service.service_personnel.first_name|title }} {{service.service_personnel.last_name|title}}</td>
-            <td class="text-active">
-              {{ service.comments|truncatechars:30 }}
-            </td>
-            <td>
-              {{ facility_name }}
-            </td>
+            <td>{{ service.service_object }}</td>
+            <td>{{ service.service_provider }}</td>
+            <td>{{ service.service_comments }}</td>
+            <td>{{ service.service_facility }}</td>
           </tr>
           {% endfor %}
         </tbody>
       </table>
     </div>
     <hr />
-    <div style="float: right;">
-        <fieldset class="border p-2">
-          {% if labs.has_previous %}
-              <a href="?page=1">&laquo; first</a>
-              <span class="current">
-                Page {{ services.number }} of {{ services.paginator.num_pages }}.
-            </span>
-              <a href="?page={{ services.previous_page_number }}">previous</a>
-          {% endif %}
-      
-          {% if services.has_next %}
-              <a href="?page={{ services.next_page_number }}">next</a>
-              <span class="current">
-                Page {{ services.number }} of {{ services.paginator.num_pages }}.
-            </span>
-              <a href="?page={{ services.paginator.num_pages }}">last &raquo;</a>
-          {% endif %}
-          </fieldset>
+    <div style="float: right">
+      <fieldset class="border p-2">
+        {% if service_paginator_list.has_previous %}
+        <a href="?page=1">&laquo; first</a>
+        <span class="current">
+          Page {{ service_paginator_list.number }} of {{
+          service_paginator_list.paginator.num_pages }}.
+        </span>
+        <a href="?page={{ service_paginator_list.previous_page_number }}"
+          >previous</a
+        >
+        {% endif %} {% if service_paginator_list.has_next %}
+        <a href="?page={{ service_paginator_list.next_page_number }}">next</a>
+        <span class="current">
+          Page {{ service_paginator_list.number }} of {{
+          service_paginator_list.num_pages }}.
+        </span>
+        <a href="?page={{ service_paginator_list.paginator.num_pages }}"
+          >last &raquo;</a
+        >
+        {% endif %}
+      </fieldset>
     </div>
   </div>
 </div>
