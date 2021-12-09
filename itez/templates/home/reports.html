@@ -6,7 +6,7 @@
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}{% endblock stylesheets %} {% block content %}
 
-<div class="content-wrapper">
+<div class="content-wrapper" id="print">
   <div class="row">
     <div class="col-sm-12">
       <div class="home-tab">
@@ -103,7 +103,10 @@
               <a href="#" class="btn btn-otline-dark align-items-center"
                 ><i class="icon-share"></i> Share</a
               >
-              <a href="#" class="btn btn-otline-dark"
+              <a
+                href="#"
+                class="btn btn-otline-dark"
+                onclick="printContent('overview')"
                 ><i class="icon-printer"></i> Print</a
               >
               <a href="#" class="btn btn-primary text-white me-0"
@@ -121,7 +124,7 @@
           >
             {% include "includes/header_stats.html" %}
 
-            <div class="row">
+            <div class="row print-card">
               <div class="col-lg-6 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
@@ -139,7 +142,7 @@
                 </div>
               </div>
             </div>
-            <div class="row">
+            <div class="row print-card">
               <div class="col-lg-6 grid-margin grid-margin-lg-0 stretch-card">
                 <div class="card">
                   <div class="card-body">
@@ -546,6 +549,10 @@
       });
     }
   });
+
+  function printContent(el) {
+    window.print();
+  }
 </script>
 
 {% endblock javascripts %}

@@ -31233,4 +31233,62 @@ input.search[type="search"]:focus {
   background: rgba(255, 255, 255, 0.2);
 }
 
+@page {
+  size: landscape;
+}
+
+@media print {
+  h1,
+  h2,
+  h3,
+  a {
+    color: #000;
+    font-size: 12px;
+  }
+  .navbar,
+  .navbar-menu-wrapper,
+  .settings-panel,
+  .sidebar,
+  .sidebar-offcanvas,
+  .footer {
+    display: none !important;
+  }
+
+  /* .stretch-card {
+    width: 15em;
+    height: 10em;
+  }
+
+  .chartjs-render-monitor {
+    width: 15em;
+    height: 10em;
+  } */
+
+  .print-card {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .stretch-card {
+    display: flex;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .chartjs-render-monitor {
+    display: block;
+    height: 178px !important ;
+    width: 370px !important;
+  }
+
+  .main-panel {
+    margin-top: -12.1em !important;
+  }
+
+  .tab-content,
+  .overview {
+    margin-bottom: -3em !important;
+  }
+}
+
 /*# sourceMappingURL=style.css.map */

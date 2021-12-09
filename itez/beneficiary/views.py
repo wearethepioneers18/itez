@@ -270,10 +270,10 @@ class BeneficiaryDetailView(LoginRequiredMixin, DetailView):
     model = Beneficiary
     template_name = "beneficiary/beneficiary_detail.html"
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, *args, **kwargs):
         context = super(BeneficiaryDetailView, self).get_context_data(**kwargs)
-        current_beneficiary_id = self.kwargs.get("pk")
-        current_beneficiary = Beneficiary.objects.get(id=current_beneficiary_id)
+        current_beneficiary_id = self.kwargs.get("pk", None)
+        current_beneficiary = Beneficiary.objects.get(pk=current_beneficiary_id)
         beneficiary_medical_records = MedicalRecord.objects.filter(
             beneficiary__id=current_beneficiary_id
         )
@@ -383,7 +383,7 @@ def beneficiary_report(request):
         province_labels.append(province.name)
         beneficiary_count_data.append(total_province_beneficiaries)
 
-        province_label_json_list = json.dumps(province_labels)
+    province_label_json_list = json.dumps(province_labels)
 
     # Number of total interactions
     total_interactions = MedicalRecord.objects.all().count()
