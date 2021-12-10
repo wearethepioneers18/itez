@@ -28,8 +28,7 @@
                 alt="Profile image"
               />
 
-              {% elif not request.user.profile_photo.url and request.user.gender
-              == 'Male' %}
+              {% elif not request.user.profile_photo.url and request.user.gender == 'Male' %}
               <img
                 style="border-radius: 0.6em; border-radius: 6em"
                 class="img-xs rounded-square mt-4"
@@ -37,8 +36,7 @@
                 alt="Profile image"
               />
 
-              {% elif not request.user.profile_photo.url and request.user.gender
-              == 'Female' %}
+              {% elif not request.user.profile_photo.url and request.user.gender == 'Female' %}
               <img
                 style="border-radius: 0.6em; border-radius: 6em"
                 class="img-xs rounded-square mt-4"
@@ -74,8 +72,7 @@
               </div>
             </div>
             <span style="float: right; margin-right: 10px; margin-top: 1.2em"
-              >{{ beneficiary.first_name|title }} {{ beneficiary.last_name|title
-              }}</span
+              >{{ beneficiary.first_name|title }} {{ beneficiary.last_name|title }}</span
             >
           </div>
           <div
