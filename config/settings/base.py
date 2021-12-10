@@ -6,7 +6,6 @@ from pathlib import Path
 import environ
 
 
-
 ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 # itez/
 APPS_DIR = ROOT_DIR / "itez"
@@ -71,7 +70,7 @@ DJANGO_APPS = [
     "django.contrib.staticfiles",
     # "django.contrib.humanize", # Handy template tags
     "djangocms_admin_style",
-    "django.contrib.admin",    
+    "django.contrib.admin",
     "django.contrib.gis",
     "django.forms"
 ]
@@ -88,7 +87,7 @@ THIRD_PARTY_APPS = [
     "drf_spectacular",
     "import_export",
     "mapwidgets",
-    "django_celery_results,"
+    # "django_celery_results,"
 ]
 
 LOCAL_APPS = [
@@ -329,7 +328,7 @@ REST_FRAMEWORK = {
     ),
     "DEFAULT_RENDERER_CLASSES": (
         "rest_framework.renderers.JSONRenderer",
-        ),
+    ),
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
     "PAGE_SIZE": 10
@@ -371,7 +370,7 @@ SPECTACULAR_SETTINGS = {
     # Set VERSION to None if only the request version should be rendered.
     'VERSION': '1.3.0',
     # available SwaggerUI versions: https://github.com/swagger-api/swagger-ui/releases
-    # "SWAGGER_UI_DIST": "//unpkg.com/swagger-ui-dist@2.0", 
+    # "SWAGGER_UI_DIST": "//unpkg.com/swagger-ui-dist@2.0",
     # "REDOC_DIST": "https://cdn.jsdelivr.net/npm/redoc@latest",
     # "SWAGGER_UI_FAVICON_HREF": settings.STATIC_URL + "your_company_favicon.png", # default is swagger favicon
 }
@@ -389,4 +388,3 @@ MAP_WIDGETS = {
     ),
     "GOOGLE_MAP_API_KEY": "AIzaSyDZMi5ucoQwtfIX7023ezUac8mQG2vrMpM"
 }
-

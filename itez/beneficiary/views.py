@@ -44,7 +44,7 @@ from .tasks import generate_export_file
 from itez.beneficiary.forms import BeneficiaryForm, MedicalRecordForm, AgentForm
 from itez.beneficiary.models import Agent
 from itez.users.models import User
-from itez.beneficiary.models import Province,
+from itez.beneficiary.models import Province
 
 from .resources import BeneficiaryResource
 
@@ -188,6 +188,7 @@ class MedicalRecordCreateView(LoginRequiredMixin, CreateView):
         form.instance.author = self.request.user
         return super(MedicalRecordCreateView, self).form_valid(form)
 
+
 class BeneficiaryCreateView(LoginRequiredMixin, CreateView):
     """
     Create a new Beneficiary object.
@@ -251,6 +252,7 @@ class BenenficiaryListView(LoginRequiredMixin, ListView):
 
         return context
 
+
 class AgentCreateView(LoginRequiredMixin, CreateView):
     """
       Create an agent object.
@@ -259,7 +261,7 @@ class AgentCreateView(LoginRequiredMixin, CreateView):
     model = Agent
     form_class = AgentForm
     template_name = "agent/agent_create.html"
-   
+
     def get_success_url(self):
         return reverse("beneficiary:agent_list")
 
@@ -273,7 +275,7 @@ class AgentCreateView(LoginRequiredMixin, CreateView):
 
         context["title"] = "create agent"
         context["roles"] = roles
-        
+
         return context
 
 
@@ -286,13 +288,13 @@ class AgentListView(LoginRequiredMixin, ListView):
     context_object_name = "agents"
     template_name = "agent/agent_list.html"
     paginate_by = 10
-    
+
     def get_context_data(self, **kwargs):
         context = super(AgentListView, self).get_context_data(**kwargs)
         context["title"] = "list all agents"
         return context
-    
- 
+
+
 class AgentDetailView(LoginRequiredMixin, DetailView):
     """
     Agent Details view.
@@ -308,7 +310,7 @@ class AgentDetailView(LoginRequiredMixin, DetailView):
 
         return context
 
-   
+
 class BeneficiaryDetailView(LoginRequiredMixin, DetailView):
     """
     Beneficiary Details view.
