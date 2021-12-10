@@ -213,7 +213,7 @@ class BeneficiaryCreateView(LoginRequiredMixin, CreateView):
     template_name = "beneficiary/beneficiary_create.html"
 
     def get_success_url(self):
-        return reverse("beneficiary:details")
+        return reverse("beneficiary:list")
 
     def get_context_data(self, **kwargs):
         context = super(BeneficiaryCreateView, self).get_context_data(**kwargs)
