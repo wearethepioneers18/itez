@@ -186,7 +186,7 @@ class MedicalRecordCreateView(LoginRequiredMixin, CreateView):
     template_name = "beneficiary/medical_record_create.html"
 
     def get_success_url(self): 
-        return reverse("beneficiary:details", kwargs={"pk": self.object.beneficiary.pk})
+        return reverse("beneficiary:medical_record_detail", kwargs={"pk": self.object.beneficiary.pk})
 
     def get_context_data(self, **kwargs):
         context = super(MedicalRecordCreateView, self).get_context_data(**kwargs)
