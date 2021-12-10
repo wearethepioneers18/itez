@@ -178,13 +178,8 @@ class Beneficiary(models.Model):
     )
     hiv_status = models.CharField(
         _("HIV Status"),
-<<<<<<< HEAD
         choices=HIV_STATUS,
         max_length=100,
-=======
-        max_length=10,
-        choices=HIV_STATUS_CHOICES,
->>>>>>> main
         null=True,
         blank=True,
     )
