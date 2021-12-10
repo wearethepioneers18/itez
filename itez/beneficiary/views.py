@@ -198,11 +198,6 @@ class MedicalRecordCreateView(LoginRequiredMixin, CreateView):
         form.instance.beneficiary = Beneficiary.objects.get(id=beneficiary_object_id)
         return super(MedicalRecordCreateView, self).form_valid(form)
 
-
-
-        
-
-
 class BeneficiaryCreateView(LoginRequiredMixin, CreateView):
     """
     Create a new Beneficiary object.
