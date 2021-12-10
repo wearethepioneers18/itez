@@ -64,14 +64,13 @@
           <input type="search" class="form-control" placeholder="Search Here" title="Search here">
         </form>
       </li>
-
-      <li class="nav-item dropdown">
+      
+      <li class="nav-item dropdown"> 
         <a class="nav-link count-indicator" id="countDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
           <i class="icon-bell"></i>
           <span class="count"></span>
         </a>
-        <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list pb-0"
-          aria-labelledby="countDropdown">
+        <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list pb-0" aria-labelledby="countDropdown">
           <a class="dropdown-item py-3">
             <p class="mb-0 font-weight-medium float-left">You have 2 unread notifications </p>
             <span class="badge badge-pill badge-primary float-right">View all</span>
@@ -79,15 +78,14 @@
           <div class="dropdown-divider"></div>
           <a class="dropdown-item preview-item">
             {% if request.user.profile.profile_photo.url %}
-            <img width="100" height="100" style="margin-right: 1em;" class="img-md rounded-circle"
-              src="{{request.user.profile.profile_photo.url}}" alt="Profile image">
-            {% elif not request.user.profile_photo.url and request.user.gender == 'Male' %}
-            <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
-            {% elif not request.user.profile_photo.url and request.user.gender == 'Female' %}
-            <img class="img-xs rounded-circle" src="/static/assets/images/faces/female.jpeg" alt="Profile image">
-            {% else %}
-            <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
-            {% endif %}
+                  <img width="100" height="100" style="margin-right: 1em;" class="img-md rounded-circle" src="{{request.user.profile.profile_photo.url}}" alt="Profile image">
+              {% elif not request.user.profile_photo.url and request.user.gender == 'Male' %}
+                  <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
+              {% elif not request.user.profile_photo.url and request.user.gender == 'Female' %}
+                  <img class="img-xs rounded-circle" src="/static/assets/images/faces/female.jpeg" alt="Profile image">
+              {% else %}
+                  <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
+              {% endif %}
             <div class="preview-item-content flex-grow py-2">
               <p class="preview-subject ellipsis font-weight-medium text-dark">Database Admin </p>
               <p class="fw-light small-text mb-0"> Added 3 new beneficiaries </p>
@@ -99,9 +97,9 @@
               <img width="100" height="100" style="margin-right: 1em;" class="img-md rounded-circle"
                 src="{{ request.user.profile.profile_photo.url }}" alt="Profile image">
               {% elif not request.user.profile_photo.url and request.user.gender == 'Male' %}
-              <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
-              {% elif not request.user.profile_photo.url and request.user.gender == 'Female' %}
-              <img class="img-xs rounded-circle" src="/static/assets/images/faces/female.jpeg" alt="Profile image">
+                  <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
+              {% elif not request.user.profile.profile_photo.url and request.user.profile.gender == 'Female' %}
+                  <img class="img-xs rounded-circle" src="/static/assets/images/faces/female.jpeg" alt="Profile image">
               {% else %}
               <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
               {% endif %}

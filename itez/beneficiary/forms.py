@@ -32,7 +32,6 @@ class MedicalRecordForm(ModelForm):
             Fieldset(
                 "Service",
                 Row(
-                    Column("beneficiary", css_class="form-group col-md-6 mb-0"),
                     Column("service", css_class="form-group col-md-6 mb-0"),
                     Column("provider_comments", css_class="form-group col-md-6 mb-0"),
                     Column("interaction_date", css_class="form-group col-md-6 mb-0"),
@@ -57,7 +56,7 @@ class MedicalRecordForm(ModelForm):
                 ),
             ),
             FormActions(
-                Submit("save", "Create Medica Record"),
+                Submit("save", "Create Medical Record"),
                 HTML('<a class="btn btn-danger" href="/beneficiary/list">Cancel</a>'),
             ),
         )

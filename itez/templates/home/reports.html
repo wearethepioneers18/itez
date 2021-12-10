@@ -48,14 +48,21 @@
           </ul>
           <div>
             <div class="btn-wrapper">
-              <a href="#" class="btn btn-otline-dark align-items-center"
-                onclick="prompt('Press Ctrl + C, then Enter to copy to clipboard','{{ request.scheme }}://{{ request.get_host }}{{ request.path }}')"><i
-                  class="icon-share"></i>
-                Share</a>
-              <a href="#" class="btn btn-otline-dark" onclick="printContent('overview')"><i class="icon-printer"></i>
-                Print</a>
-              <a href="#" class="btn btn-primary text-white me-0"><i class="icon-download"></i> Export
-                {{beneficiary_by_year}}</a>
+              <a
+                href="#"
+                class="btn btn-otline-dark align-items-center"
+                onclick="prompt('Press Ctrl + C, then Enter to copy to clipboard','{{ request.scheme }}://{{ request.get_host }}{{ request.path }}')"
+                ><i class="icon-share"></i> Share</a
+              >
+              <a
+                href="#"
+                class="btn btn-otline-dark"
+                onclick="printContent('overview')"
+                ><i class="icon-printer"></i> Print</a
+              >
+              <a href="#" class="btn btn-primary text-white me-0"
+                ><i class="icon-download"></i> Export {{beneficiary_by_year}}</a
+              >
             </div>
           </div>
         </div>
