@@ -10,25 +10,29 @@
         <!-- <img src="/static/assets/images/logo.svg" alt="logo" /> -->
       </a>
       <!-- <a class="navbar-brand brand-logo-mini" href="/">
-        <img src="/static/assets/images/logo-mini.svg" alt="logo" />
-      </a> -->
+            <img src="/static/assets/images/logo-mini.svg" alt="logo" />
+          </a> -->
       <a href="/" style="text-decoration: none;">
         <h2 style="padding-left:0.3em"><b>ITEZ</b></h2>
       </a>
     </div>
   </div>
-  <div class="navbar-menu-wrapper d-flex align-items-top"> 
+  <div class="navbar-menu-wrapper d-flex align-items-top">
     <ul class="navbar-nav">
       <li class="nav-item font-weight-semibold d-none d-lg-block ms-0">
-        <h1 class="welcome-text">Hello, <span class="text-black fw-bold">{{ request.user.first_name|title }} {{ request.user.last_name|title }}</span></h1>
+        <h1 class="welcome-text">Hello, <span class="text-black fw-bold">
+            {{ request.user.first_name|title }}
+            {{ request.user.last_name|title }}</span></h1>
         <h3 class="welcome-sub-text">Beneficiary analytics this week </h3>
       </li>
     </ul>
     <ul class="navbar-nav ms-auto">
       <li class="nav-item dropdown d-none d-lg-block">
-        <a class="nav-link dropdown-bordered dropdown-toggle dropdown-toggle-split" id="messageDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false"> Select Service Type </a>
-        <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list pb-0" aria-labelledby="messageDropdown">
-          <a class="dropdown-item py-3" >
+        <a class="nav-link dropdown-bordered dropdown-toggle dropdown-toggle-split" id="messageDropdown" href="#"
+          data-bs-toggle="dropdown" aria-expanded="false"> Select Service Type </a>
+        <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list pb-0"
+          aria-labelledby="messageDropdown">
+          <a class="dropdown-item py-3">
             <p class="mb-0 font-weight-medium float-left">Service Types</p>
           </a>
           <div class="dropdown-divider"></div>
@@ -43,88 +47,64 @@
               <p class="preview-subject ellipsis font-weight-medium text-dark">VL</p>
               <p class="fw-light small-text mb-0">Filter graphs by beneficiaries of service type Viral Load</p>
             </div>
-          </li>
-          <li class="nav-item">
-            <form class="search-form" action="#">
-              <i class="icon-search"></i>
-              <input type="search" class="form-control" placeholder="Search Here" title="Search here">
-            </form>
-          </li>
-          
-          <li class="nav-item dropdown"> 
-            <a class="nav-link count-indicator" id="countDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
-              <i class="icon-bell"></i>
-              <span class="count"></span>
-            </a>
-            <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list pb-0" aria-labelledby="countDropdown">
-              <a class="dropdown-item py-3">
-                <p class="mb-0 font-weight-medium float-left">You have 2 unread notifications </p>
-                <span class="badge badge-pill badge-primary float-right">View all</span>
-              </a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item preview-item">
-                {% if request.user.profile.profile_photo.url %}
-                      <img width="100" height="100" style="margin-right: 1em;" class="img-md rounded-circle" src="{{request.user.profile.profile_photo.url}}" alt="Profile image">
-                  {% elif not request.user.profile.profile_photo.url and request.user.profile.gender == 'Male' %}
-                      <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
-                  {% elif not request.user.profile.profile_photo.url and request.user.profile.gender == 'Female' %}
-                      <img class="img-xs rounded-circle" src="/static/assets/images/faces/female.jpeg" alt="Profile image">
-                  {% else %}
-                      <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
-                  {% endif %}
-                <div class="preview-item-content flex-grow py-2">
-                  <p class="preview-subject ellipsis font-weight-medium text-dark">Database Admin </p>
-                  <p class="fw-light small-text mb-0"> Added 3 new beneficiaries </p>
-                </div>
-              </a>
-              <a class="dropdown-item preview-item">
-                <div class="preview-thumbnail">
-                  {% if request.user.profile.profile_photo.url %}
-                      <img width="100" height="100" style="margin-right: 1em;" class="img-md rounded-circle" src="{{request.user.profile.profile_photo.url}}" alt="Profile image">
-                  {% elif not request.user.profile.profile_photo.url and request.user.profile.gender == 'Male' %}
-                      <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
-                  {% elif not request.user.profile.profile_photo.url and request.user.profile.gender == 'Female' %}
-                      <img class="img-xs rounded-circle" src="/static/assets/images/faces/female.jpeg" alt="Profile image">
-                  {% else %}
-                      <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
-                  {% endif %}
-                </div>
-                <div class="preview-item-content flex-grow py-2">
-                  <p class="preview-subject ellipsis font-weight-medium text-dark">Report Manager </p>
-                  <p class="fw-light small-text mb-0"> Requested a new report generation on benefficiaries </p>
-                </div>
-              </a>
+          </a>
+        </div>
+      </li>
+      <li class="nav-item d-none d-lg-block">
+        <div id="datepicker-popup" class="input-group date datepicker navbar-date-picker">
+          <span class="input-group-addon input-group-prepend border-right">
+            <span class="icon-calendar input-group-text calendar-icon"></span>
+          </span>
+          <input type="text" class="form-control">
+        </div>
+      </li>
+      <li class="nav-item">
+        <form class="search-form" action="#">
+          <i class="icon-search"></i>
+          <input type="search" class="form-control" placeholder="Search Here" title="Search here">
+        </form>
+      </li>
+
+      <li class="nav-item dropdown">
+        <a class="nav-link count-indicator" id="countDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+          <i class="icon-bell"></i>
+          <span class="count"></span>
+        </a>
+        <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list pb-0"
+          aria-labelledby="countDropdown">
+          <a class="dropdown-item py-3">
+            <p class="mb-0 font-weight-medium float-left">You have 2 unread notifications </p>
+            <span class="badge badge-pill badge-primary float-right">View all</span>
+          </a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item preview-item">
+            {% if request.user.profile.profile_photo.url %}
+            <img width="100" height="100" style="margin-right: 1em;" class="img-md rounded-circle"
+              src="{{request.user.profile.profile_photo.url}}" alt="Profile image">
+            {% elif not request.user.profile_photo.url and request.user.gender == 'Male' %}
+            <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
+            {% elif not request.user.profile_photo.url and request.user.gender == 'Female' %}
+            <img class="img-xs rounded-circle" src="/static/assets/images/faces/female.jpeg" alt="Profile image">
+            {% else %}
+            <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
+            {% endif %}
+            <div class="preview-item-content flex-grow py-2">
+              <p class="preview-subject ellipsis font-weight-medium text-dark">Database Admin </p>
+              <p class="fw-light small-text mb-0"> Added 3 new beneficiaries </p>
             </div>
           </a>
           <a class="dropdown-item preview-item">
             <div class="preview-thumbnail">
               {% if request.user.profile.profile_photo.url %}
-                  <img width="40" height="40" style="margin-right: 1em;" class="img-md rounded-circle" src="{{request.user.profile.profile_photo.url}}" alt="Profile image">
-              {% elif not request.user.profile.profile_photo.url and request.user.profile.gender == 'Male' %}
-                  <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
-              {% elif not request.user.profile.profile_photo.url and request.user.profile.gender == 'Female' %}
-                  <img class="img-xs rounded-circle" src="/static/assets/images/faces/female.jpeg" alt="Profile image">
+              <img width="100" height="100" style="margin-right: 1em;" class="img-md rounded-circle"
+                src="{{request.user.profile.profile_photo.url}}" alt="Profile image">
+              {% elif not request.user.profile_photo.url and request.user.gender == 'Male' %}
+              <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
+              {% elif not request.user.profile_photo.url and request.user.gender == 'Female' %}
+              <img class="img-xs rounded-circle" src="/static/assets/images/faces/female.jpeg" alt="Profile image">
               {% else %}
-                  <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
+              <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
               {% endif %}
-            
-              <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="UserDropdown">
-              <div class="dropdown-header text-center">
-                {% if request.user.profile.profile_photo.url %}
-                  <img width="100" height="100" style="margin-right: 1em;" class="img-md rounded-circle" src="{{request.user.profile.profile_photo.url}}" alt="Profile image">
-                {% elif not request.user.profile.profile_photo.url and request.user.profile.gender == 'Male' %}
-                    <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
-                {% elif not request.user.profile.profile_photo.url and request.user.profile.gender == 'Female' %}
-                    <img class="img-xs rounded-circle" src="/static/assets/images/faces/female.jpeg" alt="Profile image">
-                {% else %}
-                    <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
-                {% endif %}
-                <p class="mb-1 mt-3 font-weight-semibold">{{ request.user.first_name|title }} {{ request.user.last_name|title }}</p>
-                <p class="fw-light text-muted mb-0">{{request.user.username}}</p>
-              </div>
-              <a class="dropdown-item" href="{% url 'user:profile' %}"><i class="dropdown-item-icon mdi mdi-account-outline text-primary me-2"></i> My Profile</a>
-              <a href="{% url 'logout' %}" class="dropdown-item">
-                <i class="dropdown-item-icon mdi mdi-power text-primary me-2"></i>Sign Out</a>
             </div>
             <div class="preview-item-content flex-grow py-2">
               <p class="preview-subject ellipsis font-weight-medium text-dark">Report Manager </p>
@@ -136,36 +116,41 @@
       <li class="nav-item dropdown d-none d-lg-block user-dropdown">
         <a class="nav-link" id="UserDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
           {% if request.user.profile.profile_photo.url %}
-              <img width="40" height="40" style="margin-right: 1em;" class="img-md rounded-circle" src="{{request.user.profile.profile_photo.url}}" alt="Profile image">
+          <img width="40" height="40" style="margin-right: 1em;" class="img-md rounded-circle"
+            src="{{request.user.profile.profile_photo.url}}" alt="Profile image">
           {% elif not request.user.profile_photo.url and request.user.gender == 'Male' %}
-              <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
+          <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
           {% elif not request.user.profile_photo.url and request.user.gender == 'Female' %}
-              <img class="img-xs rounded-circle" src="/static/assets/images/faces/female.jpeg" alt="Profile image">
+          <img class="img-xs rounded-circle" src="/static/assets/images/faces/female.jpeg" alt="Profile image">
           {% else %}
-              <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
+          <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
           {% endif %}
-        
+
           <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="UserDropdown">
-          <div class="dropdown-header text-center">
-            {% if request.user.profile.profile_photo.url %}
-              <img width="100" height="100" style="margin-right: 1em;" class="img-md rounded-circle" src="{{request.user.profile.profile_photo.url}}" alt="Profile image">
-            {% elif not request.user.profile_photo.url and request.user.gender == 'Male' %}
-                <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
-            {% elif not request.user.profile_photo.url and request.user.gender == 'Female' %}
-                <img class="img-xs rounded-circle" src="/static/assets/images/faces/female.jpeg" alt="Profile image">
-            {% else %}
-                <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
-            {% endif %}
-            <p class="mb-1 mt-3 font-weight-semibold">{{ request.user.first_name|title }} {{ request.user.last_name|title }}</p>
-            <p class="fw-light text-muted mb-0">{{request.user.username}}</p>
+            <div class="dropdown-header text-center">
+              {% if request.user.profile.profile_photo.url %}
+              <img width="100" height="100" style="margin-right: 1em;" class="img-md rounded-circle"
+                src="{{request.user.profile.profile_photo.url}}" alt="Profile image">
+              {% elif not request.user.profile_photo.url and request.user.gender == 'Male' %}
+              <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
+              {% elif not request.user.profile_photo.url and request.user.gender == 'Female' %}
+              <img class="img-xs rounded-circle" src="/static/assets/images/faces/female.jpeg" alt="Profile image">
+              {% else %}
+              <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
+              {% endif %}
+              <p class="mb-1 mt-3 font-weight-semibold">{{ request.user.first_name|title }} {{
+                request.user.last_name|title }}</p>
+              <p class="fw-light text-muted mb-0">{{request.user.username}}</p>
+            </div>
+            <a class="dropdown-item" href="{% url 'user:profile' %}"><i
+                class="dropdown-item-icon mdi mdi-account-outline text-primary me-2"></i> My Profile</a>
+            <a href="{% url 'logout' %}" class="dropdown-item">
+              <i class="dropdown-item-icon mdi mdi-power text-primary me-2"></i>Sign Out</a>
           </div>
-          <a class="dropdown-item" href="{% url 'user:profile' %}"><i class="dropdown-item-icon mdi mdi-account-outline text-primary me-2"></i> My Profile</a>
-          <a href="{% url 'logout' %}" class="dropdown-item">
-            <i class="dropdown-item-icon mdi mdi-power text-primary me-2"></i>Sign Out</a>
-        </div>
       </li>
     </ul>
-    <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-bs-toggle="offcanvas">
+    <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
+      data-bs-toggle="offcanvas">
       <span class="mdi mdi-menu"></span>
     </button>
   </div>

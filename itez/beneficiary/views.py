@@ -223,9 +223,9 @@ class BenenficiaryListView(LoginRequiredMixin, ListView):
             q = self.request.GET["q"]
             beneficiary = Beneficiary.objects.filter(
                 alive=True and
-                Q(first_name__contains=q)
-                | Q(last_name__contains=q)
-                | Q(beneficiary_id__contains=q)
+                Q(first_name__icontains=q)
+                | Q(last_name__icontains=q)
+                | Q(beneficiary_id__icontains=q)
             )
 
         else:
