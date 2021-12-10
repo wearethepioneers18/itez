@@ -13,7 +13,7 @@ class MedicalRecordForm(ModelForm):
     class Meta:
 
         model = MedicalRecord
-        exclude = ["created", "medical_record_id"]
+        exclude = ["created", "medical_record_id", "beneficiary"]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -24,7 +24,6 @@ class MedicalRecordForm(ModelForm):
             Fieldset(
                 "Service",
                 Row(
-                    Column("beneficiary", css_class="form-group col-md-6 mb-0"),
                     Column("service", css_class="form-group col-md-6 mb-0"),
                     Column("provider_comments", css_class="form-group col-md-6 mb-0"),
                     Column("interaction_date", css_class="form-group col-md-6 mb-0"),

@@ -27,6 +27,7 @@ from django.core.paginator import Paginator
 from django.conf import settings
 
 from celery.result import AsyncResult
+from itez import beneficiary
 
 from itez.beneficiary.models import Beneficiary, BeneficiaryParent, MedicalRecord, Province
 from itez.beneficiary.models import Service
@@ -180,13 +181,22 @@ class MedicalRecordCreateView(LoginRequiredMixin, CreateView):
     form_class = MedicalRecordForm
     template_name = "beneficiary/medical_record_create.html"
 
-    def get_success_url(self):
+    def get_success_url(self): 
         return reverse("beneficiary:details", kwargs={"pk": self.object.beneficiary.pk})
 
     def get_context_data(self, **kwargs):
         context = super(MedicalRecordCreateView, self).get_context_data(**kwargs)
         context["title"] = "add medical record"
         return context
+
+    def form_valid(self, form):
+        beneficiary_object_id = self.kwargs.get('beneficiary_id', None)
+        form.instance.beneficiary = Beneficiary.objects.get(id=beneficiary_object_id)
+        return super(MedicalRecordCreateView, self).form_valid(form)
+
+
+
+        
 
 
 class BeneficiaryCreateView(LoginRequiredMixin, CreateView):
@@ -199,7 +209,7 @@ class BeneficiaryCreateView(LoginRequiredMixin, CreateView):
     template_name = "beneficiary/beneficiary_create.html"
 
     def get_success_url(self):
-        return reverse("beneficiary:list")
+        return reverse("beneficiary:details")
 
     def get_context_data(self, **kwargs):
         context = super(BeneficiaryCreateView, self).get_context_data(**kwargs)
@@ -383,8 +393,6 @@ def beneficiary_report(request):
 
     # Number of total interactions
     total_interactions = MedicalRecord.objects.all().count()
-  
-
     
     
     # Dashboar Cards Stats

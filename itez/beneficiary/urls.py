@@ -45,7 +45,7 @@ urlpatterns = [
         name="medical_record_detail",
     ),
     path(
-        "medical_record_create",
+        "beneficiary/<int:beneficiary_id>/medical_record/create",
         views.MedicalRecordCreateView.as_view(),
         name="medical_record_create",
     ),
