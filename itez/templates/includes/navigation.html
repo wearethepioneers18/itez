@@ -43,7 +43,6 @@
               <p class="preview-subject ellipsis font-weight-medium text-dark">VL</p>
               <p class="fw-light small-text mb-0">Filter graphs by beneficiaries of service type Viral Load</p>
             </div>
-<<<<<<< HEAD
           </li>
           <li class="nav-item">
             <form class="search-form" action="#">
@@ -95,69 +94,19 @@
                   <p class="fw-light small-text mb-0"> Requested a new report generation on benefficiaries </p>
                 </div>
               </a>
-=======
-          </a>
-        </div>
-      </li>
-      <li class="nav-item d-none d-lg-block">
-        <div id="datepicker-popup" class="input-group date datepicker navbar-date-picker">
-          <span class="input-group-addon input-group-prepend border-right">
-            <span class="icon-calendar input-group-text calendar-icon"></span>
-          </span>
-          <input type="text" class="form-control">
-        </div>
-      </li>
-      <li class="nav-item">
-        <form class="search-form" action="#">
-          <i class="icon-search"></i>
-          <input type="search" class="form-control" placeholder="Search Here" title="Search here">
-        </form>
-      </li>
-      
-      <li class="nav-item dropdown"> 
-        <a class="nav-link count-indicator" id="countDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
-          <i class="icon-bell"></i>
-          <span class="count"></span>
-        </a>
-        <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list pb-0" aria-labelledby="countDropdown">
-          <a class="dropdown-item py-3">
-            <p class="mb-0 font-weight-medium float-left">You have 2 unread notifications </p>
-            <span class="badge badge-pill badge-primary float-right">View all</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item preview-item">
-            {% if request.user.profile.profile_photo.url %}
-                  <img width="100" height="100" style="margin-right: 1em;" class="img-md rounded-circle" src="{{request.user.profile.profile_photo.url}}" alt="Profile image">
-              {% elif not request.user.profile_photo.url and request.user.gender == 'Male' %}
-                  <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
-              {% elif not request.user.profile_photo.url and request.user.gender == 'Female' %}
-                  <img class="img-xs rounded-circle" src="/static/assets/images/faces/female.jpeg" alt="Profile image">
-              {% else %}
-                  <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
-              {% endif %}
-            <div class="preview-item-content flex-grow py-2">
-              <p class="preview-subject ellipsis font-weight-medium text-dark">Database Admin </p>
-              <p class="fw-light small-text mb-0"> Added 3 new beneficiaries </p>
->>>>>>> main
             </div>
           </a>
           <a class="dropdown-item preview-item">
             <div class="preview-thumbnail">
               {% if request.user.profile.profile_photo.url %}
-<<<<<<< HEAD
                   <img width="40" height="40" style="margin-right: 1em;" class="img-md rounded-circle" src="{{request.user.profile.profile_photo.url}}" alt="Profile image">
               {% elif not request.user.profile.profile_photo.url and request.user.profile.gender == 'Male' %}
-=======
-                  <img width="100" height="100" style="margin-right: 1em;" class="img-md rounded-circle" src="{{request.user.profile.profile_photo.url}}" alt="Profile image">
-              {% elif not request.user.profile_photo.url and request.user.gender == 'Male' %}
->>>>>>> main
                   <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
               {% elif not request.user.profile.profile_photo.url and request.user.profile.gender == 'Female' %}
                   <img class="img-xs rounded-circle" src="/static/assets/images/faces/female.jpeg" alt="Profile image">
               {% else %}
                   <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
               {% endif %}
-<<<<<<< HEAD
             
               <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="UserDropdown">
               <div class="dropdown-header text-center">
@@ -176,8 +125,6 @@
               <a class="dropdown-item" href="{% url 'user:profile' %}"><i class="dropdown-item-icon mdi mdi-account-outline text-primary me-2"></i> My Profile</a>
               <a href="{% url 'logout' %}" class="dropdown-item">
                 <i class="dropdown-item-icon mdi mdi-power text-primary me-2"></i>Sign Out</a>
-=======
->>>>>>> main
             </div>
             <div class="preview-item-content flex-grow py-2">
               <p class="preview-subject ellipsis font-weight-medium text-dark">Report Manager </p>

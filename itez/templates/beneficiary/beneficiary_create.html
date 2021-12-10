@@ -6,16 +6,9 @@
 
 <link rel="stylesheet" href="/static/assets/js/select.dataTables.min.css" />
 <link
-<<<<<<< HEAD
   href="//netdna.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
   rel="stylesheet"
 />
-=======
-  href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"
-  rel="stylesheet"
-/>
-
->>>>>>> main
 {% endblock css_plugins %}
 
 <!-- Specific Page CSS goes HERE  -->
@@ -28,14 +21,9 @@
         <div class="card-body">
           <h4 class="card-title">{{ title|title }}</h4>
 
-<<<<<<< HEAD
           <form class="form-sample" action="/beneficiary/create" method="post" >
             {% csrf_token %}
             {% crispy form form.helper %}
-=======
-          <form class="form-sample" method="post">
-            {% csrf_token %} {% crispy form form.helper %}
->>>>>>> main
           </form>
         </div>
       </div>
