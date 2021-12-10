@@ -802,10 +802,6 @@ class MedicalRecord(models.Model):
     
     def __str__(self):
         return f"Medical Record for: {self.beneficiary}, service: {self.service}"
-<<<<<<< HEAD
- 
-=======
     
     def  get_absolute_url(self):
         return reverse('beneficiary:detail', kwargs={'pk': self.beneficiary.pk})
->>>>>>> main
