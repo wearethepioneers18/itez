@@ -194,11 +194,17 @@
                                 <div class="card" style="border-bottom-left-radius: 1em; border-bottom-right-radius: 1em;">
                                     <div class="card-body">
                                         <div style="margin-right: 12em;" class="wrapper d-flex align-items-center justify-content-between py-2 border-bottom">
+<<<<<<< HEAD
+                                            {% if request.user.profile.profile_photo %}
+                                                <img height="100" width="100" style="border-radius: 0.6em;"  class="img-md zoom rounded-square  mt-4" src="{{ request.user.profile.profile_photo.url }}" alt="Profile image">
+                                            {% elif not request.user.profile_photo and request.user.gender == 'Male' %}
+=======
                                             {% if request.user.profile.profile_photo.url %}
                                                 <img height="100" width="100" style="border-radius: 0.6em;" class="img-md zoom rounded-square  mt-4" src="{{request.user.profile.profile_photo.url}}" alt="Profile image">
                                             {% elif not request.user.profile_photo.url and request.user.gender == 'Male' %}
+>>>>>>> main
                                                 <img style="border-radius: 0.6em;" class="img-xs rounded-square  mt-4" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
-                                            {% elif not request.user.profile_photo.url and request.user.gender == 'Female' %}
+                                            {% elif not request.user.profile_photo and request.user.gender == 'Female' %}
                                                 <img style="border-radius: 0.6em;" class="img-xs rounded-square  mt-4" src="/static/assets/images/faces/female.jpeg" alt="Profile image">
                                             {% else %}
                                                 <img style="border-radius: 0.6em;" class="img-xs rounded-square  mt-4" src="/static/assets/images/faces/male.jpeg" alt="Profile image">

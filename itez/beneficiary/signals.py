@@ -2,7 +2,7 @@
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 
-from itez.beneficiary.models import AgentDetail, Beneficiary
+from itez.beneficiary.models import Agent, Beneficiary
 from itez.beneficiary.utils import generate_uuid
 
 
@@ -19,7 +19,7 @@ def set_beneficiary_ID(instance, sender, **kwargs):
         pass
 
 
-@receiver(pre_save, sender=AgentDetail)
+@receiver(pre_save, sender=Agent)
 def set_agent_ID(instance, sender, **kwargs):
     """
     Assigns a unique generated ID to the agent object before saving to

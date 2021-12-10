@@ -23,10 +23,14 @@ SEX_CHOICES = (
 )
 
 
-class AgentDetail(models.Model):
+class Agent(models.Model):
     """
     Create agent detail table with its attributes or columns.
     """
+    user = models.OneToOneField(
+        'users.User', 
+        on_delete=models.CASCADE
+        )
 
     first_name = models.CharField(
         _("First Name"),
@@ -35,7 +39,7 @@ class AgentDetail(models.Model):
         blank=True
     )
     last_name = models.CharField(
-        _("Second Name"),
+        _("Last Name"),
         max_length=200,
         null=False
     )
@@ -65,6 +69,9 @@ class AgentDetail(models.Model):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
+    
+    def  get_absolute_url(self):
+            return reverse('beneficiary:agent_detail', kwargs={'pk': self.pk})
 
 
 class Beneficiary(models.Model):
@@ -87,6 +94,12 @@ class Beneficiary(models.Model):
         ("seperated", _("Seperated")),
         ("divorced", _("Divorced")),
         ("widowed", _("Widowed")),
+    )
+
+    HIV_STATUS = (
+        ("positive", _("Positive")),
+        ("negative", _("Negative")),
+        ("unkown", _("Uknown")),
     )
 
     EDUCATION_LEVEL = (
@@ -165,13 +178,18 @@ class Beneficiary(models.Model):
     )
     hiv_status = models.CharField(
         _("HIV Status"),
+<<<<<<< HEAD
+        choices=HIV_STATUS,
+        max_length=100,
+=======
         max_length=10,
         choices=HIV_STATUS_CHOICES,
+>>>>>>> main
         null=True,
         blank=True,
     )
     agent = models.ForeignKey(
-        AgentDetail,
+        Agent,
         on_delete=models.PROTECT,
         null=True,
         blank=True
@@ -789,6 +807,10 @@ class MedicalRecord(models.Model):
     
     def __str__(self):
         return f"Medical Record for: {self.beneficiary}, service: {self.service}"
+<<<<<<< HEAD
+ 
+=======
     
     def  get_absolute_url(self):
         return reverse('beneficiary:detail', kwargs={'pk': self.beneficiary.pk})
+>>>>>>> main

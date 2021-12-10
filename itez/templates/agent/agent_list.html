@@ -62,9 +62,24 @@
                         <div class="card-body">
                           <div class="d-sm-flex justify-content-between align-items-start">
                             <div>
-                              <h4 class="card-title card-title-dash">System Users</h4>
+                              <h4 class="card-title card-title-dash">All Agent Users</h4>
+                            </div>
+                            <div class="form-group">
+                              <form class="search-form" action="#">
+                                <input type="search" class="form-control" placeholder="Search agents here..." title="Search here">
+                                <!-- <i class="icon-search"></i> -->
+                              </form>
+                            </div>
+                            <div>
+                              <button class="btn btn-primary btn-lg text-white mb-0 me-0" type="button">
+                                
+                                <a href="{% url 'beneficiary:agent_create' %}" class="text-white" style="text-decoration: none;">
+                                <i class="mdi mdi-account-plus"></i>Add new Agent User</button>
+                                </a>
+                                
                             </div>
                           </div>
+                          
                           <div class="table-responsive  mt-1">
                             <table class="table select-table">
                               <thead>
@@ -75,18 +90,19 @@
                                         <input type="checkbox" class="form-check-input" aria-checked="false"><i class="input-helper"></i></label>
                                     </div>
                                   </th>
+                                  <th>Agent ID</th>
                                   <th>Full Name</th>
-                                  <th>Username</th>
-                                  <th>Gender</th>
+                                  <th>Related User</th>
+                                  <th>Date of Birth</th>
                                   <th>Role</th>
-                                  <th>Status</th>
-                                  <th>Last Login</th>
+                                  <th>Gender</th>
+                                  <th>Location</th>
                                   <th>Action</th>
                                 </tr>
                               </thead>
                               <tbody>
-                                {% if users_list %}
-                                {% for user in users_list %}
+                                {% if agents %}
+                                {% for agent in agents %}
                                 <tr>
                                   <td>
                                     <div class="form-check form-check-flat mt-0">
@@ -95,74 +111,73 @@
                                     </div>
                                   </td>
                                   <td>
-                                    <div class="d-flex ">
-                                     <img src="/static/assets/images/faces/male.jpeg" alt="">
-                                      <!-- <img src="/static/assets/images/faces/face1.jpg" alt=""> -->
-                                      <div>
-                                        <h6>{{user.first_name}} {{user.last_name}}</h6>
-                                      </div>
-                                    </div>
-                                  </td>
-                                   <td>
-                                    <h6>{{user.username}}</h6>
+                                    {% if agent.user.profile.profile_photo %}
+                                        <img src="{{ agent.user.profile.profile_photo.url }}">
+                                      {% elif not agent.user.profile.profile_photo and agent.gender == "Male" %}
+                                        <img src="/static/assets/images/faces/male.jpeg" alt="">
+                                      {% else %}
+                                        <img src="/static/assets/images/faces/female.jpeg" alt="">
+                                      {% endif %}
+                                    <a style="text-decoration: none;" href="{{ agent.get_absolute_url }}">{{ agent.agent_id }}</a>
                                   </td>
                                   <td>
-                                    <h6>{{user.profile.gender}}</h6>
+                                    <h6>{{ agent.first_name|title }} {{ agent.last_name|title }}</h6>
                                   </td>
                                   <td>
-                                    <!-- <h6>{{user.groups.all}}</h6> -->
+                                    {% if agent.user.first_name and agent.user.last_name %}
+                                      <h6>{{ agent.user.first_name }} {{ agent.user.last_name }}</h6>
+                                    {% else %}
+                                      <h6>{{ agent.user.username }}</h6>
+                                    {% endif%}
                                   </td>
-                                  {%if user.is_active %}
                                   <td>
-                                    <h6>{{user.status}}
-                                    <div class="badge badge-opacity-warning"></div>Active</td>
-                                  {%else %}
-                                  <td><div class="badge badge-opacity-warning"></div>Inactive</td>
-                                  {%endif%}
-                                  </h6>
-                                 <td>
-                                    <h6>{{user.last_login}}</h6>
+                                    <h6>{{ agent.birthdate }}</h6>
                                   </td>
-                                  
-                                   <td><div class="badge badge-opacity-warning">
-                                    <a href="http://localhost:8000/admin/users/user/{{user.id}}/change/">
-                                          <i class="menu-icon mdi mdi-pencil"></i>
-                                        </a>
-                                    </div>
+                                    <td>
+                                    <h6>{{ agent.user.group.all }}</h6>
+                                  </td>
+                                  <td>
+                                    <h6>{{ agent.gender }}</h6>
+                                  </td>
+                                  <td>
+                                    <h6>{{ agent.Location }}</h6>
+                                  </td>
+                                  <td>
                                     <div class="badge badge-opacity-danger">
                                     <a href="#">
                                           <i class="menu-icon mdi mdi-delete-forever"></i>
                                         </a>
                                       </div>
-                                      </td>
                                   </td>
                                 </tr>
-                                {%endfor%}
+                                {% endfor %}
+                                {% else %}
+                                <h3>No Agent Users Available</h3>
                                 {% endif %}
                               </tbody>
                             </table>
                           </div>
+
                           <div class="m-3">
 
-                            {% if not is_paginated %}
-                              {% if page_obj.has_previous %}
+                            {% if is_paginated %}
 
-                                <a class="btn btn-outline-info mb-4" href="?page=1">First</a>
-                                <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                              {% if page_obj.has_previous %}
+                                <a class="btn btn-primary btn-lg text-white mb-0 me-0" href="?page=1">First</a>
+                                <a class="btn btn-primary btn-lg text-white mb-0 me-0" href="?page={{ page_obj.previous_page_number }}">Previous</a>
                               {% endif %}
 
                               {% for num in page_obj.paginator.page_range %}
-                              {{page_obj.paginator.page_range}}
                                 {% if page_obj.number == num %}
-                                  <a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
+                                  <a class="btn btn-lg mb-0 me-0" href="?page={{ num }}">{{ num }}</a>
                                 {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-                                  <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
+                                  <a class="btn btn-primary btn-lg text-white mb-0 me-0" href="?page={{ num }}">{{ num }}</a>
                                 {% endif %}
                               {% endfor %}
 
                               {% if page_obj.has_next %}
-                                <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.next_page_number }}">Next</a>
-                                <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+                                <a class="btn btn-primary btn-lg text-white mb-0 me-0" href="?page={{ page_obj.next_page_number }}">Next</a>
+                                <a class="btn btn-primary btn-lg text-white mb-0 me-0" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
                               {% endif %}
                             {% endif %}
                           </div>

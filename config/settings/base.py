@@ -87,7 +87,8 @@ THIRD_PARTY_APPS = [
     "rolepermissions",
     "drf_spectacular",
     "import_export",
-    "django_celery_results"
+    "mapwidgets",
+    "django_celery_results",
 ]
 
 LOCAL_APPS = [
@@ -113,9 +114,9 @@ AUTHENTICATION_BACKENDS = [
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-user-model
 AUTH_USER_MODEL = "users.User"
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-redirect-url
-LOGIN_REDIRECT_URL = "users:redirect"
+LOGIN_REDIRECT_URL = "beneficiary:home"
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-url
-LOGIN_URL = "account_login"
+LOGIN_URL = "login"
 
 LOGOUT_REDIRECT_URL = '/login'
 # PASSWORDS
@@ -374,3 +375,18 @@ SPECTACULAR_SETTINGS = {
     # "REDOC_DIST": "https://cdn.jsdelivr.net/npm/redoc@latest",
     # "SWAGGER_UI_FAVICON_HREF": settings.STATIC_URL + "your_company_favicon.png", # default is swagger favicon
 }
+
+# APPEND_SLASH=False
+
+# Google map API widget
+# --------------------------------
+MAP_WIDGETS = {
+    "GooglePointFieldWidget": (
+        ("zoom", 15),
+        # ("mapCenterLocation", [-15.4164488, 28.2821535]),
+        ("GooglePlaceAutocompleteOptions", {'componentRestrictions': {'country': 'zambia'}}),
+        ("markerFitZoom", 12),
+    ),
+    "GOOGLE_MAP_API_KEY": "AIzaSyDZMi5ucoQwtfIX7023ezUac8mQG2vrMpM"
+}
+

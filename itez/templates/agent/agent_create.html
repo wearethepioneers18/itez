@@ -3,19 +3,12 @@
 
 <!-- Specific CSS Plugins goes HERE  -->
 {% block css_plugins %}
-
 <link rel="stylesheet" href="/static/assets/js/select.dataTables.min.css" />
 <link
-<<<<<<< HEAD
   href="//netdna.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
   rel="stylesheet"
 />
-=======
-  href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"
-  rel="stylesheet"
-/>
 
->>>>>>> main
 {% endblock css_plugins %}
 
 <!-- Specific Page CSS goes HERE  -->
@@ -28,14 +21,10 @@
         <div class="card-body">
           <h4 class="card-title">{{ title|title }}</h4>
 
-<<<<<<< HEAD
-          <form class="form-sample" action="/beneficiary/create" method="post" >
-            {% csrf_token %}
+          <form class="form-sample" action="/agent/create" method="post">
+            {% csrf_token %} 
+            {{ form.media }}
             {% crispy form form.helper %}
-=======
-          <form class="form-sample" method="post">
-            {% csrf_token %} {% crispy form form.helper %}
->>>>>>> main
           </form>
         </div>
       </div>
@@ -56,7 +45,28 @@
 
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
+<script>
+  $(document).on("google_point_map_widget:marker_create", function (e, place, lat, lng, locationInputElem, mapWrapID) {
+    console.log(place); // Google geocoding response object
+    console.log(locationInputElem); // django widget textarea widget (hidden)
+    console.log(lat, lng); // created marker coordinates
+    console.log(mapWrapID); // map widget wrapper element ID
+});
 
+$(document).on("google_point_map_widget:marker_change", function (e, place, lat, lng, locationInputElem, mapWrapID) {
+    console.log(place); // Google geocoding response object
+    console.log(locationInputElem); // django widget textarea widget (hidden)
+    console.log(lat, lng);  // changed marker coordinates
+    console.log(mapWrapID); // map widget wrapper element ID
+});
+
+$(document).on("google_point_map_widget:marker_delete", function (e, lat, lng, locationInputElem, mapWrapID) {
+    console.log(locationInputElem); // django widget textarea widget (hidden)
+    console.log(lat, lng);  // deleted marker coordinates
+    console.log(mapWrapID); // map widget wrapper element ID
+})
+
+</script>
 <script src="/static/assets/js/dashboard.js"></script>
 <script src="/static/assets/js/Chart.roundedBarCharts.js"></script>
 

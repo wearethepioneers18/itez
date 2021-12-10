@@ -1,12 +1,17 @@
-from django.contrib.auth import forms
+from django.contrib.gis import forms
 
-from django.forms import ModelForm
+from django.forms import ModelForm, widgets
+from django.contrib.gis.geos import Point
+
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Fieldset, HTML, Submit, Row, Column, Field, Div
+from crispy_forms.layout import Layout, Fieldset, HTML, Submit, Row, Column, Field, Div, MultiField
 from crispy_forms.bootstrap import FormActions
 from crispy_forms.bootstrap import TabHolder, Tab
+from mapwidgets.widgets import GooglePointFieldWidget
 
 from itez.beneficiary.models import Beneficiary, MedicalRecord
+from itez.beneficiary.models import Agent
+
 
 
 class MedicalRecordForm(ModelForm):
@@ -14,7 +19,10 @@ class MedicalRecordForm(ModelForm):
 
         model = MedicalRecord
         exclude = ["created"]
-
+        widgets = {
+            'interaction_date': widgets.DateInput(format=('%m/%d/%Y'), attrs={'class':'form-control', 'type':'date'}),
+            'provider_comments': forms.TextInput(attrs={'size': 500, 'title': 'Extra notes or comments',  'required': False}),
+        }
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
@@ -55,17 +63,63 @@ class MedicalRecordForm(ModelForm):
         )
 
     def save(self, commit=True):
-        instance = super(BeneficiaryForm, self).save(commit=False)
+        instance = super(MedicalRecordForm, self).save(commit=False)
         instance.save()
         self.save_m2m()
         return instance
 
+class AgentForm(ModelForm):
+    class Meta:
+
+        model = Agent
+        exclude = ["created", "agent_id"]
+        widgets = {
+            'birthdate': widgets.DateInput(attrs={'type': 'date'}),
+            'location': GooglePointFieldWidget
+        }
+       
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_tag = False    
+        self.helper.layout = Layout(
+            Fieldset(
+                "Personal Details",
+             Row(
+                    Div("user", css_class="form-group col-md-6 mb-0"),
+                    Div("first_name", css_class="form-group col-md-6 mb-0"),
+                    Div("last_name", css_class="form-group col-md-6 mb-0"),
+                    Div("birthdate", css_class="form-group col-md-6 mb-0"),
+                    Div("gender", css_class="form-group col-md-6 mb-0"),
+             ),
+            ),
+            Fieldset(
+                "Other Meta Data",
+                Row(
+                    Div("location", css_class="form-group col-md-12 mb-0"),
+                    css_class="form-row",
+                ),
+            ),
+            FormActions(
+                Submit("submit", "Create Agent"),
+                HTML('<a class="btn btn-danger" href="/agent/list">Cancel</a>'),
+            ),
+        )
+    def save(self, commit=True):
+        instance = super(AgentForm, self).save(commit=False)
+        if commit:
+            instance.save()
+        # self.save_m2m()  # we  can use this if we have many to many field on the model i.e Service
+        return instance
 
 class BeneficiaryForm(ModelForm):
     class Meta:
 
         model = Beneficiary
         exclude = ["created", "beneficiary_id"]
+        widgets = {
+            'date_of_birth': widgets.DateInput(format=('%m/%d/%Y'), attrs={'class':'form-control', 'type':'date'}),
+        }
 
     def __init__(self, *args, **kwargs):
         # super().__init__(*args, **kwargs)

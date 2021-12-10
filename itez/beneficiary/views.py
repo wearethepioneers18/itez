@@ -25,36 +25,28 @@ from django.views.generic import base
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
+from rolepermissions.roles import RolesManager
 from django.conf import settings
 
 from celery.result import AsyncResult
 
 from itez.beneficiary.models import (
     Beneficiary,
-    BeneficiaryParent,
     MedicalRecord,
     Province,
 )
 from itez.beneficiary.models import Service
-from django.db.models import Count
-from django.db.models.functions import ExtractYear, ExtractWeek, ExtractMonth
 
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core.paginator import Paginator
 from django.core.paginator import Paginator
 from .tasks import generate_export_file
 
-from itez.beneficiary.forms import BeneficiaryForm, MedicalRecordForm
-from itez.users.models import User, Profile
-from itez.beneficiary.models import (
-    Drug,
-    Prescription,
-    Lab,
-    District,
-    Province,
-)
+from itez.beneficiary.forms import BeneficiaryForm, MedicalRecordForm, AgentForm
+from itez.beneficiary.models import Agent
+from itez.users.models import User
+from itez.beneficiary.models import Province,
 
 from .resources import BeneficiaryResource
-from .filters import BeneficiaryFilter
 
 
 @login_required(login_url="/login/")
@@ -144,7 +136,7 @@ def poll_async_resullt(request, task_id):
 @login_required(login_url="/login/")
 def uielements(request):
     context = {"title": "UI Elements"}
-    html_template = loader.get_template("home/icons-mdi.html")
+    html_template = loader.get_template("home/basic_elements.html")
     return HttpResponse(html_template.render(context, request))
 
 
@@ -195,7 +187,6 @@ class MedicalRecordCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super(MedicalRecordCreateView, self).form_valid(form)
-
 
 class BeneficiaryCreateView(LoginRequiredMixin, CreateView):
     """
@@ -260,7 +251,64 @@ class BenenficiaryListView(LoginRequiredMixin, ListView):
 
         return context
 
+class AgentCreateView(LoginRequiredMixin, CreateView):
+    """
+      Create an agent object.
+    """
 
+    model = Agent
+    form_class = AgentForm
+    template_name = "agent/agent_create.html"
+   
+    def get_success_url(self):
+        return reverse("beneficiary:agent_list")
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super(AgentCreateView, self).form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super(AgentCreateView, self).get_context_data(**kwargs)
+        roles = RolesManager.get_roles_names()
+
+        context["title"] = "create agent"
+        context["roles"] = roles
+        
+        return context
+
+
+class AgentListView(LoginRequiredMixin, ListView):
+    """
+    List all agent users.
+    """
+
+    model = Agent
+    context_object_name = "agents"
+    template_name = "agent/agent_list.html"
+    paginate_by = 10
+    
+    def get_context_data(self, **kwargs):
+        context = super(AgentListView, self).get_context_data(**kwargs)
+        context["title"] = "list all agents"
+        return context
+    
+ 
+class AgentDetailView(LoginRequiredMixin, DetailView):
+    """
+    Agent Details view.
+    """
+
+    context_object_name = "agent"
+    model = Agent
+    template_name = "agent/agent_detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(AgentDetailView, self).get_context_data(**kwargs)
+        context["title"] = "Agent User Details"
+
+        return context
+
+   
 class BeneficiaryDetailView(LoginRequiredMixin, DetailView):
     """
     Beneficiary Details view.

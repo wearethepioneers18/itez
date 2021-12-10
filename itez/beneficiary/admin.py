@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.contrib.gis.db import models
 from itez.beneficiary.models import (
     MedicalRecord,
     Lab,
@@ -8,7 +9,7 @@ from itez.beneficiary.models import (
     Prescription,
     ServiceArea,
     WorkDetail,
-    AgentDetail,
+    Agent,
     Beneficiary,
     BeneficiaryParent,
     Facility,
@@ -21,6 +22,8 @@ from itez.beneficiary.models import (
 
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
+
+from mapwidgets.widgets import GooglePointFieldWidget
 
 
 class LabResource(resources.ModelResource):
@@ -163,7 +166,7 @@ class WorkDetailAdmin(admin.ModelAdmin):
     ]
 
 
-class AgentDetailAdmin(admin.ModelAdmin):
+class AgentAdmin(admin.ModelAdmin):
     list_display = [
         "first_name",
         "last_name",
@@ -172,7 +175,9 @@ class AgentDetailAdmin(admin.ModelAdmin):
         "gender",
         "location",
     ]
-
+    formfield_overrides = {
+        models.PointField: {"widget": GooglePointFieldWidget}
+    }
 
 class FacilityTypeAdmin(admin.ModelAdmin):
     list_display = ["name"]
@@ -234,7 +239,7 @@ class MedicalRecordAdmin(admin.ModelAdmin):
 admin.site.register(Province, ProvinceAdmin)
 admin.site.register(District, DistrictAdmin)
 admin.site.register(ServiceArea, ServiceAreaAdmin)
-admin.site.register(AgentDetail, AgentDetailAdmin)
+admin.site.register(Agent, AgentAdmin)
 admin.site.register(WorkDetail, WorkDetailAdmin)
 admin.site.register(BeneficiaryParent, BeneficiaryParentAdmin)
 admin.site.register(FacilityType, FacilityTypeAdmin)

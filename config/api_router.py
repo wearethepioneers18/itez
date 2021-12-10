@@ -9,7 +9,7 @@ from itez.users.api.views import (
     RoleAPIView
 )
 from itez.beneficiary.api.views import (
-    AgentDetailAPIView,
+    AgentAPIView,
     BeneficiaryAPIView,
     BeneficiaryParentAPIView,
     ProvinceAPIView,
@@ -71,7 +71,7 @@ router.register(
 
 router.register(
     "agent", 
-    AgentDetailAPIView
+    AgentAPIView
     )
 router.register(
     "beneficiarie", 
