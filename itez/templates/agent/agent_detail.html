@@ -1,0 +1,154 @@
+{% extends "layouts/base.html" %} {% block title %} Dashboard {% endblock %}
+
+<!-- Specific CSS Plugins goes HERE  -->
+{% block css_plugins %}
+
+<link rel="stylesheet" href="/static/assets/js/select.dataTables.min.css" />
+
+{% endblock css_plugins %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %} {% block content %}
+
+<div class="content-wrapper">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="home-tab">
+        <div
+          class="
+            d-sm-flex
+            align-items-center
+            justify-content-between
+            border-bottom
+          "
+        ></div>
+        <div
+          class="tab-content tab-content-basic d-flex justify-content-center"
+        >
+          <div class="rows">
+
+            <div class="container rounded bg-white mt-5 mb-5">
+              <div class="row">
+                  <div class="col-md-3 border-right">
+                      <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+                        {% if agent.user.profile.profile_photo %}
+                            <img class="rounded-circle mt-5" src="{{ agent.user.profile.profile_photo.url }}" height="150" width="150">
+                        {% elif not agent.user.profile.profile_photo.url and agent.user.profile.gender == 'Male' %}
+                            <img class="rounded-circle mt-5" src="/static/assets/images/faces/male.jpeg" alt="Profile image" height="150" width="150">
+                        {% elif not agent.user.profile.profile_photo.url and agent.user.profile.gender == 'Female' %}
+                            <img class="rounded-circle mt-5" src="/static/assets/images/faces/female.jpeg" alt="Profile image" height="150" width="150">
+                        {% else %}
+                            <img class="rounded-circle mt-5" src="/static/assets/images/faces/male.jpeg" alt="Profile image" height="150" width="150">
+                        {% endif %}
+                        <span class="font-weight-bold">{{ agent.agent_id }}</span>
+                        <span class="text-black-50">{{ agent.user.email }}
+
+                        </span><span> </span></div>
+                  </div>
+                  <div class="col-md-5 border-right">
+                      <div class="p-3 py-5">
+                          <div class="d-flex justify-content-between align-items-center mb-3">
+                              <h4 class="text-right">Agent User Details</h4>
+                          </div>
+                          <div class="row mt-2">
+                              <div class="col-md-6"><label class="labels">Agent ID</label><input type="text" class="form-control" placeholder="first name" value="{{ agent.agent_id }}"></div>
+                              <div class="col-md-6"><label class="labels">Full Name</label><input type="text" class="form-control" value="{{ agent.first_name|title }} {{ agent.last_name|title }}" placeholder="Full Name"></div>
+                          </div>
+                          <div class="row mt-3">
+                              <div class="col-md-12"><label class="labels">Related User</label><input type="text" class="form-control" placeholder="enter phone number" value="{% if agent.user.first_name and agent.user.last_name %} {{ agent.user.first_name|title }} {{ agent.user.last_name|title }} {% else %} {{ agent.user.username }} {% endif %}"></div>
+                              <div class="col-md-12"><label class="labels">Gender</label><input type="text" class="form-control" placeholder="enter address" value="{{ agent.gender }}"></div>
+                              <div class="col-md-12"><label class="labels">Email ID</label><input type="text" class="form-control" placeholder="enter email id" value="{{ agent.user.email }}"></div>
+                              <div class="col-md-12"><label class="labels">Education</label><input type="text" class="form-control" placeholder="education" value="{{ agent.user.profile.education_level }}"></div>
+                          </div>
+                          <div class="row mt-3">
+                              <div class="col-md-6"><label class="labels">Location (District) </label><input type="text" class="form-control" placeholder="country" value="{{ agent.user.profile.city }}"></div>
+                              <div class="col-md-6"><label class="labels">Phone Number</label><input type="text" class="form-control" value="{{ agent.user.profile.phone_number }}" placeholder="Phone"></div>
+                          </div>
+                          <div class="mt-5 text-center">
+                            <button type="submit" class="btn btn-primary me-2"><span style="color: #fff;">Update Agent Details</span></button>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-md-4">
+                      <div class="p-3 py-5">
+                          <div class="d-flex justify-content-between align-items-center experience"><span>Roles</span></div><br>
+                          <div class="col-md-12"><label class="labels">Assigned Roles</label><input type="text" class="form-control" placeholder="experience" value="{{ agent.user.groups.all.0.name }}"></div> <br>
+                          <div class="col-md-12"><label class="labels"><h4>Is Active </h4></label>
+                            {% if agent.user.is_active %}
+                            <span style="padding-left: 10em;">
+                              <button type="button" class="btn btn-success btn-rounded btn-icon">
+                                <i class="mdi mdi-account-check"></i>
+                              </button>
+                            </span>
+                            {% else %}
+                            <span>
+                              <button type="button" class="btn btn-danger btn-rounded btn-icon">
+                                <i class="mdi mdi-delete-forever"></i>
+                              </button>
+                            </span>
+                            {% endif %}
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          </div>
+          </div>
+           
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <style>
+    
+    .form-control:focus {
+        box-shadow: none;
+    }
+    
+    .profile-button {
+        box-shadow: none;
+        border: none
+    }
+    
+    .profile-button:focus {
+        box-shadow: none
+    }
+    
+    .profile-button:active {
+        box-shadow: rgb(152, 142, 154)
+    }
+    
+    .back:hover {
+        cursor: pointer
+    }
+    
+    .labels {
+        font-size: 11px
+    }
+    
+    .add-experience:hover {
+        color: #fff;
+        cursor: pointer;
+    }
+    </style>
+    {% endblock content %}
+
+    <!-- Specific JS Plugins goes HERE  -->
+    {% block js_plugins %}
+
+    <script src="/static/assets/vendors/chart.js/Chart.min.js"></script>
+    <script src="/static/assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+    <script src="/static/assets/vendors/progressbar.js/progressbar.min.js"></script>
+
+    {% endblock js_plugins %}
+
+    <!-- Specific Page JS goes HERE  -->
+    {% block javascripts %}
+
+    <script src="/static/assets/js/dashboard.js"></script>
+    <script src="/static/assets/js/Chart.roundedBarCharts.js"></script>
+
+    {% endblock javascripts %}
+  </div>
+</div>

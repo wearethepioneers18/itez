@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from itez.beneficiary.models import (
-    AgentDetail,
+    Agent,
     Beneficiary,
     BeneficiaryParent,
     Province,
@@ -93,12 +93,12 @@ class ServiceProviderPersonelQualificationSerializer(serializers.ModelSerializer
         model = ServiceProviderPersonelQualification
         fields = '__all__'
 
-class AgentDetailSerializer(serializers.ModelSerializer):
+class AgentSerializer(serializers.ModelSerializer):
     """
-    AgentDetail serializer.
+    Agent serializer.
     """
     class Meta:
-        model = AgentDetail
+        model = Agent
         fields = '__all__'
 
 

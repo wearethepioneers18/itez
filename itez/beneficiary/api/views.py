@@ -12,7 +12,7 @@ from rest_framework.mixins import (
 from rest_framework.viewsets import GenericViewSet
 
 from itez.beneficiary.models import (
-    AgentDetail,
+    Agent,
     Beneficiary,
     BeneficiaryParent,
     Province,
@@ -42,7 +42,7 @@ from itez.beneficiary.api.serializers import (
     ServiceSerializer,
     ServiceProviderPersonelSerializer,
     ServiceProviderPersonelQualificationSerializer,
-    AgentDetailSerializer,
+    AgentSerializer,
     BeneficiarySerializer,
     BeneficiaryParentSerializer,
     ProvinceModelSerializer,
@@ -324,13 +324,13 @@ class ServiceProviderPersonelQualificationAPIView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class AgentDetailAPIView(ListModelMixin, CreateModelMixin,
+class AgentAPIView(ListModelMixin, CreateModelMixin,
     GenericViewSet, RetrieveModelMixin, UpdateModelMixin):
     """
-    API end point for AgentDetail model list, create and update.
+    API end point for Agent model list, create and update.
     """
-    queryset = AgentDetail.objects.all()
-    serializer_class = AgentDetailSerializer
+    queryset = Agent.objects.all()
+    serializer_class = AgentSerializer
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)

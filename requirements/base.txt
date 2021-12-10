@@ -23,7 +23,10 @@ django-role-permissions==3.1.1 # https://github.com/vintasoftware/django-role-pe
 django-imagekit==4.1.0 # https://github.com/matthewwithanm/django-imagekit
 django-import-export==2.5.0
 djangocms-admin-style==2.0.2
+django-map-widgets==0.3.2
 django-celery-results==2.2.0 # https://github.com/celery/django-celery-results
+django-filter==21.1 
+
 # Common
 # ------------------------------------------------------------------------------
 python-decouple==3.4

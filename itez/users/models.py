@@ -86,7 +86,10 @@ class User(AbstractBaseUser, PermissionsMixin):
         return reverse("user:profile", kwargs={"pk": self.pk})
 
     def __str__(self):
-        return f"{self.first_name} {self.last_name}"
+        if self.first_name and self.last_name:
+            return f"{self.first_name} {self.last_name}"
+        else:
+            return f"{self.username}"
 
 
 EDUCATION_LEVEL = (
@@ -150,14 +153,15 @@ class Profile(models.Model):
     postal_code = models.CharField(
         _("Postal Code"), max_length=100, null=True, blank=True
     )
-
-    def __str__(self):
-        return f"{self.user.username}'s Profile"
-
     class Meta:
         verbose_name = "User Profile"
         verbose_name_plural = "User Profiles"
 
+    def __str__(self):
+        if self.user.first_name and self.user.last_name:
+            return f"{self.user.first_name} {self.user.last_name}'s Profile"
+        else:
+            return f"{self.user.username}'s Profile"
 
 class UserWorkDetail(models.Model):
     """

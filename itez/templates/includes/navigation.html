@@ -93,7 +93,7 @@
                   <img width="100" height="100" style="margin-right: 1em;" class="img-md rounded-circle" src="{{request.user.profile.profile_photo.url}}" alt="Profile image">
               {% elif not request.user.profile_photo.url and request.user.gender == 'Male' %}
                   <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
-              {% elif not request.user.profile_photo.url and request.user.gender == 'Female' %}
+              {% elif not request.user.profile.profile_photo.url and request.user.profile.gender == 'Female' %}
                   <img class="img-xs rounded-circle" src="/static/assets/images/faces/female.jpeg" alt="Profile image">
               {% else %}
                   <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">

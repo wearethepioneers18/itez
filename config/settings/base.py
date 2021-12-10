@@ -6,7 +6,6 @@ from pathlib import Path
 import environ
 
 
-
 ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 # itez/
 APPS_DIR = ROOT_DIR / "itez"
@@ -71,7 +70,7 @@ DJANGO_APPS = [
     "django.contrib.staticfiles",
     # "django.contrib.humanize", # Handy template tags
     "djangocms_admin_style",
-    "django.contrib.admin",    
+    "django.contrib.admin",
     "django.contrib.gis",
     "django.forms"
 ]
@@ -87,7 +86,8 @@ THIRD_PARTY_APPS = [
     "rolepermissions",
     "drf_spectacular",
     "import_export",
-    "django_celery_results"
+    "mapwidgets",
+    # "django_celery_results,"
 ]
 
 LOCAL_APPS = [
@@ -113,9 +113,9 @@ AUTHENTICATION_BACKENDS = [
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-user-model
 AUTH_USER_MODEL = "users.User"
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-redirect-url
-LOGIN_REDIRECT_URL = "users:redirect"
+LOGIN_REDIRECT_URL = "beneficiary:home"
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-url
-LOGIN_URL = "account_login"
+LOGIN_URL = "login"
 
 LOGOUT_REDIRECT_URL = '/login'
 # PASSWORDS
@@ -328,7 +328,7 @@ REST_FRAMEWORK = {
     ),
     "DEFAULT_RENDERER_CLASSES": (
         "rest_framework.renderers.JSONRenderer",
-        ),
+    ),
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
     "PAGE_SIZE": 10
@@ -370,7 +370,21 @@ SPECTACULAR_SETTINGS = {
     # Set VERSION to None if only the request version should be rendered.
     'VERSION': '1.3.0',
     # available SwaggerUI versions: https://github.com/swagger-api/swagger-ui/releases
-    # "SWAGGER_UI_DIST": "//unpkg.com/swagger-ui-dist@2.0", 
+    # "SWAGGER_UI_DIST": "//unpkg.com/swagger-ui-dist@2.0",
     # "REDOC_DIST": "https://cdn.jsdelivr.net/npm/redoc@latest",
     # "SWAGGER_UI_FAVICON_HREF": settings.STATIC_URL + "your_company_favicon.png", # default is swagger favicon
+}
+
+# APPEND_SLASH=False
+
+# Google map API widget
+# --------------------------------
+MAP_WIDGETS = {
+    "GooglePointFieldWidget": (
+        ("zoom", 15),
+        ("mapCenterLocation", [-15.4164488, 28.2821535]),
+        ("GooglePlaceAutocompleteOptions", {'componentRestrictions': {'country': 'zambia'}}),
+        ("markerFitZoom", 12),
+    ),
+    "GOOGLE_MAP_API_KEY": "AIzaSyDZMi5ucoQwtfIX7023ezUac8mQG2vrMpM"
 }
