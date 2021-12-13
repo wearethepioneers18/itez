@@ -12,7 +12,7 @@
           </tr>
         </thead>
         <tbody>
-          {% for medication in medications.medications %}
+          {% for medication in medication_paginator_list %}
           <tr>
             <td>{{ medication.prescription_title }}</td>
             <td>{{ medication.no_of_days }}</td>
@@ -24,30 +24,22 @@
       </table>
     </div>
     <hr />
-    <div style="float: right">
-      <fieldset class="border p-2">
+    <div class="paginator" style="float: right;">
+      <span class="sr-only">
         {% if medication_paginator_list.has_previous %}
-        <a href="?page=1">&laquo; first</a>
-        <span class="current">
-          Page {{ medication_paginator_list.number }} of {{
-          medication_paginator_list.paginator.num_pages }}.
-        </span>
-        <a href="?page={{ medication_paginator_list.previous_page_number }}"
-          >previous</a
-        >
-        {% endif %} {% if medication_paginator_list.has_next %}
-        <a href="?page={{ medication_paginator_list.next_page_number }}"
-          >next</a
-        >
-        <span class="current">
-          Page {{ medication_paginator_list.number }} of {{
-          medication_paginator_list.paginator.num_pages }}.
-        </span>
-        <a href="?page={{ medication_paginator_list.paginator.num_pages }}"
-          >last &raquo;</a
-        >
-        {% endif %}
-      </fieldset>
+           <a href="?medication_page=1">&laquo; first</a>
+           <a href="?medication_page={{medication_paginator_list.previous_page_number}}">previous</a>
+         {% endif %}
+
+         <span class="current">
+           Page {{ medication_paginator_list.number }} of {{ medication_paginator_list.paginator.num_pages }}
+         </span>
+
+         {% if medication_paginator_list.has_next %}
+           <a href="?medication_page={{medication_paginator_list.next_page_number}}">next</a>
+           <a href="?medication_page={{medication_paginator_list.paginator.num_pages}}">last &raquo;</a>
+         {% endif %}
+      </span>
     </div>
   </div>
 </div>
