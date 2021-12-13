@@ -8,17 +8,17 @@ from django.db.models.expressions import OrderBy
 from django.db.models.functions.datetime import TruncMonth, TruncWeek, TruncDay
 from django.views.generic import CreateView, FormView
 from django.views.generic.detail import DetailView
+from rolepermissions.roles import assign_role
+from rolepermissions.roles import RolesManager
 from django.views.generic.edit import CreateView
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.template import loader
 from django.urls import reverse
 from django.shortcuts import render, redirect, get_object_or_404
-
+from itez.beneficiary.models import GENDER_CHOICES, SEX_CHOICES
 from rest_framework.filters import SearchFilter, OrderingFilter
-
 import json
-
 
 from django.views.generic import TemplateView
 from django.views.generic.list import ListView
@@ -52,6 +52,9 @@ from itez.beneficiary.models import Province
 
 from .resources import BeneficiaryResource
 
+from .resources import BeneficiaryResource
+from .filters import BeneficiaryFilter
+
 
 @login_required(login_url="/login/")
 def index(request):
@@ -67,14 +70,25 @@ def index(request):
     other = Beneficiary.objects.filter(gender="Other").count()
 
     # Weekly Visits
-    sun_day = MedicalRecord.objects.filter(interaction_date__week_day = 1).count()
-    mon_day = MedicalRecord.objects.filter(interaction_date__week_day = 2).count()
-    tue_day = MedicalRecord.objects.filter(interaction_date__week_day = 3).count()
-    wed_day = MedicalRecord.objects.filter(interaction_date__week_day = 4).count()
-    thu_day = MedicalRecord.objects.filter(interaction_date__week_day = 5).count()
-    fri_day = MedicalRecord.objects.filter(interaction_date__week_day = 6).count()
-    sat_day = MedicalRecord.objects.filter(interaction_date__week_day = 7).count()
-   
+    sun_day = MedicalRecord.objects.filter(interaction_date__week_day=1).count()
+    mon_day = MedicalRecord.objects.filter(interaction_date__week_day=2).count()
+    tue_day = MedicalRecord.objects.filter(interaction_date__week_day=3).count()
+    wed_day = MedicalRecord.objects.filter(interaction_date__week_day=4).count()
+    thu_day = MedicalRecord.objects.filter(interaction_date__week_day=5).count()
+    fri_day = MedicalRecord.objects.filter(interaction_date__week_day=6).count()
+    sat_day = MedicalRecord.objects.filter(interaction_date__week_day=7).count()
+
+    uncleaned_user_roles = RolesManager.get_roles_names()
+    cleaned_user_roles = []
+    for user_role in uncleaned_user_roles:
+        splitted_user_role = user_role.split("_")
+        cleaned_user_role = " ".join(splitted_user_role).title()
+        cleaned_user_roles.append({
+            "key": f"{user_role}",\
+            "value": f"{cleaned_user_role}"
+        })
+    gender_list = [gender[0] or gender[1] for gender in GENDER_CHOICES]
+    sex_list = [sex[0] or sex[1] for sex in SEX_CHOICES]
     context = {
         "segment": "index",
         "opd": opd,
@@ -87,15 +101,19 @@ def index(request):
         "female": female,
         "transgender": transgender,
         "other": other,
-        "sunday" : sun_day,
-        "monday" : mon_day,
-        "tuesday" : tue_day,
-        "wednesday" : wed_day,
-        "thursday" : thu_day,
-        "friday" : fri_day,
-        "saturday" : sat_day,
+        "sunday": sun_day,
+        "monday": mon_day,
+        "tuesday": tue_day,
+        "wednesday": wed_day,
+        "thursday": thu_day,
+        "friday": fri_day,
+        "saturday": sat_day,
+        "user_roles": cleaned_user_roles,
+        "gender_list": gender_list,
+        "sex_list": sex_list,
+        
     }
-
+    
     html_template = loader.get_template("home/index.html")
     return HttpResponse(html_template.render(context, request))
 
