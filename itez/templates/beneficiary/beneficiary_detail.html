@@ -18,7 +18,7 @@
         <div class="card-body">
           <div style="float: right; margin-top: -0.5em" class="wrapper d-flex">
             <fieldset class="border p-2">
-              {% if beneficiary.profile_photo.url %}
+              {% if beneficiary.profile_photo %}
               <img
                 height="70"
                 width="70"
@@ -28,7 +28,7 @@
                 alt="Profile image"
               />
 
-              {% elif not request.user.profile_photo.url and request.user.gender == 'Male' %}
+              {% elif beneficiary.profile_photo and beneficiary.gender == 'Male' %}
               <img
                 style="border-radius: 0.6em; border-radius: 6em"
                 class="img-xs rounded-square mt-4"
@@ -36,7 +36,7 @@
                 alt="Profile image"
               />
 
-              {% elif not request.user.profile_photo.url and request.user.gender == 'Female' %}
+              {% elif not beneficiary.profile_photo and beneficiary.gender == 'Female' %}
               <img
                 style="border-radius: 0.6em; border-radius: 6em"
                 class="img-xs rounded-square mt-4"
