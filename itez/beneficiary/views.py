@@ -265,11 +265,7 @@ class BeneficiaryDetailView(LoginRequiredMixin, DetailView):
            "services": [] 
         }
 
-        medications = { 
-            "medications": []
-        }
-
-        labs = []
+        
 
         # Get all services for the beneficiary
         for medical_record in beneficiary_medical_records:            
@@ -283,60 +279,24 @@ class BeneficiaryDetailView(LoginRequiredMixin, DetailView):
                     "service_comments" : medical_record.provider_comments,
                 }
             )           
-        # Get all labs for beneficiary
-        for lab in beneficiary_medical_records:
-            lab_entry = lab.lab
-            labs.append(lab_entry)
-
-        # Get all prescriptions for beneficiary
-        for medication in beneficiary_medical_records:
-            medications["medications"].append(
-                {
-                    "prescription_title": medication.prescription.title,
-                    "drugs_to_take": medication.prescription.drugs.name,
-                    "when_to_take": medication.when_to_take,
-                    "no_of_days": medication.no_of_days,
-                    "date_prescribed": medication.prescription.date 
-                }
-
-            ) 
-                   
-        # Table Paginators
-        medication_paginator_list = []
-        for _, values in medications.items():
-            for medication in values:
-                medication_paginator_list.append(medication["prescription_title"])
-
+        
         services_paginator_list = []
         for _, values in services.items():
             for service in values:
                 services_paginator_list.append(service["service_object"])
 
 
-
         service_paginator = Paginator(services["services"], 2)
         service_page_number = self.request.GET.get('service_page')
         service_paginator_list = service_paginator.get_page(service_page_number)
 
-
-        medication_paginator = Paginator(medications["medications"], 2)
-        medication_page_number = self.request.GET.get('medication_page')
-        medication_paginator_list = medication_paginator.get_page(medication_page_number)        
-
-        
-        labs_paginator = Paginator(labs, 2)
-        lab_page = self.request.GET.get('labs_page')
-        labs = labs_paginator.get_page(lab_page)
-
-        
+               
         context["title"] = "Beneficiary Details"
         context["service_title"] = "services"
         context["medication_title"] = "medications"
         context["lab_title"] = "labs"
         context["beneficiary"] = current_beneficiary
         context['service_paginator_list']  = service_paginator_list
-        context['labs']  = labs        
-        context['medication_paginator_list'] = medication_paginator_list
         return context
 
 
