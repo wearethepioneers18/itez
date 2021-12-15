@@ -34,6 +34,8 @@ from itez import beneficiary
 
 from itez.beneficiary.models import (
     Beneficiary,
+    District,
+    Facility,
     MedicalRecord,
     Province
 )
@@ -184,7 +186,7 @@ class MedicalRecordCreateView(LoginRequiredMixin, CreateView):
     model = MedicalRecord
     form_class = MedicalRecordForm
     template_name = "beneficiary/medical_record_create.html"
-
+    
     def get_success_url(self): 
         return reverse("beneficiary:details", kwargs={"pk": self.object.beneficiary.pk})
 
@@ -198,27 +200,6 @@ class MedicalRecordCreateView(LoginRequiredMixin, CreateView):
         form.instance.beneficiary = Beneficiary.objects.get(id=beneficiary_object_id)
         return super(MedicalRecordCreateView, self).form_valid(form)
 
-
-
-        
-
-
-class BeneficiaryCreateView(LoginRequiredMixin, CreateView):
-    """
-    Create a new Beneficiary object.
-    """
-
-    model = Beneficiary
-    form_class = BeneficiaryForm
-    template_name = "beneficiary/beneficiary_create.html"
-
-    def get_success_url(self):
-        return reverse("beneficiary:details")
-
-    def get_context_data(self, **kwargs):
-        context = super(BeneficiaryCreateView, self).get_context_data(**kwargs)
-        context["title"] = "create new beneficiary"
-        return context
 
 
 class BenenficiaryListView(LoginRequiredMixin, ListView):
@@ -262,6 +243,83 @@ class BenenficiaryListView(LoginRequiredMixin, ListView):
         context["title"] = "Beneficiaries"
 
         return context
+  
+
+class BeneficiaryDetailView(LoginRequiredMixin, DetailView):
+    """
+    Beneficiary Details view.
+    """
+
+    context_object_name = "beneficiary"
+    model = Beneficiary
+    paginate_by = 2
+    template_name = "beneficiary/beneficiary_detail.html"
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(BeneficiaryDetailView, self).get_context_data(**kwargs)
+        current_beneficiary_id = self.kwargs.get('pk')
+        current_beneficiary = Beneficiary.objects.get(id=current_beneficiary_id) 
+        beneficiary_medical_records = MedicalRecord.objects.filter(beneficiary__id=current_beneficiary_id)
+        
+        services = { 
+           "services": [] 
+        }
+
+        
+
+        # Get all services for the beneficiary
+        for medical_record in beneficiary_medical_records:            
+            service_personnel_name = medical_record.service.service_personnel.first_name + " " + medical_record.service.service_personnel.last_name
+            
+            services["services"].append(
+                {
+                    "service_object": medical_record.service,
+                    "service_facility": medical_record.service_facility,
+                    "service_provider" : service_personnel_name,
+                    "service_comments" : medical_record.provider_comments,
+                }
+            )           
+        
+        services_paginator_list = []
+        for _, values in services.items():
+            for service in values:
+                services_paginator_list.append(service["service_object"])
+
+
+        service_paginator = Paginator(services["services"], 2)
+        service_page_number = self.request.GET.get('service_page')
+        service_paginator_list = service_paginator.get_page(service_page_number)
+
+               
+        context["title"] = "Beneficiary Details"
+        context["service_title"] = "services"
+        context["medication_title"] = "medications"
+        context["lab_title"] = "labs"
+        context["beneficiary"] = current_beneficiary
+        context['service_paginator_list']  = service_paginator_list
+        return context
+
+
+
+class BeneficiaryCreateView(LoginRequiredMixin, CreateView):
+    """
+    Create a new Beneficiary object.
+    """
+
+    model = Beneficiary
+    form_class = BeneficiaryForm
+    template_name = "beneficiary/beneficiary_create.html"
+
+    def get_success_url(self):
+        return reverse("beneficiary:list")
+
+    def get_context_data(self, **kwargs):
+        context = super(BeneficiaryCreateView, self).get_context_data(**kwargs)
+        context["title"] = "create new beneficiary"
+        return context
+
+
+
 
 
 class AgentCreateView(LoginRequiredMixin, CreateView):
@@ -322,96 +380,7 @@ class AgentDetailView(LoginRequiredMixin, DetailView):
         return context
 
 
-class BeneficiaryDetailView(LoginRequiredMixin, DetailView):
-    """
-    Beneficiary Details view.
-    """
 
-    context_object_name = "beneficiary"
-    model = Beneficiary
-    template_name = "beneficiary/beneficiary_detail.html"
-
-    def get_context_data(self, *args, **kwargs):
-        context = super(BeneficiaryDetailView, self).get_context_data(**kwargs)
-        current_beneficiary_id = self.kwargs.get('pk')
-        current_beneficiary = Beneficiary.objects.get(id=current_beneficiary_id) 
-        beneficiary_medical_records = MedicalRecord.objects.filter(beneficiary__id=current_beneficiary_id)
-        
-        services = { 
-           "services": [] 
-        }
-
-        medications = { 
-            "medications": []
-        }
-
-        labs = []
-
-        # Get all services for the beneficiary
-        for medical_record in beneficiary_medical_records:            
-            service_personnel_name = medical_record.service.service_personnel.first_name + " " + medical_record.service.service_personnel.last_name
-            
-            services["services"].append(
-                {
-                    "service_object": medical_record.service,
-                    "service_facility": medical_record.service_facility,
-                    "service_provider" : service_personnel_name,
-                    "service_comments" : medical_record.provider_comments,
-                }
-            )            
-        # Get all labs for beneficiary
-        for lab in beneficiary_medical_records:
-            lab_entry = lab.lab
-            labs.append(lab_entry)
-
-        # Get all prescriptions for beneficiary
-        for medication in beneficiary_medical_records:
-            medications["medications"].append(
-                {
-                    "prescription_title": medication.prescription.title,
-                    "drugs_to_take": medication.prescription.drugs.name,
-                    "when_to_take": medication.when_to_take,
-                    "no_of_days": medication.no_of_days,
-                    "date_prescribed": medication.prescription.date 
-                }
-
-            ) 
-                   
-        # Table Paginators
-        medication_paginator_list = []
-        for _, values in medications.items():
-            for medication in values:
-                medication_paginator_list.append(medication["prescription_title"])
-
-        services_paginator_list = []
-        for _, values in services.items():
-            for service in values:
-                services_paginator_list.append(service["service_object"])
-
-
-        medication_paginator = Paginator(medication_paginator_list, 2)
-        page = self.request.GET.get('medical_page')
-        medication_paginator_list = medication_paginator.get_page(page)
-        
-        service_paginator = Paginator(services_paginator_list, 2)
-        service_page = self.request.GET.get('service_page')
-        service_paginator_list = service_paginator.get_page(service_page)
-        
-        labs_paginator = Paginator(labs, 2)
-        lab_page = self.request.GET.get('labs_page')
-        labs = labs_paginator.get_page(lab_page)
-        
-        context["title"] = "Beneficiary Details"
-        context["service_title"] = "services"
-        context["medication_title"] = "medications"
-        context["lab_title"] = "labs"
-        context["beneficiary"] = current_beneficiary
-        context['services']  = services
-        context['service_paginator_list']  = service_paginator_list
-        context['labs']  = labs        
-        context['medications'] = medications
-        context['medication_paginator_list'] = medication_paginator_list
-        return context
 
 
 @login_required(login_url="/login/")
