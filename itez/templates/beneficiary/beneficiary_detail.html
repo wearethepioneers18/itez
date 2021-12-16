@@ -240,7 +240,7 @@
           >
             <div class="d-flex">
               <div class="wrapper ms-3">
-                <small class="text-muted mb-0">last VL: </small>
+                <small class="text-muted mb-0">Last VL: </small>
               </div>
             </div>
             <span style="float: right; margin-right: 10px"
@@ -366,8 +366,43 @@
     </div>
 
     <div class="col-lg-8 grid-margin">
+		<div class="row">
+			<div class="col-lg-12 grid margin">
+				<div class="accordion" id="accordionExample">
+					<h2 class="mt-1">
+						Last Visit
+					</h2>
+					<div class="card" style="margin-top: 10px;">
+					  <div class="card-header" id="headingOne">
+						  <div class="row">
+							  <!-- Meta Data Section -->
+							  <div class="col-md-4">Interaction Date:{{latest_beneficiary_service.interaction_date}}</div>
+							  <div class="col-md-4">Service Name: {{latest_beneficiary_service.service_name}}</div>
+							  <div class="col-md-4">Service Facility: {{latest_beneficiary_service.service_facility}} </div>
+						  </div>				
+					  </div>
+				  
+					  <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+						<div class="card-header" id="headingOne">
+							<div class="row">
+								<!-- Meta Data Section -->
+								<div class="col-md-4">Service Provider: {{latest_beneficiary_service.service_provider}}</div>
+								<div class="col-md-4">Provider Comments: {{latest_beneficiary_service.service_provider_comments}}</div>
+							</div>	
+							<div class="row">
+								<div class="card-title">Supporting Documents</div>
+								<div class="card-body">
+									
+								</div>
+							</div>		
+						</div>
+					  </div>
+					</div>
+				  </div>
+			</div>
+		</div>
       <div class="row">
-        <div class="col-lg-12 grid-margin stretch-card">
+        <div class="col-lg-12 grid-margin">
           {% include 'includes/services.html' %}
         </div>
 
@@ -393,5 +428,8 @@
 
 <script src="/static/assets/js/dashboard.js"></script>
 <script src="/static/assets/js/Chart.roundedBarCharts.js"></script>
+<script>
+	$('.collapse').collapse()
+</script>
 
 {% endblock javascripts %}
