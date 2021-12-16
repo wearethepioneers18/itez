@@ -391,6 +391,10 @@ class AgentDetailView(LoginRequiredMixin, DetailView):
 
 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> a43cd704b09e4b44aa797ade3b45d616ea811342
 
 
 @login_required(login_url="/login/")
