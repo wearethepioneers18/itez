@@ -138,7 +138,7 @@ def poll_async_resullt(request, task_id):
 @login_required(login_url="/login/")
 def uielements(request):
 	context = {"title": "UI Elements"}
-	html_template = loader.get_template("home/basic_elements.html")
+	html_template = loader.get_template("beneficiary/test_details.html")
 	return HttpResponse(html_template.render(context, request))
 
 
@@ -257,7 +257,7 @@ class BeneficiaryDetailView(LoginRequiredMixin, DetailView):
 		current_beneficiary = Beneficiary.objects.get(id=current_beneficiary_id) 
 		beneficiary_medical_records = MedicalRecord.objects.filter(beneficiary__id=current_beneficiary_id)
 		latest_beneficiary_medical_record = MedicalRecord.objects.filter(beneficiary__id=current_beneficiary_id).latest('created')
-		print("Service Provider" + str(latest_beneficiary_medical_record.service.service_personnel.first_name))
+		print("Service Provider" + str(latest_beneficiary_medical_record.service.document))
 		
 		services = { 
 		   "services": [] 
@@ -272,6 +272,9 @@ class BeneficiaryDetailView(LoginRequiredMixin, DetailView):
 			"interaction_date": latest_beneficiary_medical_record.interaction_date,
 			"service_provider": service_provider_name,
 			"service_provider_comments": latest_beneficiary_medical_record.provider_comments,
+			"supporting_documents": latest_beneficiary_medical_record.document,
+			"prescription": latest_beneficiary_medical_record.prescription.title,
+			"when_to_take" : latest_beneficiary_medical_record.when_to_take
 		}      
 
 		# Get all services for the beneficiary
@@ -388,13 +391,6 @@ class AgentDetailView(LoginRequiredMixin, DetailView):
 		context["title"] = "Agent User Details"
 
 		return context
-
-
-
-<<<<<<< HEAD
-=======
-
->>>>>>> a43cd704b09e4b44aa797ade3b45d616ea811342
 
 
 @login_required(login_url="/login/")

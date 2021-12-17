@@ -48,8 +48,8 @@
                             <div class="form-group inline ">
                             <div class="search">
                               <form class="search-form flex-column search" autocomplete='off' action="#">
-                                <input type="search" class="form-control search " name="q"
-                                  placeholder="Search beneficiary here" title="Search here" id="search_here"
+                                <input type="search" class="form-control search " name="q" data-toggle="tooltip" title="Search"
+                                  placeholder="Search beneficiary" title="Search here" id="search_here"
                                   >
                                 <div>
                                   <svg>
@@ -60,17 +60,15 @@
                             </div></div>
 
                             <div>
-                              <button id="download-report-button" type="button" class="btn btn-success btn-icon-text btn-lg text-white mb-0 me-0">
-                                {% comment %} <i class="fa fa-circle-o-notch fa-spin px-2"></i> {% endcomment %}
-                                <i id="download-icon" class="mdi mdi-download"></i>                                                    
-                                Download
-                              </button>
-                              <button class="btn btn-primary btn-lg text-white mb-0 me-0" type="button">
-                                
-                                
-                                <a href="{% url 'beneficiary:create' %}" class="text-white" style="text-decoration: none;">
-                                <i class="mdi mdi-account-plus"></i >Add new Beneficiary</button>
-                                </a>
+                            	<button id="download-report-button" type="button" class="btn btn-success btn-icon-text btn-lg text-white mb-0 me-0" data-toggle="tooltip" title="Download Records">
+									{% comment %} <i class="fa fa-circle-o-notch fa-spin px-2"></i> {% endcomment %}
+									<i id="download-icon" class="mdi mdi-download"></i>
+                            	</button>
+                            	<button class="btn btn-primary btn-lg text-white mb-0 me-0" type="button">                             
+                                	<a href="{% url 'beneficiary:create' %}" class="text-white" style="text-decoration: none;" data-toggle="tooltip" title="Add Beneficiary">
+									<i class="mdi mdi-account-plus"></i >
+									</a>
+								</button>
 
 
                             </div>
@@ -201,6 +199,8 @@
   <script src="/static/assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
   <script src="/static/assets/vendors/progressbar.js/progressbar.min.js"></script>
 
+
+
 {% endblock js_plugins %}
 
 <!-- Specific Page JS goes HERE  -->
@@ -288,5 +288,7 @@
       $('[data-toggle="tooltip"]').tooltip();
     });
     </script>
+
+	
 
 {% endblock javascripts %}
