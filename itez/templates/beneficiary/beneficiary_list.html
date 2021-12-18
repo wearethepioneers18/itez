@@ -1,11 +1,13 @@
 {% extends "layouts/base.html" %}
 
-{% block title %} Dashboard {% endblock %} 
+{% block title %} Dashboard {% endblock %}
 
 <!-- Specific CSS Plugins goes HERE  -->
 {% block css_plugins %}
-  <link rel="stylesheet" href="/static/assets/js/select.dataTables.min.css">
-  <link rel="stylesheet" href="/static/assets/css/loading_button.css">
+
+<link rel="stylesheet" href="/static/assets/css/loading_button.css">
+<link rel="stylesheet" href="/static/assets/css/datatables.min.css" />
+
 {% endblock css_plugins %}
 
 <!-- Specific Page CSS goes HERE  -->
@@ -13,7 +15,6 @@
 {% endblock stylesheets %}
 
 {% block content %}
-
   <div class="content-wrapper">
     <div class="row">
       <div class="col-sm-12">
@@ -24,28 +25,28 @@
             align-items-center
             justify-content-between
             border-bottom
-          "
-        >
+          ">
           <h2>Beneficiaries</h2> 
         </div>
-          <div class="tab-content tab-content-basic">
-            <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview"> 
-              
-             
-              <div class="row">
-                <div class="col-lg-12 d-flex flex-column">
-                  <div class="row flex-grow">
-                    <div class="col-12 grid-margin stretch-card">
-                      <div class="card card-rounded">
-                        <div class="card-body">
-                          <div class="d-sm-flex justify-content-between align-items-start">
-                            <div>
-                              
-                              <h4 class="card-title card-title-dash">All Beneficiaries</h4>
-                              <p class="card-subtitle card-subtitle-dash">{{ registered_today }} new beneficicary registrations today</p>
-                            </div>
-                           
-                            <div class="form-group inline ">
+        <div class="tab-content tab-content-basic">
+          <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview">
+
+
+            <div class="row">
+              <div class="col-lg-12 d-flex flex-column">
+                <div class="row flex-grow">
+                  <div class="col-12 grid-margin stretch-card">
+                    <div class="card card-rounded">
+                      <div class="card-body">
+                        <div class="d-sm-flex justify-content-between align-items-start">
+                          <div>
+
+                            <h4 class="card-title card-title-dash">All Beneficiaries</h4>
+                            <p class="card-subtitle card-subtitle-dash">{{ registered_today }} new beneficicary
+                              registrations today</p>
+                          </div>
+
+                          <div class="form-group inline ">
                             <div class="search">
                               <form class="search-form flex-column search" autocomplete='off' action="#">
                                 <input type="search" class="form-control search " name="q" data-toggle="tooltip" title="Search"
@@ -69,9 +70,6 @@
 									<i class="mdi mdi-account-plus"></i >
 									</a>
 								</button>
-
-
-                            </div>
                           </div>
                           <div class="table-responsive  mt-1">
                             <table class="table select-table">
@@ -158,25 +156,45 @@
 
                             {% if is_paginated %}
 
-                              {% if page_obj.has_previous %}
-                                <a class="btn btn-primary btn-lg text-white mb-0 me-0" href="?page=1">First</a>
-                                <a class="btn btn-primary btn-lg text-white mb-0 me-0" href="?page={{ page_obj.previous_page_number }}">Previous</a>
-                              {% endif %}
-
-                              {% for num in page_obj.paginator.page_range %}
-                                {% if page_obj.number == num %}
-                                  <a class="btn btn-lg mb-0 me-0" href="?page={{ num }}">{{ num }}</a>
-                                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-                                  <a class="btn btn-primary btn-lg text-white mb-0 me-0" href="?page={{ num }}">{{ num }}</a>
-                                {% endif %}
+                                  <div class="badge badge-opacity-danger">
+                                    <a href="#" data-toggle="tooltip" title="Delete">
+                                      <i class="menu-icon mdi mdi-delete-forever"></i>
+                                    </a>
+                                  </div>
+                                </td>
+                              </tr>
                               {% endfor %}
-
-                              {% if page_obj.has_next %}
-                                <a class="btn btn-primary btn-lg text-white mb-0 me-0" href="?page={{ page_obj.next_page_number }}">Next</a>
-                                <a class="btn btn-primary btn-lg text-white mb-0 me-0" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+                              {% else %}
+                              <h3>No Beneficiaries Available</h3>
                               {% endif %}
+                            </tbody>
+                          </table>
+                        </div>
+                        <div class="m-3">
+
+                          {% if is_paginated %}
+
+                          {% if page_obj.has_previous %}
+                          <a class="btn btn-primary btn-lg text-white mb-0 me-0" href="?page=1">First</a>
+                          <a class="btn btn-primary btn-lg text-white mb-0 me-0"
+                            href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                          {% endif %}
+
+                          {% for num in page_obj.paginator.page_range %}
+                          {% if page_obj.number == num %}
+                          <a class="btn btn-lg mb-0 me-0" href="?page={{ num }}">{{ num }}</a>
+                          {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %} <a
+                            class="btn btn-primary btn-lg text-white mb-0 me-0" href="?page={{ num }}">{{ num }}</a>
                             {% endif %}
-                          </div>
+                            {% endfor %}
+
+                            {% if page_obj.has_next %}
+                            <a class="btn btn-primary btn-lg text-white mb-0 me-0"
+                              href="?page={{ page_obj.next_page_number }}">Next</a>
+                            <a class="btn btn-primary btn-lg text-white mb-0 me-0"
+                              href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+                            {% endif %}
+                            {% endif %}
                         </div>
                       </div>
                     </div>
@@ -189,15 +207,17 @@
       </div>
     </div>
   </div>
+</div>
 
 {% endblock content %}
 
 <!-- Specific JS Plugins goes HERE  -->
 {% block js_plugins %}
 
-  <script src="/static/assets/vendors/chart.js/Chart.min.js"></script>
-  <script src="/static/assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
-  <script src="/static/assets/vendors/progressbar.js/progressbar.min.js"></script>
+<script src="/static/assets/vendors/chart.js/Chart.min.js"></script>
+<script src="/static/assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+<script src="/static/assets/vendors/progressbar.js/progressbar.min.js"></script>
+
 
 
 
@@ -206,67 +226,35 @@
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
 
-  <script src="/static/assets/js/dashboard.js"></script>
-  <script src="/static/assets/js/Chart.roundedBarCharts.js"></script>
-  <script src="/static/assets/js/modal.js"></script>        
+<script src="/static/assets/js/dashboard.js"></script>
+<script src="/static/assets/js/Chart.roundedBarCharts.js"></script>
+<script src="/static/assets/js/modal.js"></script>
+<script src="/static/assets/js/datatables.min.js"></script>
 
-  <script>
-    $('#download-report-button').on('click', function(e) {
-      e.preventDefault();
-      
-      $.notifyBar({ cssClass: "success", html: "Your request is being processed. You download will start automatically once the file is ready ...",delay: 5000});
-      // see the URL Setup for where this url came from
-      const url = 'export_beneficiary_data';
-      $.get(url)
-        .done(function pollAsyncResults(data) {
-          $('#download-report-button').addClass('buttonload disabled').html('Processing');
-          // bind pollAsyncResults to itself to avoid clashing with 
-          // the prior get request
-          context: this
-          // see the URL setup for where this url came from
-          const pollAsyncUrl = `poll_async_results/${data.task_id}`
-          $.get(pollAsyncUrl)
-            .done(function(asyncData, status, xhr) {
-              context: this
-              // if the status doesn't respond with 202, that means 
-              // that the task finished successfully
-              if (asyncData.state === "SUCCESS") {
-                // stop making get requests to pollAsyncResults
-                clearTimeout(pollAsyncResults);
-                $('#download-report-button').removeClass('buttonload disabled').text('Download');
-                // to download - create an anchor element and
-                // simulate a click
-                const a = document.createElement('a');
-                document.body.appendChild(a);
-                a.style='display: none';
-                a.href=asyncData.location;
-                a.download=asyncData.filename;
-                a.click();
-                // change the button back to normal and hide the     
-                // overlay
-                $('#download-reports-button').text('Download Report(CSV)')
-              }
-              // async task still processing
-              else if (asyncData.state === "PENDING") {
-                // Call the function pollAsyncResults again after 
-                // waiting 0.5 seconds.
-                setTimeout(function() { pollAsyncResults(data) }, 2000);
-              }
-              else {
-                clearTimeout(pollAsyncResults);
-                
-              }
-            })
-            // see PollAsyncResultsView in View Setup. If the celery 
-            // task fails, and returns a JSON blob with status_code 
-            // 500, PollAsyncResultsView returns a 500 response, 
-            // which would indicate that the task failed
-            .fail(function(xhr, status, error) {
+
+<script>
+  $('#download-report-button').on('click', function (e) {
+    e.preventDefault();
+
+    $.notifyBar({ cssClass: "success", html: "Your request is being processed. You download will start automatically once the file is ready ...", delay: 5000 });
+    // see the URL Setup for where this url came from
+    const url = 'export_beneficiary_data';
+    $.get(url)
+      .done(function pollAsyncResults(data) {
+        $('#download-report-button').addClass('buttonload disabled').html('Processing');
+        // bind pollAsyncResults to itself to avoid clashing with 
+        // the prior get request
+        context: this
+        // see the URL setup for where this url came from
+        const pollAsyncUrl = `poll_async_results/${data.task_id}`
+        $.get(pollAsyncUrl)
+          .done(function (asyncData, status, xhr) {
+            context: this
+            // if the status doesn't respond with 202, that means 
+            // that the task finished successfully
+            if (asyncData.state === "SUCCESS") {
               // stop making get requests to pollAsyncResults
-              $.notifyBar({ cssClass: "error", html: "An error occured while processing your request",delay: 5000});
-              
               clearTimeout(pollAsyncResults);
-              
               $('#download-report-button').removeClass('buttonload disabled');
               $('#download-icon').removeClass('fa fa-circle-o-notch fa-spin px-2').addClass('mdi mdi-download');
               // add a message, modal, or something to show the user 

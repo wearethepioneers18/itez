@@ -8,15 +8,16 @@ from django.db.models.expressions import OrderBy
 from django.db.models.functions.datetime import TruncMonth, TruncWeek, TruncDay
 from django.views.generic import CreateView, FormView
 from django.views.generic.detail import DetailView
+from rolepermissions.roles import assign_role
+from rolepermissions.roles import RolesManager
 from django.views.generic.edit import CreateView
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.template import loader
 from django.urls import reverse
 from django.shortcuts import render, redirect, get_object_or_404
-
+from itez.beneficiary.models import GENDER_CHOICES, SEX_CHOICES
 from rest_framework.filters import SearchFilter, OrderingFilter
-
 import json
 
 from django.views.generic import TemplateView
@@ -49,6 +50,9 @@ from itez.beneficiary.forms import BeneficiaryForm, MedicalRecordForm, AgentForm
 from itez.users.models import User
 
 from .resources import BeneficiaryResource
+
+from .resources import BeneficiaryResource
+from .filters import BeneficiaryFilter
 
 
 @login_required(login_url="/login/")
@@ -312,8 +316,6 @@ class BeneficiaryDetailView(LoginRequiredMixin, DetailView):
 		context['latest_beneficiary_service'] = latest_beneficiary_service
 		return context
 
-
-
 class BeneficiaryCreateView(LoginRequiredMixin, CreateView):
 	"""
 	Create a new Beneficiary object.
@@ -330,9 +332,6 @@ class BeneficiaryCreateView(LoginRequiredMixin, CreateView):
 		context = super(BeneficiaryCreateView, self).get_context_data(**kwargs)
 		context["title"] = "create new beneficiary"
 		return context
-
-
-
 
 
 class AgentCreateView(LoginRequiredMixin, CreateView):
@@ -389,7 +388,6 @@ class AgentDetailView(LoginRequiredMixin, DetailView):
 	def get_context_data(self, **kwargs):
 		context = super(AgentDetailView, self).get_context_data(**kwargs)
 		context["title"] = "Agent User Details"
-
 		return context
 
 
@@ -491,7 +489,7 @@ def beneficiary_report(request):
 	}
 
 	html_template = loader.get_template("home/reports.html")
-	return HttpResponse(html_template.render(context, request))
+	return HttpResponse(html_template.render(context, request)
 
 
 @login_required(login_url="/login/")

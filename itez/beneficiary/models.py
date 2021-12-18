@@ -702,7 +702,6 @@ CLIENT_TYPES = (
     ("ART", _('ART (Antiretroviral Therapy)')),
 )
 
-
 class Service(models.Model):
     """
     Service provision to Beneficiary.
@@ -767,7 +766,7 @@ class MedicalRecord(models.Model):
     service = models.ForeignKey(
         Service,
         on_delete=models.CASCADE,
-    )    
+    )
     service_facility = models.ForeignKey(
         'Facility',
         on_delete=models.PROTECT,
