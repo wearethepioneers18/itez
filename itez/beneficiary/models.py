@@ -702,7 +702,6 @@ CLIENT_TYPES = (
     ("ART", _('ART (Antiretroviral Therapy)')),
 )
 
-
 class Service(models.Model):
     """
     Service provision to Beneficiary.

@@ -1,0 +1,152 @@
+<form method="POST" enctype="multipart/form-data" action="register/" style="color: black;">{% csrf_token %}
+  <div class="modal" id="modal1" data-animation="slideInOutLeft">
+    <div class="modal-dialog"
+      style=" box-shadow: 10 10px 16px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19) !important;">
+
+      <section class="modal-content shadow p-3 mb-2 bg-body rounded"
+        style="margin-bottom: -12px; box-shadow: black 1em;">
+        <div class="container-fluid page-body-wrapper full-page-wrapper">
+          <div class="row w-80 mx-60" style="margin-top: -1.8em; padding: 1em; margin-bottom: -2em;">
+
+            <div>
+              <div class="auth-form-light text-left py-1 px-2 px-sm-5">
+                <div class="brand-logo text-align-center" style="vertical-align:middle;">
+                  <h1 style="font-size:2.5em ">Add New User</h1>
+                </div>
+                <br />
+
+                <form method="post" action="" class="pt-3">
+
+                  {% csrf_token %}
+                  <div class="form-floating mb-3">
+                    <input style="height: 20%;" type="text" name="username" class="form-control" id="floatingInput"
+                      placeholder="Bupe Muleya" required>
+                    <label for="floatingInput">Username</label>
+                  </div>
+                  <div class="col-12 mt-2 mb-2">
+                    <div class="row g-3">
+                      <div class="col-sm-6">
+                        <div class="form-floating mb-3">
+                          <input style="height: 20%;" type="text" name="first_name" class="form-control"
+                            id="floatingInput" placeholder="Bupe">
+                          <label for="floatingInput">First Name</label>
+                        </div>
+                      </div>
+                      <div class="col-sm-6">
+                        <div class="form-floating mb-3">
+                          <input style="height: 20%;" type="text" name="last_name" class="form-control"
+                            id="floatingInput" placeholder="Muleya">
+                          <label for="floatingInput">Last Name</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-floating mb-3">
+                    <input style="height: 20%;" type="email" name="email_address" class="form-control"
+                      id="floatingInput" placeholder="username@example.com" required>
+                    <label for="floatingInput">Email Address</label>
+                  </div>
+                  <div class="row g-3">
+                    <div class="col-sm-6">
+                      <div style="height: 30%;" class="form-floating mb-3">
+                        <select name="sex" style="height: 30%; color: black;" id="sex" class="form-select mt-1"
+                          id="floatingSelect">
+                          {% for sex in sex_list %}
+                          {% if sex|title == 'Male' %}
+                          <option value="{{ sex }}" selected>{{ sex|title }}</option>
+                          {% else %}
+                          <option value="{{ sex }}">{{ sex|title }}</option>
+                          {% endif %}
+                          {% endfor %}
+                        </select>
+                        <label for="floatingSelect">Sex</label>
+                      </div>
+                    </div>
+                    <div class="col-sm-6">
+                      <div style="max-height: 60px;" class="form-floating mb-3">
+                        <select name="gender" style="max-height: 30px; color: black;" id="gender"
+                          class="form-select mt-1" id="floatingSelect">
+                          {% for gender in gender_list %}
+                          {% if gender|title == 'Male' %}
+                          <option value="{{ gender }}" selected>{{ gender|title }}</option>
+                          {% else %}
+                          <option value="{{ gender }}">{{ gender|title }}</option>
+                          {% endif %}
+                          {% endfor %}
+                        </select>
+                        <label for="floatingSelect">Gender</label>
+                      </div>
+                    </div>
+
+                  </div>
+                  <div style="margin-top: -10em;">
+                    <div class="col-sm-12">
+                      <div class="form-floating mb-3">
+                        <input style="max-height: 60px;" type="date" name="birth_date" class="form-control"
+                          id="floatingInput">
+                        <label for="floatingInput">Birth Date</label>
+                      </div>
+                    </div>
+
+                    <div class="col-12 mt-2 mb-2">
+                      <div class="row g-3">
+                        <div class="col-sm-6">
+                          <div class="form-floating mb-3">
+                            <input style="height: 20%;" minlength="7" type="password" name="password"
+                              class="form-control" id="floatingInput" placeholder="" required>
+                            <label for="floatingInput">Password</label>
+                          </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                          <div class="form-floating mb-3">
+                            <input style="height: 20%;" minlength="7" type="password" name="password_confirm"
+                              class="form-control" id="floatingInput" placeholder="" required>
+                            <label for="floatingInput">Confirm Password</label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                  <div class="col-md-12 grid-margin stretch-card mt-4">
+                    <div class="card">
+                      <div class="card-body">
+                        <div class="form-group">
+                          <style>
+                            .select_arbt {
+                              color: black;
+                            }
+
+                            .select_arbt:hover {
+                              color: blue;
+                            }
+
+                          </style>
+                          <label style="color: grey;">Select user Roles</label>
+                          <select style="height: 20%;" name="user_roles"
+                            class="/static/assets/js-example-basic-multiple w-100" multiple="multiple">
+                            {% for role in user_roles %}
+                            <option class="select_arbt" value="{{ role.key }}">{{ role.value }}</option>
+                            {% endfor %}
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mt-3" style="padding-left:10em;">
+                    <button type="submit" name="register"
+                      class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn">Register</button>
+                  </div>
+                  <div class="my-2 d-flex justify-content-between align-items-center" style="padding-left:10em">
+                  </div>
+                  <div class="text-center mt-4 fw-light">
+
+                    <h1 style="padding-left: -0.8em;">&#128151;</h1>
+                    <br />
+
+                  </div>
+      </section>
+    </div>
+  </div>
+</form>

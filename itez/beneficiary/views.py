@@ -8,15 +8,16 @@ from django.db.models.expressions import OrderBy
 from django.db.models.functions.datetime import TruncMonth, TruncWeek, TruncDay
 from django.views.generic import CreateView, FormView
 from django.views.generic.detail import DetailView
+from rolepermissions.roles import assign_role
+from rolepermissions.roles import RolesManager
 from django.views.generic.edit import CreateView
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.template import loader
 from django.urls import reverse
 from django.shortcuts import render, redirect, get_object_or_404
-
+from itez.beneficiary.models import GENDER_CHOICES, SEX_CHOICES
 from rest_framework.filters import SearchFilter, OrderingFilter
-
 import json
 
 
@@ -53,6 +54,9 @@ from itez.users.models import User
 from itez.beneficiary.models import Province
 
 from .resources import BeneficiaryResource
+
+from .resources import BeneficiaryResource
+from .filters import BeneficiaryFilter
 
 
 @login_required(login_url="/login/")
@@ -97,7 +101,7 @@ def index(request):
         "friday" : fri_day,
         "saturday" : sat_day,
     }
-
+    
     html_template = loader.get_template("home/index.html")
     return HttpResponse(html_template.render(context, request))
 
@@ -378,7 +382,6 @@ class AgentDetailView(LoginRequiredMixin, DetailView):
         context["title"] = "Agent User Details"
 
         return context
-
 
 
 
