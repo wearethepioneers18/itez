@@ -84,7 +84,7 @@ def user_profile(request):
     education_levels = [level[1] for level in EDUCATION_LEVEL]
     sex_array = [sex[1] for sex in SEX_CHOICES]
     gender_array = [gender[1] for gender in GENDER_CHOICES]
-    
+
     context = {
         # "province": user_province,
         "user": user_profile,

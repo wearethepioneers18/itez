@@ -7,27 +7,33 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('beneficiary', '0022_beneficiary_facility'),
+        ("beneficiary", "0022_beneficiary_facility"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='beneficiary',
-            old_name='facility',
-            new_name='service_facility',
+            model_name="beneficiary",
+            old_name="facility",
+            new_name="service_facility",
         ),
         migrations.RemoveField(
-            model_name='beneficiary',
-            name='service_provider',
+            model_name="beneficiary",
+            name="service_provider",
         ),
         migrations.AddField(
-            model_name='beneficiary',
-            name='address',
-            field=models.TextField(blank=True, null=True, verbose_name='Address'),
+            model_name="beneficiary",
+            name="address",
+            field=models.TextField(blank=True, null=True, verbose_name="Address"),
         ),
         migrations.AddField(
-            model_name='beneficiary',
-            name='registered_facility',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='registerd_facility', to='beneficiary.facility'),
+            model_name="beneficiary",
+            name="registered_facility",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name="registerd_facility",
+                to="beneficiary.facility",
+            ),
         ),
     ]

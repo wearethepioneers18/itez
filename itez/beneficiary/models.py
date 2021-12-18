@@ -15,69 +15,45 @@ GENDER_CHOICES = (
     ("Male", _("Male")),
     ("Female", _("Female")),
     ("Transgender", _("Transgender")),
-    ("Other", _("Other"))
+    ("Other", _("Other")),
 )
-SEX_CHOICES = (
-    ("Male", _("Male")),
-    ("Female", _("Female"))
-)
+SEX_CHOICES = (("Male", _("Male")), ("Female", _("Female")))
 
 
 class Agent(models.Model):
     """
     Create agent detail table with its attributes or columns.
     """
-    user = models.OneToOneField(
-        'users.User',
-        on_delete=models.CASCADE
-    )
+
+    user = models.OneToOneField("users.User", on_delete=models.CASCADE)
 
     first_name = models.CharField(
-        _("First Name"),
-        max_length=200,
-        null=True,
-        blank=True
+        _("First Name"), max_length=200, null=True, blank=True
     )
-    last_name = models.CharField(
-        _("Last Name"),
-        max_length=200,
-        null=False
-    )
+    last_name = models.CharField(_("Last Name"), max_length=200, null=False)
     birthdate = models.DateField(
-        _("Birth Date"),
-        auto_now_add=False,
-        null=True,
-        blank=True
+        _("Birth Date"), auto_now_add=False, null=True, blank=True
     )
-    agent_id = models.CharField(
-        max_length=100,
-        editable=False
-    )
+    agent_id = models.CharField(max_length=100, editable=False)
     gender = models.CharField(
-        _("Gender"),
-        max_length=50,
-        choices=GENDER_CHOICES,
-        default=GENDER_CHOICES[3][0]
+        _("Gender"), max_length=50, choices=GENDER_CHOICES, default=GENDER_CHOICES[3][0]
     )
     location = models.PointField(
-        _("Location"),
-        geography=True,
-        blank=True,
-        null=True,
-        srid=4326
+        _("Location"), geography=True, blank=True, null=True, srid=4326
     )
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
 
     def get_absolute_url(self):
-        return reverse('beneficiary:agent_detail', kwargs={'pk': self.pk})
+        return reverse("beneficiary:agent_detail", kwargs={"pk": self.pk})
 
 
 class Beneficiary(models.Model):
     """
     Implements the Beneficiary properties and required methods.
     """
+
     ART_STATUS_CHOICES = (
         ("Enrolled", _("Enrolled")),
         ("Not Enrolled", _("Not Enrolled")),
@@ -114,67 +90,39 @@ class Beneficiary(models.Model):
         ("phd", _("PHD")),
     )
 
-    first_name = models.CharField(
-        _("First Name"),
-        max_length=200
-    )
-    last_name = models.CharField(
-        _("Last Name"),
-        max_length=200
-    )
+    first_name = models.CharField(_("First Name"), max_length=200)
+    last_name = models.CharField(_("Last Name"), max_length=200)
     other_name = models.CharField(
-        _("Other Name"),
-        max_length=200,
-        null=True,
-        blank=True
+        _("Other Name"), max_length=200, null=True, blank=True
     )
     gender = models.CharField(
         _("Gender"),
         max_length=100,
         choices=GENDER_CHOICES,
-        default=GENDER_CHOICES[3][0]
+        default=GENDER_CHOICES[3][0],
     )
-    sex = models.CharField(
-        _("Sex"),
-        max_length=100,
-        choices=SEX_CHOICES
-    )
+    sex = models.CharField(_("Sex"), max_length=100, choices=SEX_CHOICES)
     profile_photo = ProcessedImageField(
-        upload_to='profile_photo',
+        upload_to="profile_photo",
         processors=[ResizeToFill(512, 512)],
-        format='JPEG',
-        options={'quality': 100},
+        format="JPEG",
+        options={"quality": 100},
         null=True,
-        blank=True
+        blank=True,
     )
     phone_number = models.CharField(
-        _("Phone Number"),
-        max_length=20,
-        null=True,
-        blank=True
+        _("Phone Number"), max_length=20, null=True, blank=True
     )
-    email = models.EmailField(
-        _("Email"),
-        max_length=200,
-        null=True,
-        blank=True
-    )
-    beneficiary_id = models.CharField(
-        max_length=100,
-        editable=False
-    )
+    email = models.EmailField(_("Email"), max_length=200, null=True, blank=True)
+    beneficiary_id = models.CharField(max_length=100, editable=False)
     art_status = models.CharField(
         _("ART Status"),
         max_length=100,
         choices=ART_STATUS_CHOICES,
         null=True,
-        blank=True
+        blank=True,
     )
-    last_vl = models.IntegerField(
-        _("Last Viral Load"),
-        null=True,
-        blank=True
-    )
+    last_vl = models.IntegerField(_("Last Viral Load"), null=True, blank=True)
     hiv_status = models.CharField(
         _("HIV Status"),
         choices=HIV_STATUS,
@@ -182,18 +130,13 @@ class Beneficiary(models.Model):
         null=True,
         blank=True,
     )
-    agent = models.ForeignKey(
-        Agent,
-        on_delete=models.PROTECT,
-        null=True,
-        blank=True
-    )
+    agent = models.ForeignKey(Agent, on_delete=models.PROTECT, null=True, blank=True)
     registered_facility = models.ForeignKey(
-        'Facility',
+        "Facility",
         on_delete=models.PROTECT,
         null=True,
         blank=True,
-        related_name="registerd_facility"
+        related_name="registerd_facility",
     )
     date_of_birth = models.DateField(_("Date of Birth"))
     marital_status = models.CharField(
@@ -201,36 +144,26 @@ class Beneficiary(models.Model):
         choices=MARITAL_STATUS,
         max_length=100,
         null=True,
-        blank=True
+        blank=True,
     )
     name_of_spouse = models.CharField(
-        _("Phone Number"),
-        max_length=200,
-        null=True,
-        blank=True
+        _("Phone Number"), max_length=200, null=True, blank=True
     )
     number_of_children = models.IntegerField(
-        _("Number of children"),
-        null=True,
-        blank=True
+        _("Number of children"), null=True, blank=True
     )
     number_of_siblings = models.IntegerField(
-        _("Number of siblings"),
-        null=True,
-        blank=True
+        _("Number of siblings"), null=True, blank=True
     )
     parent_details = models.ForeignKey(
-        'BeneficiaryParent',
-        on_delete=models.PROTECT,
-        null=True,
-        blank=True
+        "BeneficiaryParent", on_delete=models.PROTECT, null=True, blank=True
     )
     education_level = models.CharField(
         _("Education level"),
         max_length=300,
         null=True,
         blank=True,
-        choices=EDUCATION_LEVEL
+        choices=EDUCATION_LEVEL,
     )
     address = models.TextField(
         _("Address"),
@@ -265,68 +198,34 @@ class Beneficiary(models.Model):
         return Beneficiary.objects.filter(created__gt=time_diff).count()
 
     def get_absolute_url(self):
-        return reverse('beneficiary:details', kwargs={'pk': self.pk})
+        return reverse("beneficiary:details", kwargs={"pk": self.pk})
 
 
 class BeneficiaryParent(models.Model):
-    father_first_name = models.CharField(
-        _("Father First Name"),
-        max_length=200
-    )
+    father_first_name = models.CharField(_("Father First Name"), max_length=200)
     father_last_name = models.CharField(
-        _("Father Last Name"),
-        max_length=250,
-        null=True,
-        blank=True
+        _("Father Last Name"), max_length=250, null=True, blank=True
     )
     mother_first_name = models.CharField(
-        _("Mother First Name"),
-        max_length=250,
-        null=True,
-        blank=True
+        _("Mother First Name"), max_length=250, null=True, blank=True
     )
     mother_last_name = models.CharField(
-        _("Mother Last Name"),
-        max_length=250,
-        null=True,
-        blank=True
+        _("Mother Last Name"), max_length=250, null=True, blank=True
     )
-    address = models.TextField(
-        max_length=300,
-        null=True,
-        blank=True
-    )
-    father_phone_number = models.CharField(
-        max_length=20,
-        null=True,
-        blank=True
-    )
-    mother_phone_number = models.CharField(
-        max_length=20,
-        null=True,
-        blank=True
-    )
+    address = models.TextField(max_length=300, null=True, blank=True)
+    father_phone_number = models.CharField(max_length=20, null=True, blank=True)
+    mother_phone_number = models.CharField(max_length=20, null=True, blank=True)
     father_date_of_birth = models.DateField(
-        _("Father's date of birth"),
-        null=True,
-        blank=True
+        _("Father's date of birth"), null=True, blank=True
     )
     mother_date_of_birth = models.DateField(
-        _("Mother's date of birth"),
-        null=True,
-        blank=True
+        _("Mother's date of birth"), null=True, blank=True
     )
     father_village = models.CharField(
-        _("Father's Village"),
-        max_length=200,
-        null=True,
-        blank=True
+        _("Father's Village"), max_length=200, null=True, blank=True
     )
     mother_village = models.CharField(
-        _("Mother's Village"),
-        max_length=200,
-        null=True,
-        blank=True
+        _("Mother's Village"), max_length=200, null=True, blank=True
     )
     created = models.DateTimeField(auto_now_add=True)
 
@@ -359,10 +258,7 @@ class District(models.Model):
     Define district properties and corresponding methods.
     """
 
-    name = models.CharField(
-        _("District"),
-        max_length=255
-    )
+    name = models.CharField(_("District"), max_length=255)
 
     province = models.ForeignKey(
         Province,
@@ -380,19 +276,11 @@ class ServiceArea(models.Model):
     Define service area properties.
     """
 
-    name = models.CharField(
-        _("Service Area"),
-        max_length=200
-    )
+    name = models.CharField(_("Service Area"), max_length=200)
 
-    district = models.ForeignKey(
-        District,
-        on_delete=models.PROTECT
-    )
+    district = models.ForeignKey(District, on_delete=models.PROTECT)
 
-    created = models.DateTimeField(
-        auto_now_add=True
-    )
+    created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.name
@@ -404,31 +292,13 @@ class WorkDetail(models.Model):
     """
 
     gross_pay = models.DecimalField(
-        _("Monthly Salary"),
-        decimal_places=2,
-
-        max_digits=1000,
-        null=False
+        _("Monthly Salary"), decimal_places=2, max_digits=1000, null=False
     )
-    company = models.CharField(
-        _("Company Name"),
-        max_length=200,
-        null=False
-    )
-    insured = models.BooleanField(
-        _("Company Insured"),
-        default=False
-    )
-    work_address = models.TextField(
-        _("Work Address"),
-        null=True,
-        blank=True
-    )
+    company = models.CharField(_("Company Name"), max_length=200, null=False)
+    insured = models.BooleanField(_("Company Insured"), default=False)
+    work_address = models.TextField(_("Work Address"), null=True, blank=True)
     beneficiary = models.OneToOneField(
-        Beneficiary,
-        on_delete=models.PROTECT,
-        null=True,
-        blank=True
+        Beneficiary, on_delete=models.PROTECT, null=True, blank=True
     )
 
     def __str__(self):
@@ -440,29 +310,29 @@ COMPANY = 2
 GOVERNMENT = 3
 OTHER = 4
 IP_TYPES = (
-    (NGO, _('Non-Profit Organization')),
-    (COMPANY, _('Company')),
-    (GOVERNMENT, _('Government')),
-    (OTHER, _('Other')),
+    (NGO, _("Non-Profit Organization")),
+    (COMPANY, _("Company")),
+    (GOVERNMENT, _("Government")),
+    (OTHER, _("Other")),
 )
 
 
 class ImplementingPartner(models.Model):
     name = models.CharField(
-        _('Name'),
+        _("Name"),
         max_length=200,
     )
 
     ip_type = models.IntegerField(
-        _('Type'),
+        _("Type"),
         choices=IP_TYPES,
         default=NGO,
     )
 
     is_active = models.BooleanField(
-        _('Is Active'),
+        _("Is Active"),
         default=True,
-        help_text=_('Is still an active Implementing Partner'),
+        help_text=_("Is still an active Implementing Partner"),
     )
 
     def __str__(self):
@@ -471,7 +341,7 @@ class ImplementingPartner(models.Model):
 
 class FacilityType(models.Model):
     name = models.CharField(
-        _('Facility Type Name'),
+        _("Facility Type Name"),
         max_length=200,
     )
 
@@ -480,12 +350,7 @@ class FacilityType(models.Model):
 
 
 class Facility(models.Model):
-    hmis_code = models.CharField(
-        _('HMIS Code'),
-        max_length=100,
-        null=True,
-        blank=True
-    )
+    hmis_code = models.CharField(_("HMIS Code"), max_length=100, null=True, blank=True)
     province = models.ForeignKey(
         Province,
         default="",
@@ -502,10 +367,11 @@ class Facility(models.Model):
     )
 
     name = models.CharField(
-        _('Name'),
+        _("Name"),
         max_length=200,
         help_text=_(
-            "Just enter name without 'Hostpial' or 'Clinic`, i.e for `Kitwe General Hospital` just enter `Kitwe General`.")
+            "Just enter name without 'Hostpial' or 'Clinic`, i.e for `Kitwe General Hospital` just enter `Kitwe General`."
+        ),
     )
 
     facility_type = models.ForeignKey(
@@ -522,12 +388,12 @@ class Facility(models.Model):
         help_text=_("Related Implementing Partner."),
         max_length=250,
         null=True,
-        blank=True
+        blank=True,
     )
 
     class Meta:
-        verbose_name = 'Facility'
-        verbose_name_plural = 'Facilities'
+        verbose_name = "Facility"
+        verbose_name_plural = "Facilities"
 
     def save(self):
         if self.facility_type.name.lower() in self.name.lower():
@@ -541,39 +407,24 @@ class Facility(models.Model):
 
 
 class ServiceProviderPersonelQualification(models.Model):
-    name = models.CharField(
-        max_length=200
-    )
+    name = models.CharField(max_length=200)
 
     def __str__(self):
         return self.name
 
 
 class ServiceProviderPersonel(models.Model):
-    first_name = models.CharField(
-        _("First Name"),
-        max_length=200
-    )
-    last_name = models.CharField(
-        _("Last Name"),
-        max_length=200
-    )
-    date_of_birth = models.DateField(
-        _("Date of Birth"),
-        null=True,
-        blank=True
-    )
+    first_name = models.CharField(_("First Name"), max_length=200)
+    last_name = models.CharField(_("Last Name"), max_length=200)
+    date_of_birth = models.DateField(_("Date of Birth"), null=True, blank=True)
     department = models.CharField(
-        _("Department"),
-        max_length=200,
-        null=True,
-        blank=True
+        _("Department"), max_length=200, null=True, blank=True
     )
     qualification = models.ForeignKey(
         ServiceProviderPersonelQualification,
         null=True,
         blank=True,
-        on_delete=models.SET_NULL
+        on_delete=models.SET_NULL,
     )
 
     class Meta:
@@ -586,29 +437,19 @@ class ServiceProviderPersonel(models.Model):
 
 class Drug(models.Model):
     """
-    Beneficiary's prescribed Drug. 
+    Beneficiary's prescribed Drug.
     """
+
     beneficiary = models.ForeignKey(
         Beneficiary,
         on_delete=models.CASCADE,
     )
-    name = models.CharField(
-        _("Drug Name"),
-        max_length=200,
-        null=True,
-        blank=True
-    )
+    name = models.CharField(_("Drug Name"), max_length=200, null=True, blank=True)
     manufacturer = models.DateField(
-        _("Drug Manufacturer"),
-        auto_created=False,
-        null=True,
-        blank=True
+        _("Drug Manufacturer"), auto_created=False, null=True, blank=True
     )
     expiry_date = models.DateField(
-        _("Drug Expiry Date"),
-        auto_created=False,
-        null=True,
-        blank=True
+        _("Drug Expiry Date"), auto_created=False, null=True, blank=True
     )
     created = models.DateTimeField(auto_now_add=True)
 
@@ -620,25 +461,13 @@ class Prescription(models.Model):
     """
     Beneficiary health Facility Prescription data.
     """
+
     title = models.CharField(
-        _("Prescription Title"),
-        max_length=200,
-        null=True,
-        blank=True
+        _("Prescription Title"), max_length=200, null=True, blank=True
     )
-    drugs = models.ManyToManyField(
-        Drug
-    )
-    date = models.DateTimeField(
-        auto_now_add=False,
-        null=True,
-        blank=True
-    )
-    comment = models.TextField(
-        _("Extra Details/Comment"),
-        null=True,
-        blank=True
-    ) 
+    drugs = models.ManyToManyField(Drug)
+    date = models.DateTimeField(auto_now_add=False, null=True, blank=True)
+    comment = models.TextField(_("Extra Details/Comment"), null=True, blank=True)
 
     class Meta:
         verbose_name = _("Prescription")
@@ -652,34 +481,17 @@ class Lab(models.Model):
     """
     Beneficiary's Lab Tests.
     """
+
     title = models.CharField(
-        _("Lab Diagnosis Title"),
-        max_length=200,
-        null=True,
-        blank=True
+        _("Lab Diagnosis Title"), max_length=200, null=True, blank=True
     )
-    results = models.TextField(
-        _("Lab Results"),
-        null=True,
-        blank=True
-    )
+    results = models.TextField(_("Lab Results"), null=True, blank=True)
     results_status = models.CharField(
-        _("Lab Results Status"),
-        max_length=200,
-        null=True,
-        blank=True
+        _("Lab Results Status"), max_length=200, null=True, blank=True
     )
-    requested_date = models.DateTimeField(
-        auto_now_add=False,
-        null=True,
-        blank=True
-    )
-    comment = models.TextField(
-        _("Extra Details/Comment"),
-        null=True,
-        blank=True
-    )   
-    
+    requested_date = models.DateTimeField(auto_now_add=False, null=True, blank=True)
+    comment = models.TextField(_("Extra Details/Comment"), null=True, blank=True)
+
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -691,54 +503,43 @@ class Lab(models.Model):
 
 
 SERVICE_TYPES = (
-    ("HTS", _('HTS (HIV Testing Services)')),
-    ("LAB", _('LAB')),
-    ("PHARMACY", _('PHARMACY')),
+    ("HTS", _("HTS (HIV Testing Services)")),
+    ("LAB", _("LAB")),
+    ("PHARMACY", _("PHARMACY")),
 )
 
 
 CLIENT_TYPES = (
-    ("OPD", _('OPD (Outpatient Departments )')),
-    ("ART", _('ART (Antiretroviral Therapy)')),
+    ("OPD", _("OPD (Outpatient Departments )")),
+    ("ART", _("ART (Antiretroviral Therapy)")),
 )
+
 
 class Service(models.Model):
     """
     Service provision to Beneficiary.
     """
+
     title = models.CharField(
         _("Service Title"),
         max_length=255,
     )
     service_personnel = models.ForeignKey(
-        ServiceProviderPersonel,
-        on_delete=models.PROTECT,
-        null=True,
-        blank=True
+        ServiceProviderPersonel, on_delete=models.PROTECT, null=True, blank=True
     )
     client_type = models.CharField(
-        _("Client Type"),
-        max_length=255,
-        null=True,
-        blank=True,
-        choices=CLIENT_TYPES
+        _("Client Type"), max_length=255, null=True, blank=True, choices=CLIENT_TYPES
     )
     service_type = models.CharField(
-        _("Service Type"),
-        max_length=255,
-        null=True,
-        blank=True,
-        choices=SERVICE_TYPES
+        _("Service Type"), max_length=255, null=True, blank=True, choices=SERVICE_TYPES
     )
     document = models.FileField(
         _("Supporting Document"),
         null=True,
         blank=True,
-        upload_to="lab_documents/%Y/%m/%d/"
+        upload_to="lab_documents/%Y/%m/%d/",
     )
-    datetime = models.DateTimeField(
-        auto_now_add=True
-    )
+    datetime = models.DateTimeField(auto_now_add=True)
 
     comments = models.TextField(
         _("Comments"),
@@ -748,8 +549,8 @@ class Service(models.Model):
     )
 
     class Meta:
-        verbose_name = 'Service'
-        verbose_name_plural = 'Services'
+        verbose_name = "Service"
+        verbose_name_plural = "Services"
 
     def __str__(self):
         return self.title
@@ -759,6 +560,7 @@ class MedicalRecord(models.Model):
     """
     Beneficiary's Service.
     """
+
     beneficiary = models.ForeignKey(
         Beneficiary,
         on_delete=models.CASCADE,
@@ -768,59 +570,33 @@ class MedicalRecord(models.Model):
         on_delete=models.CASCADE,
     )
     service_facility = models.ForeignKey(
-        'Facility',
-        on_delete=models.PROTECT,
-        null=True,
-        blank=True
+        "Facility", on_delete=models.PROTECT, null=True, blank=True
     )
-    provider_comments = models.TextField(
-        _("Provider Comments"),
-        null=True,
-        blank=True
-    )
-    interaction_date = models.DateTimeField(
-        auto_now_add=False,
-        null=True,
-        blank=True
-    )
+    provider_comments = models.TextField(_("Provider Comments"), null=True, blank=True)
+    interaction_date = models.DateTimeField(auto_now_add=False, null=True, blank=True)
     prescription = models.ForeignKey(
-        Prescription,
-        null=True,
-        blank=True,
-        on_delete=models.CASCADE
+        Prescription, null=True, blank=True, on_delete=models.CASCADE
     )
-    no_of_days = models.IntegerField(
-        _("No of Days"),
-        null=True,
-        blank=True
-    )
+    no_of_days = models.IntegerField(_("No of Days"), null=True, blank=True)
     when_to_take = models.TextField(
-        _("When to Take"),
-        max_length=500,
-        null=True,
-        blank=True
+        _("When to Take"), max_length=500, null=True, blank=True
     )
-    lab = models.ForeignKey(
-        Lab,
-        null=True,
-        blank=True,
-        on_delete=models.CASCADE
-    )
+    lab = models.ForeignKey(Lab, null=True, blank=True, on_delete=models.CASCADE)
     document = models.FileField(
         _("Supporting Documents"),
         null=True,
         blank=True,
-        upload_to="supporting_documents/%Y/%m/%d/"
+        upload_to="supporting_documents/%Y/%m/%d/",
     )
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name = _("Medical Record")
         verbose_name_plural = _("Medical Records")
-        ordering = ['-created']
+        ordering = ["-created"]
 
     def __str__(self):
         return f"Medical Record for: {self.beneficiary}, service: {self.service}"
-    
-    def  get_absolute_url(self):
-        return reverse('beneficiary:details', kwargs={'pk': self.beneficiary.pk})
+
+    def get_absolute_url(self):
+        return reverse("beneficiary:details", kwargs={"pk": self.beneficiary.pk})

@@ -6,16 +6,24 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('beneficiary', '0029_auto_20211213_1236'),
+        ("beneficiary", "0029_auto_20211213_1236"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='beneficiary',
-            options={'ordering': ['-created'], 'verbose_name': 'Beneficiary', 'verbose_name_plural': 'Beneficiaries'},
+            name="beneficiary",
+            options={
+                "ordering": ["-created"],
+                "verbose_name": "Beneficiary",
+                "verbose_name_plural": "Beneficiaries",
+            },
         ),
         migrations.AlterModelOptions(
-            name='medicalrecord',
-            options={'ordering': ['-created'], 'verbose_name': 'Medical Record', 'verbose_name_plural': 'Medical Records'},
+            name="medicalrecord",
+            options={
+                "ordering": ["-created"],
+                "verbose_name": "Medical Record",
+                "verbose_name_plural": "Medical Records",
+            },
         ),
     ]

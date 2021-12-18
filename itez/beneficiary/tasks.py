@@ -20,7 +20,7 @@ def generate_export_file(self):
     """
     beneficiary_resource = BeneficiaryResource()
     dataset = beneficiary_resource.export()
-    filename = save_exported_data(data=dataset.xlsx, file_ext='.xlsx')
+    filename = save_exported_data(data=dataset.xlsx, file_ext=".xlsx")
     return filename
 
 
@@ -29,7 +29,7 @@ def save_exported_data(data=None, file_ext=None):
     file_export_path = f"{settings.MEDIA_ROOT}/exports"
 
     filename = f"all_beneficiaries_export_{timestamp}{file_ext}"
-    
+
     if not os.path.exists(file_export_path):
         os.mkdir(file_export_path)
 
