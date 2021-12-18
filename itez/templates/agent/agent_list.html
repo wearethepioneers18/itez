@@ -79,9 +79,9 @@
                                 <th>Full Name</th>
                                 <th>Related User</th>
                                 <th>Date of Birth</th>
-                                <th>Role</th>
+                                <!-- <th>Role</th> -->
                                 <th>Gender</th>
-                                <th>Location</th>
+                                <!-- <th>Location</th> -->
                                 <th>Action</th>
                               </tr>
                             </thead>
@@ -120,20 +120,45 @@
                                 <td>
                                   <h6>{{ agent.birthdate }}</h6>
                                 </td>
-                                <td>
+                                <!-- <td>
                                   <h6>{{ agent.user.group.all }}</h6>
-                                </td>
+                                </td> -->
                                 <td>
                                   <h6>{{ agent.gender }}</h6>
                                 </td>
-                                <td>
+                                <!-- <td>
                                   <h6>{{ agent.Location }}</h6>
-                                </td>
+                                </td> -->
                                 <td>
                                   <div class="badge badge-opacity-danger">
-                                    <a href="#">
-                                      <i class="menu-icon mdi mdi-delete-forever"></i>
+                                    <a href="{% url 'beneficiary:agent_update' pk=agent.id %}" data-toggle="tooltip" title="Edit">
+                                      <i class="menu-icon mdi mdi-pencil" class="tooltiptext"></i>
                                     </a>
+                                  </div>
+
+                                  <div class="badge badge-opacity-danger">
+                                    <a id="{{ agent.id }}" data-toggle="tooltip" title="Delete">
+                                      <i class="menu-icon mdi mdi-delete-forever"></i>
+                                      <script>
+                                        try{
+                                          if("{{ agent.id }}" === "{{ agent.id }}"){
+                                            const deleteButton = document.getElementById("{{ agent.id }}");
+                                            deleteButton.addEventListener("click", () => {
+                                              var response;
+                                              response = confirm("Are you sure you want to delete this post");
+                                              if(response){
+                                                const setProperty = deleteButton.href = "{% url 'beneficiary:agent_delete' pk=agent.id %}";
+                                                setProperty.click()
+                                              }else if(!(response)){
+                                                console.log("cancelled post delete");
+                                              }
+                                            });
+                                          }
+                                        }catch(error){
+                                          console.log(error)
+                                        }
+                                    </script>
+                                  </a>
                                   </div>
                                 </td>
                               </tr>

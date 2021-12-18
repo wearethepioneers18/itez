@@ -71,95 +71,105 @@
 									</a>
 								</button>
                           </div>
-                          <div class="table-responsive  mt-1">
-                            <table class="table select-table">
-                              <thead>
-                                <tr>
-                                  <th>
-                                    <div class="form-check form-check-flat mt-0">
-                                      <label class="form-check-label">
-                                        <input type="checkbox" class="form-check-input" aria-checked="false"><i class="input-helper"></i></label>
-                                    </div>
-                                  </th>
+
+                        </div>
+                        <div class="table-responsive  mt-1">
+                          <table class="table select-table" id="table_id">
+                            <thead>
+                              <tr>
+                                <th>
+                                  <div class="form-check form-check-flat mt-0">
+                                    <label class="form-check-label">
+                                      <input type="checkbox" class="form-check-input" aria-checked="false"><i
+                                        class="input-helper"></i></label>
+                                  </div>
+                                </th>
                                   <th>Beneficiary  ID</th>
                                   <th>Full Name</th>
                                   <th>Gender & Sex</th>
-                                  <th>Province</th>
-                                  <th>Interaction</th>
+                                  <th>Facility</th>
+                                  <th>Registered Date</th>
                                   <th>Action</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                {% if beneficiaries %}
-                                {% for beneficiary in beneficiaries %}
-                                <tr>
-                                  <td>
-                                    <div class="form-check form-check-flat mt-0">
-                                      <label class="form-check-label">
-                                      <input type="checkbox" class="form-check-input" aria-checked="false"><i class="input-helper"></i></label>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {% if beneficiaries %}
+                              {% for beneficiary in beneficiaries %}
+                              <tr>
+                                <td>
+                                  <div class="form-check form-check-flat mt-0">
+                                    <label class="form-check-label">
+                                      <input type="checkbox" class="form-check-input" aria-checked="false"><i
+                                        class="input-helper"></i></label>
+                                  </div>
+                                </td>
+                                <td>
+                                  <a style="text-decoration: none;" href="{{ beneficiary.get_absolute_url }}">
+                                    {{ beneficiary.beneficiary_id }}</a>
+                                </td>
+                                <td>
+                                  <div class="d-flex ">
+                                    {% if beneficiary.profile_photo %}
+                                    <img src="{{ beneficiary.profile_photo.url }}">
+                                    {% elif beneficiary.sex == "Male" %}
+                                    <img src="/static/assets/images/faces/male.jpeg" alt="">
+                                    {% else %}
+                                    <img src="/static/assets/images/faces/female.jpeg" alt="">
+                                    {% endif %}
+                                    <div>
+                                      <a style="text-decoration: none;" href="#">
+                                        <h6>{{ beneficiary.first_name }} {{ beneficiary.last_name }}</h6>
+                                        <p>{{beneficiary.get_age }} years old</p>
+                                      </a>
                                     </div>
-                                  </td>
-                                  <td>
-                                    <a style="text-decoration: none;" href="{{ beneficiary.get_absolute_url }}">{{ beneficiary.beneficiary_id }}</a>
-                                  </td>
-                                  <td>
-                                    <div class="d-flex ">
-                                      {% if beneficiary.profile_photo %}
-                                        <img src="{{ beneficiary.profile_photo.url }}">
-                                      {% elif beneficiary.sex == "Male" %}
-                                        <img src="/static/assets/images/faces/male.jpeg" alt="">
-                                      {% else %}
-                                        <img src="/static/assets/images/faces/female.jpeg" alt="">
-                                      {% endif %}
-                                        <!-- <img src="/static/assets/images/faces/face1.jpg" alt=""> -->
-                                        <div>
-                                          <a style="text-decoration: none;" href="#">
-                                            <h6>{{ beneficiary.first_name }} {{ beneficiary.last_name }}</h6>
-                                            <p>{{beneficiary.get_age }} years old</p>
-                                          </a>
-                                        </div>
-                                    </div>
-                                  </td>
-                                  <td>
-                                    <h6>{{ beneficiary.sex }}</h6>
-                                    <p>{{ beneficiary.gender }}</p>
-                                  </td>
-                                  <td>{{ beneficiary.province }}</td>
-                                  <td><div class="badge badge-opacity-info">OPD</div></td>
-                                  <td>
-                                    <div class="badge badge-opacity-danger">
-                                    <a href="{% url 'beneficiary:medical_record_create' beneficiary.pk %}" data-toggle="tooltip"  title="Add Medical Record"  >
-                                          <i class="menu-icon mdi mdi-file"></i>
-                                        </a>
-                                    </div>
-                                    <div class="badge badge-opacity-danger">
-                                    <a href="#" data-toggle="tooltip" title="Edit">
-                                          <i class="menu-icon mdi mdi-pencil" class="tooltiptext"></i>
-                                        </a>
-                                    </div>                                 
-                                    
-                                    <div class="badge badge-opacity-danger">
-                                    <a href="#" data-toggle="tooltip" title="Delete">
-                                          <i class="menu-icon mdi mdi-delete-forever"></i>
-                                        </a>
-                                      </div>
-                                  </td>
-                                </tr>
-                                {% endfor %}
-                                {% else %}
-                                <h3>No Beneficiaries Available</h3>
-                                {% endif %}
-                              </tbody>
-                            </table>
-                          </div>
-                          <div class="m-3">
-
-                            {% if is_paginated %}
+                                  </div>
+                                </td>
+                                <td>
+                                  <h6>{{ beneficiary.sex }}</h6>
+                                  <p>{{ beneficiary.gender }}</p>
+                                </td>
+                                <td>
+                                  <h6>{{ beneficiary.registered_facility }}</h6>
+                                </td>
+                                <td>
+                                  <h6>{{ beneficiary.created }}</h6>
+                                </td>
+                                <td>
+                                  <div class="badge badge-opacity-danger">
+                                    <a href="{% url 'beneficiary:medical_record_create' beneficiary.pk %}"
+                                      data-toggle="tooltip" title="Add Medical Record">
+                                      <i class="menu-icon mdi mdi-file"></i>
+                                    </a>
+                                  </div>
+                                  <div class="badge badge-opacity-danger">
+                                    <a href="{% url 'beneficiary:update' pk=beneficiary.id %}" data-toggle="tooltip" title="Edit">
+                                      <i class="menu-icon mdi mdi-pencil" class="tooltiptext"></i>
+                                    </a>
+                                  </div>
 
                                   <div class="badge badge-opacity-danger">
-                                    <a href="#" data-toggle="tooltip" title="Delete">
+                                    <a id="{{ beneficiary.id }}" data-toggle="tooltip" title="Delete">
                                       <i class="menu-icon mdi mdi-delete-forever"></i>
-                                    </a>
+                                      <script>
+                                        try{
+                                          if("{{ beneficiary.id }}" === "{{ beneficiary.id }}"){
+                                            const deleteButton = document.getElementById("{{ beneficiary.id }}");
+                                            deleteButton.addEventListener("click", () => {
+                                              var response;
+                                              response = confirm("Are you sure you want to delete this post");
+                                              if(response){
+                                                const setProperty = deleteButton.href = "{% url 'beneficiary:delete' pk=beneficiary.id %}";
+                                                setProperty.click()
+                                              }else if(!(response)){
+                                                console.log("cancelled post delete");
+                                              }
+                                            });
+                                          }
+                                        }catch(error){
+                                          console.log(error)
+                                        }
+                                    </script>
+                                  </a>
                                   </div>
                                 </td>
                               </tr>
@@ -173,27 +183,26 @@
                         <div class="m-3">
 
                           {% if is_paginated %}
-
-                          {% if page_obj.has_previous %}
-                          <a class="btn btn-primary btn-lg text-white mb-0 me-0" href="?page=1">First</a>
-                          <a class="btn btn-primary btn-lg text-white mb-0 me-0"
-                            href="?page={{ page_obj.previous_page_number }}">Previous</a>
-                          {% endif %}
-
-                          {% for num in page_obj.paginator.page_range %}
-                          {% if page_obj.number == num %}
-                          <a class="btn btn-lg mb-0 me-0" href="?page={{ num }}">{{ num }}</a>
-                          {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %} <a
-                            class="btn btn-primary btn-lg text-white mb-0 me-0" href="?page={{ num }}">{{ num }}</a>
+                            {% if page_obj.has_previous %}
+                              <a class="btn btn-primary btn-lg text-white mb-0 me-0" href="?page=1">First</a>
+                              <a class="btn btn-primary btn-lg text-white mb-0 me-0"
+                                href="?page={{ page_obj.previous_page_number }}">Previous</a>
                             {% endif %}
-                            {% endfor %}
 
-                            {% if page_obj.has_next %}
-                            <a class="btn btn-primary btn-lg text-white mb-0 me-0"
-                              href="?page={{ page_obj.next_page_number }}">Next</a>
-                            <a class="btn btn-primary btn-lg text-white mb-0 me-0"
-                              href="?page={{ page_obj.paginator.num_pages }}">Last</a>
-                            {% endif %}
+                            {% for num in page_obj.paginator.page_range %}
+                              {% if page_obj.number == num %}
+                                <a class="btn btn-lg mb-0 me-0" href="?page={{ num }}">{{ num }}</a>
+                              {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %} <a
+                                class="btn btn-primary btn-lg text-white mb-0 me-0" href="?page={{ num }}">{{ num }}</a>
+                              {% endif %}
+                             {% endfor %}
+
+                              {% if page_obj.has_next %}
+                                <a class="btn btn-primary btn-lg text-white mb-0 me-0"
+                                  href="?page={{ page_obj.next_page_number }}">Next</a>
+                                <a class="btn btn-primary btn-lg text-white mb-0 me-0"
+                                  href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+                              {% endif %}
                             {% endif %}
                         </div>
                       </div>
