@@ -243,7 +243,7 @@ class Beneficiary(models.Model):
     class Meta:
         verbose_name = "Beneficiary"
         verbose_name_plural = "Beneficiaries"
-        ordering = ["created"]
+        ordering = ["-created"]
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
@@ -638,7 +638,7 @@ class Prescription(models.Model):
         _("Extra Details/Comment"),
         null=True,
         blank=True
-    )
+    ) 
 
     class Meta:
         verbose_name = _("Prescription")
@@ -678,7 +678,8 @@ class Lab(models.Model):
         _("Extra Details/Comment"),
         null=True,
         blank=True
-    )
+    )   
+    
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -765,12 +766,6 @@ class MedicalRecord(models.Model):
     service = models.ForeignKey(
         Service,
         on_delete=models.CASCADE,
-    )    
-    service_facility = models.ForeignKey(
-        'Facility',
-        on_delete=models.PROTECT,
-        null=True,
-        blank=True
     )
     service_facility = models.ForeignKey(
         'Facility',
@@ -779,7 +774,7 @@ class MedicalRecord(models.Model):
         blank=True
     )
     provider_comments = models.TextField(
-        _("Extra Details/Comment"),
+        _("Provider Comments"),
         null=True,
         blank=True
     )
@@ -811,11 +806,18 @@ class MedicalRecord(models.Model):
         blank=True,
         on_delete=models.CASCADE
     )
+    document = models.FileField(
+        _("Supporting Documents"),
+        null=True,
+        blank=True,
+        upload_to="supporting_documents/%Y/%m/%d/"
+    )
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name = _("Medical Record")
         verbose_name_plural = _("Medical Records")
+        ordering = ['-created']
 
     def __str__(self):
         return f"Medical Record for: {self.beneficiary}, service: {self.service}"

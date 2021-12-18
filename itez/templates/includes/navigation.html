@@ -77,11 +77,11 @@
           </a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item preview-item">
-            {% if request.user.profile.profile_photo.url %}
+            {% if request.user.profile.profile_photo %}
                   <img width="100" height="100" style="margin-right: 1em;" class="img-md rounded-circle" src="{{request.user.profile.profile_photo.url}}" alt="Profile image">
-              {% elif not request.user.profile_photo.url and request.user.gender == 'Male' %}
+              {% elif not request.user.profile_photo and request.user.gender == 'Male' %}
                   <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
-              {% elif not request.user.profile_photo.url and request.user.gender == 'Female' %}
+              {% elif not request.user.profile_photo and request.user.gender == 'Female' %}
                   <img class="img-xs rounded-circle" src="/static/assets/images/faces/female.jpeg" alt="Profile image">
               {% else %}
                   <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
@@ -93,12 +93,12 @@
           </a>
           <a class="dropdown-item preview-item">
             <div class="preview-thumbnail">
-              {% if request.user.profile.profile_photo.url %}
+              {% if request.user.profile.profile_photo %}
               <img width="100" height="100" style="margin-right: 1em;" class="img-md rounded-circle"
                 src="{{ request.user.profile.profile_photo.url }}" alt="Profile image">
-              {% elif not request.user.profile_photo.url and request.user.gender == 'Male' %}
+              {% elif not request.user.profile_photo and request.user.gender == 'Male' %}
                   <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
-              {% elif not request.user.profile.profile_photo.url and request.user.profile.gender == 'Female' %}
+              {% elif not request.user.profile.profile_photo and request.user.profile.gender == 'Female' %}
                   <img class="img-xs rounded-circle" src="/static/assets/images/faces/female.jpeg" alt="Profile image">
               {% else %}
               <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
@@ -113,12 +113,12 @@
       </li>
       <li class="nav-item dropdown d-none d-lg-block user-dropdown">
         <a class="nav-link" id="UserDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
-          {% if request.user.profile.profile_photo.url %}
+          {% if request.user.profile.profile_photo %}
           <img width="40" height="40" style="margin-right: 1em;" class="img-md rounded-circle"
             src="{{ request.user.profile.profile_photo.url }}" alt="Profile image">
-          {% elif not request.user.profile_photo.url and request.user.gender == 'Male' %}
+          {% elif not request.user.profile_photo and request.user.gender == 'Male' %}
           <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
-          {% elif not request.user.profile_photo.url and request.user.gender == 'Female' %}
+          {% elif not request.user.profile_photo and request.user.gender == 'Female' %}
           <img class="img-xs rounded-circle" src="/static/assets/images/faces/female.jpeg" alt="Profile image">
           {% else %}
           <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
@@ -126,7 +126,7 @@
 
           <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="UserDropdown">
             <div class="dropdown-header text-center">
-              {% if request.user.profile.profile_photo.url %}
+              {% if request.user.profile.profile_photo %}
               <img width="100" height="100" style="margin-right: 1em;" class="img-md rounded-circle"
                 src="{{ request.user.profile.profile_photo.url }}" alt="Profile image">
               {% elif not request.user.profile_photo.url and request.user.gender == 'Male' %}

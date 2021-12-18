@@ -20,10 +20,13 @@
       <div class="card">
         <div class="card-body">
           <h4 class="card-title">{{ title|title }}</h4>
-
-          <form class="form-sample" method="post" >
-            {% csrf_token %}
-            {% crispy form form.helper %}
+          <form
+            class="form-sample"
+            action="/beneficiary/create"
+            method="post"
+            enctype="multipart/form-data"
+          >
+            {% csrf_token %} {% crispy form form.helper %}
           </form>
         </div>
       </div>
