@@ -1,5 +1,6 @@
 # -*- encoding: utf-8 -*-
 import json
+import datetime
 from django import template
 from django.contrib.gis.db.models import fields
 from django.db.models import query
@@ -417,20 +418,27 @@ def user_events(request):
 def beneficiary_report(request):
     # Graphs
     # Number of beneficiaries by year
+    
+    current_year = datetime.datetime.now().year
+    year_one = current_year - 1
+    year_two = current_year - 2
+    year_three = current_year - 3
+    year_four = current_year - 4
+    
     year1 = (
-        Beneficiary.objects.filter(created__year=2017).values("created__year").count()
+        Beneficiary.objects.filter(created__year=year_four).values("created__year").count()
     )
     year2 = (
-        Beneficiary.objects.filter(created__year=2018).values("created__year").count()
+        Beneficiary.objects.filter(created__year=year_three).values("created__year").count()
     )
     year3 = (
-        Beneficiary.objects.filter(created__year=2019).values("created__year").count()
+        Beneficiary.objects.filter(created__year=year_two).values("created__year").count()
     )
     year4 = (
-        Beneficiary.objects.filter(created__year=2020).values("created__year").count()
+        Beneficiary.objects.filter(created__year=year_one).values("created__year").count()
     )
     year5 = (
-        Beneficiary.objects.filter(created__year=2021).values("created__year").count()
+        Beneficiary.objects.filter(created__year=current_year).values("created__year").count()
     )
 
     # Number of beneficiaries by province
