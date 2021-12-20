@@ -119,7 +119,7 @@ class BeneficiaryAdmin(ImportExportModelAdmin):
         "email",
         "date_of_birth",
         "education_level",
-        "created"
+        "created",
     ]
     search_fields = [
         "sex",
@@ -175,9 +175,8 @@ class AgentAdmin(admin.ModelAdmin):
         "gender",
         "location",
     ]
-    formfield_overrides = {
-        models.PointField: {"widget": GooglePointFieldWidget}
-    }
+    formfield_overrides = {models.PointField: {"widget": GooglePointFieldWidget}}
+
 
 class FacilityTypeAdmin(admin.ModelAdmin):
     list_display = ["name"]

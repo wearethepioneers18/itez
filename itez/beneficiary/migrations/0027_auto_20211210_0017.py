@@ -6,18 +6,28 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('beneficiary', '0026_auto_20211209_1801'),
+        ("beneficiary", "0026_auto_20211209_1801"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='agent',
-            name='last_name',
-            field=models.CharField(max_length=200, verbose_name='Last Name'),
+            model_name="agent",
+            name="last_name",
+            field=models.CharField(max_length=200, verbose_name="Last Name"),
         ),
         migrations.AlterField(
-            model_name='beneficiary',
-            name='hiv_status',
-            field=models.CharField(blank=True, choices=[('positive', 'Positive'), ('negative', 'Negative'), ('unkown', 'Uknown')], max_length=100, null=True, verbose_name='HIV Status'),
+            model_name="beneficiary",
+            name="hiv_status",
+            field=models.CharField(
+                blank=True,
+                choices=[
+                    ("positive", "Positive"),
+                    ("negative", "Negative"),
+                    ("unkown", "Uknown"),
+                ],
+                max_length=100,
+                null=True,
+                verbose_name="HIV Status",
+            ),
         ),
     ]

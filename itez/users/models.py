@@ -153,6 +153,7 @@ class Profile(models.Model):
     postal_code = models.CharField(
         _("Postal Code"), max_length=100, null=True, blank=True
     )
+
     class Meta:
         verbose_name = "User Profile"
         verbose_name_plural = "User Profiles"
@@ -162,6 +163,7 @@ class Profile(models.Model):
             return f"{self.user.first_name} {self.user.last_name}'s Profile"
         else:
             return f"{self.user.username}'s Profile"
+
 
 class UserWorkDetail(models.Model):
     """

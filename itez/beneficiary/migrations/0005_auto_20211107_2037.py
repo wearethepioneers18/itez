@@ -8,33 +8,65 @@ import uuid
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('beneficiary', '0004_agentdetail_beneficiary_beneficiaryparent_servicearea_workdetail'),
+        (
+            "beneficiary",
+            "0004_agentdetail_beneficiary_beneficiaryparent_servicearea_workdetail",
+        ),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='agentdetail',
-            name='agend_ID',
-            field=models.CharField(default='A6394A9', max_length=100, verbose_name='Agent Id'),
+            model_name="agentdetail",
+            name="agend_ID",
+            field=models.CharField(
+                default="A6394A9", max_length=100, verbose_name="Agent Id"
+            ),
         ),
         migrations.AlterField(
-            model_name='agentdetail',
-            name='gender',
-            field=models.CharField(choices=[('Male', 'Male'), ('Female', 'Female'), ('Transgender', 'Transgender'), ('Other', 'Other')], default='Other', max_length=50, verbose_name='Gender'),
+            model_name="agentdetail",
+            name="gender",
+            field=models.CharField(
+                choices=[
+                    ("Male", "Male"),
+                    ("Female", "Female"),
+                    ("Transgender", "Transgender"),
+                    ("Other", "Other"),
+                ],
+                default="Other",
+                max_length=50,
+                verbose_name="Gender",
+            ),
         ),
         migrations.AlterField(
-            model_name='beneficiary',
-            name='agent_ID',
-            field=models.ForeignKey(default='67123EF', on_delete=django.db.models.deletion.PROTECT, to='beneficiary.agentdetail'),
+            model_name="beneficiary",
+            name="agent_ID",
+            field=models.ForeignKey(
+                default="67123EF",
+                on_delete=django.db.models.deletion.PROTECT,
+                to="beneficiary.agentdetail",
+            ),
         ),
         migrations.AlterField(
-            model_name='beneficiary',
-            name='beneficiary_ID',
-            field=models.UUIDField(default=uuid.UUID('32d441b7-d506-4209-b7aa-4152d5e814d8'), editable=False),
+            model_name="beneficiary",
+            name="beneficiary_ID",
+            field=models.UUIDField(
+                default=uuid.UUID("32d441b7-d506-4209-b7aa-4152d5e814d8"),
+                editable=False,
+            ),
         ),
         migrations.AlterField(
-            model_name='beneficiary',
-            name='gender',
-            field=models.CharField(choices=[('Male', 'Male'), ('Female', 'Female'), ('Transgender', 'Transgender'), ('Other', 'Other')], default='Other', max_length=100, verbose_name='Gender'),
+            model_name="beneficiary",
+            name="gender",
+            field=models.CharField(
+                choices=[
+                    ("Male", "Male"),
+                    ("Female", "Female"),
+                    ("Transgender", "Transgender"),
+                    ("Other", "Other"),
+                ],
+                default="Other",
+                max_length=100,
+                verbose_name="Gender",
+            ),
         ),
     ]

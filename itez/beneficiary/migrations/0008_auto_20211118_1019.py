@@ -7,29 +7,47 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('beneficiary', '0007_auto_20211117_1306'),
+        ("beneficiary", "0007_auto_20211117_1306"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='beneficiary',
-            name='sex',
-            field=models.CharField(choices=[('Male', 'Male'), ('Female', 'Female')], default='sex', max_length=100, verbose_name='Sex'),
+            model_name="beneficiary",
+            name="sex",
+            field=models.CharField(
+                choices=[("Male", "Male"), ("Female", "Female")],
+                default="sex",
+                max_length=100,
+                verbose_name="Sex",
+            ),
             preserve_default=False,
         ),
         migrations.AlterField(
-            model_name='agentdetail',
-            name='agend_ID',
-            field=models.CharField(default='Agent-A44741A', editable=False, max_length=100, verbose_name='Agent ID'),
+            model_name="agentdetail",
+            name="agend_ID",
+            field=models.CharField(
+                default="Agent-A44741A",
+                editable=False,
+                max_length=100,
+                verbose_name="Agent ID",
+            ),
         ),
         migrations.AlterField(
-            model_name='beneficiary',
-            name='agent_ID',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='beneficiary.agentdetail'),
+            model_name="beneficiary",
+            name="agent_ID",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.PROTECT,
+                to="beneficiary.agentdetail",
+            ),
         ),
         migrations.AlterField(
-            model_name='beneficiary',
-            name='beneficiary_ID',
-            field=models.CharField(default='Beneficiary-6DC7F7D', editable=False, max_length=100, verbose_name='Beneficiary ID'),
+            model_name="beneficiary",
+            name="beneficiary_ID",
+            field=models.CharField(
+                default="Beneficiary-6DC7F7D",
+                editable=False,
+                max_length=100,
+                verbose_name="Beneficiary ID",
+            ),
         ),
     ]

@@ -9,14 +9,16 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('beneficiary', '0024_auto_20211202_1344'),
+        ("beneficiary", "0024_auto_20211202_1344"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='agentdetail',
-            name='user',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='users.user'),
+            model_name="agentdetail",
+            name="user",
+            field=models.ForeignKey(
+                default=1, on_delete=django.db.models.deletion.CASCADE, to="users.user"
+            ),
             preserve_default=False,
         ),
     ]

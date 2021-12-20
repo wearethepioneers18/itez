@@ -7,61 +7,112 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('beneficiary', '0018_auto_20211201_1326'),
+        ("beneficiary", "0018_auto_20211201_1326"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='MedicalRecord',
+            name="MedicalRecord",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('provider_comments', models.TextField(blank=True, null=True, verbose_name='Extra Details/Comment')),
-                ('interaction_date', models.DateTimeField(blank=True, null=True)),
-                ('no_of_days', models.IntegerField(blank=True, null=True, verbose_name='No of Days')),
-                ('when_to_take', models.TextField(blank=True, max_length=500, null=True, verbose_name='When to Take')),
-                ('created', models.DateTimeField(auto_now_add=True)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "provider_comments",
+                    models.TextField(
+                        blank=True, null=True, verbose_name="Extra Details/Comment"
+                    ),
+                ),
+                ("interaction_date", models.DateTimeField(blank=True, null=True)),
+                (
+                    "no_of_days",
+                    models.IntegerField(
+                        blank=True, null=True, verbose_name="No of Days"
+                    ),
+                ),
+                (
+                    "when_to_take",
+                    models.TextField(
+                        blank=True,
+                        max_length=500,
+                        null=True,
+                        verbose_name="When to Take",
+                    ),
+                ),
+                ("created", models.DateTimeField(auto_now_add=True)),
             ],
             options={
-                'verbose_name': 'Medical Record',
-                'verbose_name_plural': 'Medical Records',
+                "verbose_name": "Medical Record",
+                "verbose_name_plural": "Medical Records",
             },
         ),
         migrations.AddField(
-            model_name='beneficiary',
-            name='alive',
+            model_name="beneficiary",
+            name="alive",
             field=models.BooleanField(default=True),
         ),
         migrations.DeleteModel(
-            name='BeneficiaryService',
+            name="BeneficiaryService",
         ),
         migrations.AddField(
-            model_name='medicalrecord',
-            name='beneficiary',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='beneficiary.beneficiary'),
+            model_name="medicalrecord",
+            name="beneficiary",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                to="beneficiary.beneficiary",
+            ),
         ),
         migrations.AddField(
-            model_name='medicalrecord',
-            name='facility',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='beneficiary.facility'),
+            model_name="medicalrecord",
+            name="facility",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="beneficiary.facility",
+            ),
         ),
         migrations.AddField(
-            model_name='medicalrecord',
-            name='lab',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='beneficiary.lab'),
+            model_name="medicalrecord",
+            name="lab",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="beneficiary.lab",
+            ),
         ),
         migrations.AddField(
-            model_name='medicalrecord',
-            name='prescription',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='beneficiary.prescription'),
+            model_name="medicalrecord",
+            name="prescription",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="beneficiary.prescription",
+            ),
         ),
         migrations.AddField(
-            model_name='medicalrecord',
-            name='service',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='beneficiary.service'),
+            model_name="medicalrecord",
+            name="service",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="beneficiary.service"
+            ),
         ),
         migrations.AddField(
-            model_name='medicalrecord',
-            name='service_provider',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='beneficiary.serviceproviderpersonel'),
+            model_name="medicalrecord",
+            name="service_provider",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="beneficiary.serviceproviderpersonel",
+            ),
         ),
     ]

@@ -6,40 +6,40 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('beneficiary', '0020_auto_20211202_0148'),
+        ("beneficiary", "0020_auto_20211202_0148"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='lab',
-            name='beneficiary',
+            model_name="lab",
+            name="beneficiary",
         ),
         migrations.RemoveField(
-            model_name='lab',
-            name='facility',
+            model_name="lab",
+            name="facility",
         ),
         migrations.RemoveField(
-            model_name='lab',
-            name='service_provider',
+            model_name="lab",
+            name="service_provider",
         ),
         migrations.RemoveField(
-            model_name='medicalrecord',
-            name='facility',
+            model_name="medicalrecord",
+            name="facility",
         ),
         migrations.RemoveField(
-            model_name='prescription',
-            name='beneficiary',
+            model_name="prescription",
+            name="beneficiary",
         ),
         migrations.RemoveField(
-            model_name='prescription',
-            name='facility',
+            model_name="prescription",
+            name="facility",
         ),
         migrations.RemoveField(
-            model_name='prescription',
-            name='service_provider',
+            model_name="prescription",
+            name="service_provider",
         ),
         migrations.RemoveField(
-            model_name='service',
-            name='facility',
+            model_name="service",
+            name="facility",
         ),
     ]

@@ -7,93 +7,276 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('beneficiary', '0013_auto_20211125_1209'),
+        ("beneficiary", "0013_auto_20211125_1209"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Drug',
+            name="Drug",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(blank=True, max_length=200, null=True, verbose_name='Drug Name')),
-                ('manufacturer', models.DateField(blank=True, null=True, verbose_name='Drug Manufacturer')),
-                ('expiry_date', models.DateField(blank=True, null=True, verbose_name='Drug Expiry Date')),
-                ('created', models.DateTimeField(auto_now_add=True)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "name",
+                    models.CharField(
+                        blank=True, max_length=200, null=True, verbose_name="Drug Name"
+                    ),
+                ),
+                (
+                    "manufacturer",
+                    models.DateField(
+                        blank=True, null=True, verbose_name="Drug Manufacturer"
+                    ),
+                ),
+                (
+                    "expiry_date",
+                    models.DateField(
+                        blank=True, null=True, verbose_name="Drug Expiry Date"
+                    ),
+                ),
+                ("created", models.DateTimeField(auto_now_add=True)),
             ],
         ),
         migrations.AlterField(
-            model_name='beneficiary',
-            name='agent',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, to='beneficiary.agentdetail'),
+            model_name="beneficiary",
+            name="agent",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                to="beneficiary.agentdetail",
+            ),
         ),
         migrations.AlterField(
-            model_name='beneficiaryparent',
-            name='father_last_name',
-            field=models.CharField(blank=True, max_length=250, null=True, verbose_name='Father Last Name'),
+            model_name="beneficiaryparent",
+            name="father_last_name",
+            field=models.CharField(
+                blank=True, max_length=250, null=True, verbose_name="Father Last Name"
+            ),
         ),
         migrations.AlterField(
-            model_name='beneficiaryparent',
-            name='mother_first_name',
-            field=models.CharField(blank=True, max_length=250, null=True, verbose_name='Mother First Name'),
+            model_name="beneficiaryparent",
+            name="mother_first_name",
+            field=models.CharField(
+                blank=True, max_length=250, null=True, verbose_name="Mother First Name"
+            ),
         ),
         migrations.AlterField(
-            model_name='beneficiaryparent',
-            name='mother_last_name',
-            field=models.CharField(blank=True, max_length=250, null=True, verbose_name='Mother Last Name'),
+            model_name="beneficiaryparent",
+            name="mother_last_name",
+            field=models.CharField(
+                blank=True, max_length=250, null=True, verbose_name="Mother Last Name"
+            ),
         ),
         migrations.CreateModel(
-            name='Service',
+            name="Service",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=255, verbose_name='Service Title')),
-                ('client_type', models.CharField(blank=True, choices=[(1, 'OPD (Outpatient Departments )'), (2, 'ART (Antiretroviral Therapy)')], max_length=255, null=True, verbose_name='Client Type')),
-                ('service_type', models.CharField(blank=True, choices=[(1, 'HTS (HIV Testing Services)'), (2, 'LAB'), (2, 'PHARMACY')], max_length=255, null=True, verbose_name='Service Type')),
-                ('document', models.FileField(blank=True, null=True, upload_to='lab_documents/%Y/%m/%d/', verbose_name='Supporting Document')),
-                ('datetime', models.DateTimeField(auto_now_add=True)),
-                ('comments', models.TextField(blank=True, help_text='Extra comments if any.', null=True, verbose_name='Comments')),
-                ('service_personnel', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, to='beneficiary.serviceproviderpersonel')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "title",
+                    models.CharField(max_length=255, verbose_name="Service Title"),
+                ),
+                (
+                    "client_type",
+                    models.CharField(
+                        blank=True,
+                        choices=[
+                            (1, "OPD (Outpatient Departments )"),
+                            (2, "ART (Antiretroviral Therapy)"),
+                        ],
+                        max_length=255,
+                        null=True,
+                        verbose_name="Client Type",
+                    ),
+                ),
+                (
+                    "service_type",
+                    models.CharField(
+                        blank=True,
+                        choices=[
+                            (1, "HTS (HIV Testing Services)"),
+                            (2, "LAB"),
+                            (2, "PHARMACY"),
+                        ],
+                        max_length=255,
+                        null=True,
+                        verbose_name="Service Type",
+                    ),
+                ),
+                (
+                    "document",
+                    models.FileField(
+                        blank=True,
+                        null=True,
+                        upload_to="lab_documents/%Y/%m/%d/",
+                        verbose_name="Supporting Document",
+                    ),
+                ),
+                ("datetime", models.DateTimeField(auto_now_add=True)),
+                (
+                    "comments",
+                    models.TextField(
+                        blank=True,
+                        help_text="Extra comments if any.",
+                        null=True,
+                        verbose_name="Comments",
+                    ),
+                ),
+                (
+                    "service_personnel",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.PROTECT,
+                        to="beneficiary.serviceproviderpersonel",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Service',
-                'verbose_name_plural': 'Services',
+                "verbose_name": "Service",
+                "verbose_name_plural": "Services",
             },
         ),
         migrations.CreateModel(
-            name='Prescription',
+            name="Prescription",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(blank=True, max_length=200, null=True, verbose_name='Prescription Title')),
-                ('date', models.DateTimeField(blank=True, null=True)),
-                ('comment', models.TextField(blank=True, null=True, verbose_name='Extra Details/Comment')),
-                ('beneficiary', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='beneficiary.beneficiary')),
-                ('drugs', models.ManyToManyField(to='beneficiary.Drug')),
-                ('facility', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='beneficiary.facility')),
-                ('service_provider', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, to='beneficiary.serviceproviderpersonel')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "title",
+                    models.CharField(
+                        blank=True,
+                        max_length=200,
+                        null=True,
+                        verbose_name="Prescription Title",
+                    ),
+                ),
+                ("date", models.DateTimeField(blank=True, null=True)),
+                (
+                    "comment",
+                    models.TextField(
+                        blank=True, null=True, verbose_name="Extra Details/Comment"
+                    ),
+                ),
+                (
+                    "beneficiary",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="beneficiary.beneficiary",
+                    ),
+                ),
+                ("drugs", models.ManyToManyField(to="beneficiary.Drug")),
+                (
+                    "facility",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to="beneficiary.facility",
+                    ),
+                ),
+                (
+                    "service_provider",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.PROTECT,
+                        to="beneficiary.serviceproviderpersonel",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Prescription',
-                'verbose_name_plural': 'Prescription',
+                "verbose_name": "Prescription",
+                "verbose_name_plural": "Prescription",
             },
         ),
         migrations.CreateModel(
-            name='Lab',
+            name="Lab",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(blank=True, max_length=200, null=True, verbose_name='Lab Diagnosis Title')),
-                ('date', models.DateTimeField(blank=True, null=True)),
-                ('comment', models.TextField(blank=True, null=True, verbose_name='Extra Details/Comment')),
-                ('beneficiary', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='beneficiary.beneficiary')),
-                ('facility', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='beneficiary.facility')),
-                ('service_provider', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, to='beneficiary.serviceproviderpersonel')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "title",
+                    models.CharField(
+                        blank=True,
+                        max_length=200,
+                        null=True,
+                        verbose_name="Lab Diagnosis Title",
+                    ),
+                ),
+                ("date", models.DateTimeField(blank=True, null=True)),
+                (
+                    "comment",
+                    models.TextField(
+                        blank=True, null=True, verbose_name="Extra Details/Comment"
+                    ),
+                ),
+                (
+                    "beneficiary",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="beneficiary.beneficiary",
+                    ),
+                ),
+                (
+                    "facility",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to="beneficiary.facility",
+                    ),
+                ),
+                (
+                    "service_provider",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.PROTECT,
+                        to="beneficiary.serviceproviderpersonel",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Prescription',
-                'verbose_name_plural': 'Prescription',
+                "verbose_name": "Prescription",
+                "verbose_name_plural": "Prescription",
             },
         ),
         migrations.AddField(
-            model_name='drug',
-            name='beneficiary',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='beneficiary.beneficiary'),
+            model_name="drug",
+            name="beneficiary",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                to="beneficiary.beneficiary",
+            ),
         ),
     ]

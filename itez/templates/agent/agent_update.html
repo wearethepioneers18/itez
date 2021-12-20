@@ -1,5 +1,8 @@
-{% extends "layouts/base.html" %} {% load crispy_forms_tags %} {% block title %}
-{{ title|title }} {% endblock title %}
+{% extends "layouts/base.html" %} 
+{% load crispy_forms_tags %} 
+{% block title %}
+{{ title|title }} 
+{% endblock title %}
 
 <!-- Specific CSS Plugins goes HERE  -->
 {% block css_plugins %}
@@ -20,16 +23,39 @@
       <div class="card">
         <div class="card-body">
           <h4 class="card-title">{{ title|title }}</h4>
-            
-			<form class="form-sample" method="post" enctype="multipart/form-data">
-            {% csrf_token %} 
-            {% crispy form form.helper %}
+          <form class="form-sample" method="POST" >
+            {% csrf_token %}
+            <div class="form-row">
+              <div class="form-group col-md-6 mb-0">
+                {{ form.first_name|as_crispy_field }}
+              </div>
+              <div class="form-group col-md-6 mb-0">
+                {{ form.last_name|as_crispy_field }}
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-6 mb-0">
+                {{ form.birthdate|as_crispy_field }}
+              </div>
+              <div class="form-group col-md-6 mb-0">
+                {{ form.gender|as_crispy_field }}
+              </div>
+            </div> 
+            <div class="form-row">
+              <div class="form-group col-md-6 mb-0">
+                {{ form.location|as_crispy_field }}
+              </div>
+            </div> 
+            <button type="submit" class="btn btn-primary">
+              Update
+            </button>
           </form>
         </div>
       </div>
     </div>
   </div>
 </div>
+
 
 {% endblock content %}
 
@@ -47,5 +73,6 @@
 
 <script src="/static/assets/js/dashboard.js"></script>
 <script src="/static/assets/js/Chart.roundedBarCharts.js"></script>
+</script>
 
 {% endblock javascripts %}

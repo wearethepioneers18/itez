@@ -20,6 +20,16 @@ urlpatterns = [
         name="agent_detail",
     ),
     path(
+        "agent/<int:pk>/delete",
+        views.agent_delete_view,
+        name="agent_delete",
+    ),
+     path(
+        "agent/<int:pk>/update",
+        views.AgentUpdateView.as_view(),
+        name="agent_update",
+    ),
+    path(
         "beneficiary/<int:pk>/detail",
         views.BeneficiaryDetailView.as_view(),
         name="details",
@@ -38,6 +48,16 @@ urlpatterns = [
         "beneficiary/<int:pk>/medical_record_list",
         views.MedicalRecordListView.as_view(),
         name="medical_record_list",
+    ),
+    path(
+        "beneficiary/<int:pk>/delete",
+        views.beneficiary_delete_view,
+        name="delete",
+    ),
+    path(
+        "beneficiary/<int:pk>/update",
+        views.BeneficiaryUpdateView.as_view(),
+        name="update",
     ),
     # Medical Record `beneficiary:medical_record_list`
     path(

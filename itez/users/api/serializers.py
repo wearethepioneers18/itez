@@ -16,13 +16,16 @@ class ChangePasswordSerializer(serializers.Serializer):
     """
     Serializer for changing User password.
     """
-    password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
+
+    password = serializers.CharField(
+        write_only=True, required=True, validators=[validate_password]
+    )
     password2 = serializers.CharField(write_only=True, required=True)
     old_password = serializers.CharField(write_only=True, required=True)
 
     class Meta:
         model = User
-        fields = ('old_password', 'password', 'password2')
+        fields = ("old_password", "password", "password2")
 
     def validate(self, attrs):
         """
@@ -37,8 +40,10 @@ class ChangePasswordSerializer(serializers.Serializer):
         Returns:
             attrs [collections.OrderedDict]: Contains data posted in the request body.
         """
-        if attrs['password'] != attrs['password2']:
-            raise serializers.ValidationError({"password": "Password fields didn't match."})
+        if attrs["password"] != attrs["password2"]:
+            raise serializers.ValidationError(
+                {"password": "Password fields didn't match."}
+            )
 
         return attrs
 
@@ -55,14 +60,16 @@ class ChangePasswordSerializer(serializers.Serializer):
         Returns:
             [str]: Returns the value if the old_password is correct.
         """
-        user = self.context['request'].user
+        user = self.context["request"].user
         if not user.check_password(value):
-            raise serializers.ValidationError({"old_password": "Old password is not correct"})
+            raise serializers.ValidationError(
+                {"old_password": "Old password is not correct"}
+            )
         return value
 
     def update(self, instance, validated_data):
 
-        instance.set_password(validated_data['password'])
+        instance.set_password(validated_data["password"])
         instance.save()
 
         return instance
@@ -70,15 +77,17 @@ class ChangePasswordSerializer(serializers.Serializer):
 
 class UserProfileSerializer(serializers.ModelSerializer):
     profile_photo = serializers.ImageField(required=False)
+
     class Meta:
         model = Profile
-        exclude = ('user',)
+        exclude = ("user",)
 
 
 class UserWorkDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserWorkDetail
-        exclude = ('user',)
+        exclude = ("user",)
+
 
 class UserSerializer(serializers.ModelSerializer):
     roles = ListField(required=False, default=[], write_only=True)
@@ -91,39 +100,39 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = [
             "id",
-            "email", 
-            "username", 
-            "password", 
-            "roles", 
-            "assigned_roles", 
-            "profile", 
+            "email",
+            "username",
+            "password",
+            "roles",
+            "assigned_roles",
+            "profile",
             "user_work_detail",
             "date",
         ]
         read_only_field = ["id"]
 
         extra_kwargs = {
-            'email': {'required': False, 'min_length': 8}, 
-            'username': {'required': True, 'min_length': 4},
-            'password': {'required': True, "write_only": True, 'min_length': 8},
+            "email": {"required": False, "min_length": 8},
+            "username": {"required": True, "min_length": 4},
+            "password": {"required": True, "write_only": True, "min_length": 8},
         }
 
         depth = 2
-    
+
     def create(self, validated_data):
         user = User.objects.create(
             # email=validated_data['email'],
-            username=validated_data['username'],
+            username=validated_data["username"],
         )
-        user.set_password(validated_data['password'])
+        user.set_password(validated_data["password"])
         user.save()
 
         roles_to_assign = validated_data.get("roles", [])
         if roles_to_assign:
             for role in roles_to_assign:
                 assign_role(user, role)
-                
+
         return user
-    
+
     def get_assigned_roles(self, user):
         return [group.name for group in user.groups.all()]

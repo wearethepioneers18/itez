@@ -10,29 +10,81 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('beneficiary', '0025_agentdetail_user'),
+        ("beneficiary", "0025_agentdetail_user"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Agent',
+            name="Agent",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('first_name', models.CharField(blank=True, max_length=200, null=True, verbose_name='First Name')),
-                ('last_name', models.CharField(max_length=200, verbose_name='Second Name')),
-                ('birthdate', models.DateField(blank=True, null=True, verbose_name='Birth Date')),
-                ('agent_id', models.CharField(editable=False, max_length=100)),
-                ('gender', models.CharField(choices=[('Male', 'Male'), ('Female', 'Female'), ('Transgender', 'Transgender'), ('Other', 'Other')], default='Other', max_length=50, verbose_name='Gender')),
-                ('location', django.contrib.gis.db.models.fields.PointField(blank=True, geography=True, null=True, srid=4326, verbose_name='Location')),
-                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "first_name",
+                    models.CharField(
+                        blank=True, max_length=200, null=True, verbose_name="First Name"
+                    ),
+                ),
+                (
+                    "last_name",
+                    models.CharField(max_length=200, verbose_name="Second Name"),
+                ),
+                (
+                    "birthdate",
+                    models.DateField(blank=True, null=True, verbose_name="Birth Date"),
+                ),
+                ("agent_id", models.CharField(editable=False, max_length=100)),
+                (
+                    "gender",
+                    models.CharField(
+                        choices=[
+                            ("Male", "Male"),
+                            ("Female", "Female"),
+                            ("Transgender", "Transgender"),
+                            ("Other", "Other"),
+                        ],
+                        default="Other",
+                        max_length=50,
+                        verbose_name="Gender",
+                    ),
+                ),
+                (
+                    "location",
+                    django.contrib.gis.db.models.fields.PointField(
+                        blank=True,
+                        geography=True,
+                        null=True,
+                        srid=4326,
+                        verbose_name="Location",
+                    ),
+                ),
+                (
+                    "user",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.AlterField(
-            model_name='beneficiary',
-            name='agent',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, to='beneficiary.agent'),
+            model_name="beneficiary",
+            name="agent",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                to="beneficiary.agent",
+            ),
         ),
         migrations.DeleteModel(
-            name='AgentDetail',
+            name="AgentDetail",
         ),
     ]
