@@ -296,7 +296,7 @@ class BeneficiaryDetailView(LoginRequiredMixin, DetailView):
 				services_paginator_list.append(service["service_object"])
 
 
-		service_paginator = Paginator(services["services"], 2)
+		service_paginator = Paginator(services["services"], 5)
 		service_page_number = self.request.GET.get('service_page')
 		service_paginator_list = service_paginator.get_page(service_page_number)
 
