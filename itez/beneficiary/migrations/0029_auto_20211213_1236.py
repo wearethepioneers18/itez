@@ -6,40 +6,23 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("beneficiary", "0028_merge_20211210_1027"),
+        ('beneficiary', '0028_merge_20211210_1027'),
     ]
 
     operations = [
         migrations.AddField(
-            model_name="medicalrecord",
-            name="document",
-            field=models.FileField(
-                blank=True,
-                null=True,
-                upload_to="supporting_documents/%Y/%m/%d/",
-                verbose_name="Supporting Documents",
-            ),
+            model_name='medicalrecord',
+            name='document',
+            field=models.FileField(blank=True, null=True, upload_to='supporting_documents/%Y/%m/%d/', verbose_name='Supporting Documents'),
         ),
         migrations.AlterField(
-            model_name="beneficiary",
-            name="hiv_status",
-            field=models.CharField(
-                blank=True,
-                choices=[
-                    ("positive", "Positive"),
-                    ("negative", "Negative"),
-                    ("unkown", "Uknown"),
-                ],
-                max_length=100,
-                null=True,
-                verbose_name="HIV Status",
-            ),
+            model_name='beneficiary',
+            name='hiv_status',
+            field=models.CharField(blank=True, choices=[('positive', 'Positive'), ('negative', 'Negative'), ('unkown', 'Uknown')], max_length=100, null=True, verbose_name='HIV Status'),
         ),
         migrations.AlterField(
-            model_name="medicalrecord",
-            name="provider_comments",
-            field=models.TextField(
-                blank=True, null=True, verbose_name="Provider Comments"
-            ),
+            model_name='medicalrecord',
+            name='provider_comments',
+            field=models.TextField(blank=True, null=True, verbose_name='Provider Comments'),
         ),
     ]

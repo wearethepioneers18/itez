@@ -24,25 +24,15 @@ from itez.beneficiary.models import Agent
 
 
 class MedicalRecordForm(ModelForm):
-    document = forms.FileField(
-        widget=forms.ClearableFileInput(attrs={"multiple": True})
-    )
+    document = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}))
 
     class Meta:
 
         model = MedicalRecord
         exclude = ["created", "medical_record_id", "beneficiary"]
         widgets = {
-            "interaction_date": widgets.DateInput(
-                format=("%m/%d/%Y"), attrs={"class": "form-control", "type": "date"}
-            ),
-            "provider_comments": forms.TextInput(
-                attrs={
-                    "size": 500,
-                    "title": "Extra notes or comments",
-                    "required": False,
-                }
-            ),
+            'interaction_date': widgets.DateInput(format=('%m/%d/%Y'), attrs={'class':'form-control', 'type':'date'}),
+            'provider_comments': forms.TextInput(attrs={'size': 500, 'title': 'Extra notes or comments',  'required': False}),
             # 'document': forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}))
         }
 

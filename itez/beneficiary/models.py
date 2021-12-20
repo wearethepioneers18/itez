@@ -795,12 +795,6 @@ class MedicalRecord(models.Model):
         Service,
         on_delete=models.CASCADE,
     )
-    service_facility = models.ForeignKey(
-        'Facility',
-        on_delete=models.PROTECT,
-        null=True,
-        blank=True
-    )
     provider_comments = models.TextField(
         _("Provider Comments"),
         null=True,
