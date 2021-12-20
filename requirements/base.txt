@@ -25,6 +25,7 @@ django-import-export==2.5.0
 djangocms-admin-style==2.0.2
 django-celery-results==2.2.0 # https://github.com/celery/django-celery-results
 django-filter==21.1 
+django-notifications-hq==1.6.0 # https://github.com/django-notifications/django-notifications
 
 # Common
 # ------------------------------------------------------------------------------

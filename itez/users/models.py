@@ -57,6 +57,11 @@ class UserManager(BaseUserManager):
 
         return user
 
+class NotificationActive(models.Manager):
+    def get_queryset(self):
+        from datetime import datetime
+        return super(NotificationActive, self).get_queryset().order_by("-date") 
+
 
 class User(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(db_index=True, unique=True, max_length=255)
@@ -67,9 +72,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     date_joined = models.DateTimeField(default=timezone.now)
-
     is_active = models.BooleanField(default=True)
     date = models.DateTimeField(auto_now_add=True)
+    manager_is_active = NotificationActive()
 
     USERNAME_FIELD = "username"
     REQUIRED_FIELDS = []

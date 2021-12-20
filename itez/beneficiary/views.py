@@ -42,6 +42,8 @@ from django.db.models.functions import ExtractYear, ExtractWeek, ExtractMonth
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.paginator import Paginator
 from .tasks import generate_export_file
+from notifications.signals import notify
+
 
 from itez.beneficiary.forms import BeneficiaryForm, MedicalRecordForm
 from itez.users.models import User, Profile
@@ -99,7 +101,6 @@ def index(request):
         "friday": fri_day,
         "saturday": sat_day,
     }
-
     html_template = loader.get_template("home/index.html")
     return HttpResponse(html_template.render(context, request))
 
@@ -333,9 +334,13 @@ def user_events(request):
     p = Paginator(users, 2)
 
     page_obj = p.get_page(page_num)
-    context = {"users_list": page_obj}
+    context = {
+        "users_list": page_obj,
+        "user_manager": User.manager_is_active.get(username=request.user.username)
+        }
 
-    html_template = loader.get_template("home/events.html")
+    notify.send(request.user,  recipient=request.user, verb=f'{request.user.username} accessed events pages', action_object=request)
+    html_template = loader.get_template("home/events.html") 
     return HttpResponse(html_template.render(context, request))
 
 

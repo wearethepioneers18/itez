@@ -4,6 +4,9 @@ from django.contrib import admin
 from django.urls import include, path
 from django.views import defaults as default_views
 
+from django.conf.urls import url
+import notifications.urls
+
 from drf_spectacular.views import (
     SpectacularAPIView, 
     SpectacularRedocView, 
@@ -28,6 +31,7 @@ urlpatterns = [
     path("", include("itez.beneficiary.urls", namespace="beneficiary")),          
     path("", include("itez.authentication.urls")),
     path("", include("itez.users.urls", namespace="user")),
+    path('^inbox/notifications/', include(notifications.urls, namespace='notifications')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 admin.site.site_header = "ITEZ Administration"                   

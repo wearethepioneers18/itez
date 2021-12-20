@@ -1,3 +1,4 @@
+{% load notifications_tags %}
 <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex align-items-top flex-row">
   <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">
     <div class="me-3">
@@ -63,9 +64,22 @@
       
       <li class="nav-item dropdown"> 
         <a class="nav-link count-indicator" id="countDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
-          <i class="icon-bell"></i>
-          <span class="count"></span>
+              {% if user.is_authenticated %}
+        <svg viewBox="0 0 24 24" class="icon-xs img-responsive no-mobile">
+                            <path
+                                d="M21,19V20H3V19L5,17V11C5,7.9 7.03,5.17 10,4.29C10,4.19 10,4.1 10,4A2,2 0 0,1 12,2A2,2 0 0,1 14,4C14,4.1 14,4.19 14,4.29C16.97,5.17 19,7.9 19,11V17L21,19M14,21A2,2 0 0,1 12,23A2,2 0 0,1 10,21">
+                            </path>
+        </svg>
+                        <span class="p-l-2 only-mobile"></span> 
+                        <span id="notifications-count" class="badge-notifications badge badge-pill badge-danger" style="float:right;margin-bottom:-3px;margin-top: -2px !important; margin-left:10px !important; font-size: 0.6rem;">
+                          {% if  user.notifications.read %}
+                          {% live_notify_badge %}
+                          {% endif %}
+                        </span>
         </a>
+         {% else %}
+            ...
+         {% endif %} 
         <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list pb-0" aria-labelledby="countDropdown">
           <a class="dropdown-item py-3">
             <p class="mb-0 font-weight-medium float-left">You have 2 unread notifications </p>
@@ -73,8 +87,17 @@
           </a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item preview-item">
+            <div class="preview-item-content flex-grow py-2">
+              {% for notification in  user.notifications.read %}
+              <div>
+                Entries from <b>{{ notification.actor }}</b>
+                <button class="dropdown-item" type="button">{{ notification.description }}</button>			
+              </div>
+              <div class="dropdown-divider"></div>
+            {% endfor %}
+            </div>
             {% if request.user.profile.profile_photo.url %}
-                  <img width="100" height="100" style="margin-right: 1em;" class="img-md rounded-circle" src="{{request.user.profile.profile_photo.url}}" alt="Profile image">
+                  <img width="50" height="50" style="margin-right: 1em;" class="img-md rounded-circle" src="{{request.user.profile.profile_photo.url}}" alt="Profile image">
               {% elif not request.user.profile_photo.url and request.user.gender == 'Male' %}
                   <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
               {% elif not request.user.profile_photo.url and request.user.gender == 'Female' %}
@@ -82,30 +105,11 @@
               {% else %}
                   <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
               {% endif %}
-            <div class="preview-item-content flex-grow py-2">
-              <p class="preview-subject ellipsis font-weight-medium text-dark">Database Admin </p>
-              <p class="fw-light small-text mb-0"> Added 3 new beneficiaries </p>
-            </div>
-          </a>
-          <a class="dropdown-item preview-item">
-            <div class="preview-thumbnail">
-              {% if request.user.profile.profile_photo.url %}
-                  <img width="100" height="100" style="margin-right: 1em;" class="img-md rounded-circle" src="{{request.user.profile.profile_photo.url}}" alt="Profile image">
-              {% elif not request.user.profile_photo.url and request.user.gender == 'Male' %}
-                  <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
-              {% elif not request.user.profile_photo.url and request.user.gender == 'Female' %}
-                  <img class="img-xs rounded-circle" src="/static/assets/images/faces/female.jpeg" alt="Profile image">
-              {% else %}
-                  <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
-              {% endif %}
-            </div>
-            <div class="preview-item-content flex-grow py-2">
-              <p class="preview-subject ellipsis font-weight-medium text-dark">Report Manager </p>
-              <p class="fw-light small-text mb-0"> Requested a new report generation on benefficiaries </p>
-            </div>
           </a>
         </div>
       </li>
+     
+
       <li class="nav-item dropdown d-none d-lg-block user-dropdown">
         <a class="nav-link" id="UserDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
           {% if request.user.profile.profile_photo.url %}

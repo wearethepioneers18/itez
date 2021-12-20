@@ -12,6 +12,7 @@ from itez.users.models import Profile
 from itez.beneficiary.models import District, Province
 from itez.users.models import EDUCATION_LEVEL, GENDER_CHOICES, SEX_CHOICES
 
+
 User = get_user_model()
 
 

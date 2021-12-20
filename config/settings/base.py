@@ -87,7 +87,9 @@ THIRD_PARTY_APPS = [
     "rolepermissions",
     "drf_spectacular",
     "import_export",
-    "django_celery_results"
+    "django_celery_results",
+    "notifications"
+
 ]
 
 LOCAL_APPS = [
@@ -102,6 +104,9 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 # MIGRATIONS
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#migration-modules
+
+DJANGO_NOTIFICATIONS_CONFIG = { 'USE_JSONFIELD': True}
+
 MIGRATION_MODULES = {"sites": "itez.contrib.sites.migrations"}
 
 # AUTHENTICATION
