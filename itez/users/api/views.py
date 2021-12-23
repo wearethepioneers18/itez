@@ -10,12 +10,17 @@ from rest_framework.mixins import (
     RetrieveModelMixin,
     CreateModelMixin,
     UpdateModelMixin,
-    DestroyModelMixin
+    DestroyModelMixin,
 )
 from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError
 from rest_framework.viewsets import GenericViewSet, ViewSet
-from rest_framework.parsers import MultiPartParser, FormParser, FileUploadParser, JSONParser
+from rest_framework.parsers import (
+    MultiPartParser,
+    FormParser,
+    FileUploadParser,
+    JSONParser,
+)
 
 
 from rolepermissions.roles import assign_role
@@ -24,16 +29,19 @@ from .serializers import (
     UserSerializer,
     ChangePasswordSerializer,
     UserProfileSerializer,
-    UserWorkDetailSerializer
+    UserWorkDetailSerializer,
 )
 
 User = get_user_model()
 
 
 class UserViewSet(
-    GenericViewSet, RetrieveModelMixin, 
-    ListModelMixin, CreateModelMixin, UpdateModelMixin
-    ):
+    GenericViewSet,
+    RetrieveModelMixin,
+    ListModelMixin,
+    CreateModelMixin,
+    UpdateModelMixin,
+):
     permission_classes = (IsAuthenticated,)
     serializer_class = UserSerializer
     queryset = User.objects.all()
@@ -64,25 +72,26 @@ class UserViewSet(
         user = get_object_or_404(User, id=id)
         serializer = UserSerializer(user)
         return Response(serializer.data)
-    
+
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop("partial", True)
         instance = User.objects.get(id=request.data.get("userID"))
-        roles_to_assign = request.data.get("roles", [group.name for group in instance.groups.all()])
+        roles_to_assign = request.data.get(
+            "roles", [group.name for group in instance.groups.all()]
+        )
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
-        
+
         instance.groups.clear()
         for role in roles_to_assign:
             assign_role(instance, role)
-        
+
         self.perform_update(serializer)
 
         if getattr(instance, "_prefetched_objects_cache", None):
             instance._prefetched_objects_cache = {}
 
         return Response(serializer.data, status=status.HTTP_200_OK)
-
 
     @action(detail=True, methods=["get", "put", "patch"])
     def profile(self, request, id=None):
@@ -117,6 +126,7 @@ class ChangePasswordView(UpdateModelMixin, GenericViewSet):
     """
     API end point for changing password on User model.
     """
+
     queryset = User.objects.all()
     permission_classes = (IsAuthenticated,)
     serializer_class = ChangePasswordSerializer
@@ -126,6 +136,7 @@ class RoleAPIView(ViewSet):
     """
     API endpoint to list All available and roles.
     """
+
     def list(self, request):
         roles = RolesManager.get_roles_names()
         return Response({"roles": roles})

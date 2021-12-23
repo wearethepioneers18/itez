@@ -31,8 +31,8 @@ urlpatterns = [
     path("", include("itez.beneficiary.urls", namespace="beneficiary")),          
     path("", include("itez.authentication.urls")),
     path("", include("itez.users.urls", namespace="user")),
-    path('^inbox/notifications/', include(notifications.urls, namespace='notifications')),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path('inbox/notifications/', include(notifications.urls, namespace='notifications')),    # path('^notifications/', include('notifications_rest.urls')),
+ ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 admin.site.site_header = "ITEZ Administration"                   
 admin.site.site_title = "ITEZ Administration" 

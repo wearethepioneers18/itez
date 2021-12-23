@@ -9,27 +9,50 @@ from django.utils.timezone import utc
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('beneficiary', '0001_initial'),
+        ("beneficiary", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='province',
-            options={'ordering': ['-created'], 'verbose_name': 'Province', 'verbose_name_plural': 'Provinces'},
+            name="province",
+            options={
+                "ordering": ["-created"],
+                "verbose_name": "Province",
+                "verbose_name_plural": "Provinces",
+            },
         ),
         migrations.AlterField(
-            model_name='province',
-            name='name',
-            field=models.CharField(default=datetime.datetime(2021, 11, 2, 11, 56, 43, 246031, tzinfo=utc), max_length=255, verbose_name='Province'),
+            model_name="province",
+            name="name",
+            field=models.CharField(
+                default=datetime.datetime(2021, 11, 2, 11, 56, 43, 246031, tzinfo=utc),
+                max_length=255,
+                verbose_name="Province",
+            ),
             preserve_default=False,
         ),
         migrations.CreateModel(
-            name='District',
+            name="District",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=255, verbose_name='District')),
-                ('created', models.DateTimeField(auto_now_add=True)),
-                ('province', models.ForeignKey(default='Lusaka', on_delete=django.db.models.deletion.PROTECT, to='beneficiary.province')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=255, verbose_name="District")),
+                ("created", models.DateTimeField(auto_now_add=True)),
+                (
+                    "province",
+                    models.ForeignKey(
+                        default="Lusaka",
+                        on_delete=django.db.models.deletion.PROTECT,
+                        to="beneficiary.province",
+                    ),
+                ),
             ],
         ),
     ]

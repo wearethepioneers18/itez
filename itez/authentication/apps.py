@@ -6,8 +6,9 @@ class AuthenticationConfig(AppConfig):
     name = "itez.authentication"
     label = "itez"
 
+
 class HomeConfig(AppConfig):
-    name = 'home'
- 
+    name = "home"
+
     def ready(self):
         import home.signals

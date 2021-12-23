@@ -7,29 +7,31 @@
       </button>
     </div>
     <div>
-      <a class="navbar-brand brand-logo" href="/">
-        <!-- <img src="/static/assets/images/logo.svg" alt="logo" /> -->
-      </a>
-      <!-- <a class="navbar-brand brand-logo-mini" href="/">
-        <img src="/static/assets/images/logo-mini.svg" alt="logo" />
-      </a> -->
       <a href="/" style="text-decoration: none;">
         <h2 style="padding-left:0.3em"><b>ITEZ</b></h2>
       </a>
     </div>
   </div>
-  <div class="navbar-menu-wrapper d-flex align-items-top"> 
+  <div class="navbar-menu-wrapper d-flex align-items-top">
     <ul class="navbar-nav">
       <li class="nav-item font-weight-semibold d-none d-lg-block ms-0">
-        <h1 class="welcome-text">Hello, <span class="text-black fw-bold">{{ request.user.first_name|title }} {{ request.user.last_name|title }}</span></h1>
-        <h3 class="welcome-sub-text">Beneficiary analytics this week </h3>
+        <h1 class="welcome-text">Hello, <span class="text-black fw-bold">
+          {% if not request.user.first_name and not request.user.last_name %}
+            {{ request.user.username }}
+          {% else %}
+            {{ request.user.first_name|title }}
+            {{ request.user.last_name|title }}</span></h1>
+          {% endif %}
+            <h3 class="welcome-sub-text">Beneficiary analytics this week </h3>
       </li>
     </ul>
     <ul class="navbar-nav ms-auto">
       <li class="nav-item dropdown d-none d-lg-block">
-        <a class="nav-link dropdown-bordered dropdown-toggle dropdown-toggle-split" id="messageDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false"> Select Service Type </a>
-        <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list pb-0" aria-labelledby="messageDropdown">
-          <a class="dropdown-item py-3" >
+        <a class="nav-link dropdown-bordered dropdown-toggle dropdown-toggle-split" id="messageDropdown" href="#"
+          data-bs-toggle="dropdown" aria-expanded="false"> Select Service Type </a>
+        <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list pb-0"
+          aria-labelledby="messageDropdown">
+          <a class="dropdown-item py-3">
             <p class="mb-0 font-weight-medium float-left">Service Types</p>
           </a>
           <div class="dropdown-divider"></div>
@@ -63,86 +65,94 @@
       </li>
       
       <li class="nav-item dropdown"> 
-        <a class="nav-link count-indicator" id="countDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
-              {% if user.is_authenticated %}
-        <svg viewBox="0 0 24 24" class="icon-xs img-responsive no-mobile">
-                            <path
-                                d="M21,19V20H3V19L5,17V11C5,7.9 7.03,5.17 10,4.29C10,4.19 10,4.1 10,4A2,2 0 0,1 12,2A2,2 0 0,1 14,4C14,4.1 14,4.19 14,4.29C16.97,5.17 19,7.9 19,11V17L21,19M14,21A2,2 0 0,1 12,23A2,2 0 0,1 10,21">
-                            </path>
-        </svg>
-                        <span class="p-l-2 only-mobile"></span> 
-                        <span id="notifications-count" class="badge-notifications badge badge-pill badge-danger" style="float:right;margin-bottom:-3px;margin-top: -2px !important; margin-left:10px !important; font-size: 0.6rem;">
-                          {% if  user.notifications.read %}
-                          {% live_notify_badge %}
-                          {% endif %}
-                        </span>
-        </a>
-         {% else %}
-            ...
-         {% endif %} 
+      <a class=nav-link text-dark notification-bell unread dropdown-toggle" data-unread-notifications="true" href="#" role="button" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">              
+        <div class="dropdown-toggle" data-unread-notifications="">
+        {% if user.is_authenticated %}
+        <svg class="icon icon-sm text-gray-900" fill="white" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"></path></svg>
+              <span id="notifications-count" class="badge-notifications badge badge-danger">
+                {% if  user.notifications.unread %}
+                  {% live_notify_badge %}
+                {% endif %}
+                {% else %}
+                ...
+                {% endif %} 
+              </span>
+             
+      </a>
         <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list pb-0" aria-labelledby="countDropdown">
           <a class="dropdown-item py-3">
-            <p class="mb-0 font-weight-medium float-left">You have 2 unread notifications </p>
+            <p class="mb-0 font-weight-bold float-left">You have 2 unread notifications </p>
             <span class="badge badge-pill badge-primary float-right">View all</span>
           </a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item preview-item">
             <div class="preview-item-content flex-grow py-2">
-              {% for notification in  user.notifications.read %}
-              <div>
-                Entries from <b>{{ notification.actor }}</b>
-                <button class="dropdown-item" type="button">{{ notification.description }}</button>			
-              </div>
-              <div class="dropdown-divider"></div>
-            {% endfor %}
-            </div>
-            {% if request.user.profile.profile_photo.url %}
-                  <img width="50" height="50" style="margin-right: 1em;" class="img-md rounded-circle" src="{{request.user.profile.profile_photo.url}}" alt="Profile image">
-              {% elif not request.user.profile_photo.url and request.user.gender == 'Male' %}
+              {% for notification in  user.notifications.unread %}
+              <p class="preview-subject ellipsis font-weight-medium text-dark">  
+              <div style="float: left; -10px;">
+                {% if request.user.profile.profile_photo %}
+                  <img width="30" height="30" style="float:left;" class="img-md rounded-circle" src="{{request.user.profile.profile_photo.url}}" alt="Profile image">
+              {% elif not request.user.profile_photo and request.user.gender == 'Male' %}
                   <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
-              {% elif not request.user.profile_photo.url and request.user.gender == 'Female' %}
+              {% elif not request.user.profile_photo and request.user.gender == 'Female' %}
                   <img class="img-xs rounded-circle" src="/static/assets/images/faces/female.jpeg" alt="Profile image">
               {% else %}
                   <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
-              {% endif %}
+              {% endif %} 
+              </div>
+              <div style="align-content: center;overflow: hidden; white-space: nowrap; text-overflow: ellipsis; white-space: initial; max-width: 75%; margin-left: 8px;">{{ notification }}</div>
+              <span style="float:right; margin-top: -20px;"  id="{{notification.slug}}">&times;</span>
+              </p>
+              <script>
+                  document.getElementById('{{notification.slug}}').addEventListener("click", function() {
+                    const host = location.origin
+                    fetch(`${host}/inbox/notifications/mark-as-read/{{notification.slug}}`).then((res) => console.log(res))
+                  });
+                </script>
+                {% endfor %}
+            </div>
           </a>
         </div>
       </li>
-     
-
       <li class="nav-item dropdown d-none d-lg-block user-dropdown">
         <a class="nav-link" id="UserDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
-          {% if request.user.profile.profile_photo.url %}
-              <img width="40" height="40" style="margin-right: 1em;" class="img-md rounded-circle" src="{{request.user.profile.profile_photo.url}}" alt="Profile image">
-          {% elif not request.user.profile_photo.url and request.user.gender == 'Male' %}
-              <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
-          {% elif not request.user.profile_photo.url and request.user.gender == 'Female' %}
-              <img class="img-xs rounded-circle" src="/static/assets/images/faces/female.jpeg" alt="Profile image">
+          {% if request.user.profile.profile_photo %}
+          <img width="40" height="40" style="margin-right: 1em;" class="img-md rounded-circle"
+            src="{{ request.user.profile.profile_photo }}" alt="Profile image">
+          {% elif not request.user.profile_photo and request.user.gender == 'Male' %}
+          <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
+          {% elif not request.user.profile_photo and request.user.gender == 'Female' %}
+          <img class="img-xs rounded-circle" src="/static/assets/images/faces/female.jpeg" alt="Profile image">
           {% else %}
-              <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
+          <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
           {% endif %}
-        
+
           <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="UserDropdown">
-          <div class="dropdown-header text-center">
-            {% if request.user.profile.profile_photo.url %}
-              <img width="100" height="100" style="margin-right: 1em;" class="img-md rounded-circle" src="{{request.user.profile.profile_photo.url}}" alt="Profile image">
-            {% elif not request.user.profile_photo.url and request.user.gender == 'Male' %}
-                <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
-            {% elif not request.user.profile_photo.url and request.user.gender == 'Female' %}
-                <img class="img-xs rounded-circle" src="/static/assets/images/faces/female.jpeg" alt="Profile image">
-            {% else %}
-                <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
-            {% endif %}
-            <p class="mb-1 mt-3 font-weight-semibold">{{ request.user.first_name|title }} {{ request.user.last_name|title }}</p>
-            <p class="fw-light text-muted mb-0">{{request.user.username}}</p>
+            <div class="dropdown-header text-center">
+              {% if request.user.profile.profile_photo %}
+              <img width="100" height="100" style="margin-right: 1em;" class="img-md rounded-circle"
+                src="{{ request.user.profile.profile_photo.url }}" alt="Profile image">
+              {% elif not request.user.profile_photo and request.user.gender == 'Male' %}
+              <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
+              {% elif not request.user.profile_photo and request.user.gender == 'Female' %}
+              <img class="img-xs rounded-circle" src="/static/assets/images/faces/female.jpeg" alt="Profile image">
+              {% else %}
+              <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
+              {% endif %}
+              <p class="mb-1 mt-3 font-weight-semibold">
+                {{ request.user.first_name|title }}
+                {{ request.user.last_name|title }}</p>
+              <p class="fw-light text-muted mb-0">{{ request.user.username }}</p>
+            </div>
+            <a class="dropdown-item" href="{% url 'user:profile' %}"><i
+                class="dropdown-item-icon mdi mdi-account-outline text-primary me-2"></i> My Profile</a>
+            <a href="{% url 'logout' %}" class="dropdown-item">
+              <i class="dropdown-item-icon mdi mdi-power text-primary me-2"></i>Sign Out</a>
           </div>
-          <a class="dropdown-item" href="{% url 'user:profile' %}"><i class="dropdown-item-icon mdi mdi-account-outline text-primary me-2"></i> My Profile</a>
-          <a href="{% url 'logout' %}" class="dropdown-item">
-            <i class="dropdown-item-icon mdi mdi-power text-primary me-2"></i>Sign Out</a>
-        </div>
       </li>
     </ul>
-    <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-bs-toggle="offcanvas">
+    <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
+      data-bs-toggle="offcanvas">
       <span class="mdi mdi-menu"></span>
     </button>
   </div>

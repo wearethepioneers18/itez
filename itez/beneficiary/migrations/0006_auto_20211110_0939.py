@@ -9,28 +9,39 @@ import uuid
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('beneficiary', '0005_auto_20211107_2037'),
+        ("beneficiary", "0005_auto_20211107_2037"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='agentdetail',
-            name='agend_ID',
-            field=models.CharField(default='38E4BBC', max_length=100, verbose_name='Agent Id'),
+            model_name="agentdetail",
+            name="agend_ID",
+            field=models.CharField(
+                default="38E4BBC", max_length=100, verbose_name="Agent Id"
+            ),
         ),
         migrations.AlterField(
-            model_name='beneficiary',
-            name='agent_ID',
-            field=models.ForeignKey(default='1088847', on_delete=django.db.models.deletion.PROTECT, to='beneficiary.agentdetail'),
+            model_name="beneficiary",
+            name="agent_ID",
+            field=models.ForeignKey(
+                default="1088847",
+                on_delete=django.db.models.deletion.PROTECT,
+                to="beneficiary.agentdetail",
+            ),
         ),
         migrations.AlterField(
-            model_name='beneficiary',
-            name='beneficiary_ID',
-            field=models.UUIDField(default=uuid.UUID('be6850e2-aef9-478e-9e4b-7c0771b23bdc'), editable=False),
+            model_name="beneficiary",
+            name="beneficiary_ID",
+            field=models.UUIDField(
+                default=uuid.UUID("be6850e2-aef9-478e-9e4b-7c0771b23bdc"),
+                editable=False,
+            ),
         ),
         migrations.AlterField(
-            model_name='beneficiary',
-            name='profile_photo',
-            field=imagekit.models.fields.ProcessedImageField(blank=True, null=True, upload_to='profile_photo'),
+            model_name="beneficiary",
+            name="profile_photo",
+            field=imagekit.models.fields.ProcessedImageField(
+                blank=True, null=True, upload_to="profile_photo"
+            ),
         ),
     ]

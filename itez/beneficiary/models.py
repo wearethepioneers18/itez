@@ -21,12 +21,44 @@ SEX_CHOICES = (
     ("Male", _("Male")),
     ("Female", _("Female"))
 )
+EDUCATION_LEVEL = (
+    ("none", _("None")),
+    ("primary", _("Primary")),
+    ("basic", _("Basic")),
+    ("secondary", _("Secondary O'Level")),
+    ("certificate", _("Certificate")),
+    ("diploma", _("Diploma")),
+    ("degree", _("Degree")),
+    ("masters", _("Masters")),
+    ("doctrate", _("Doctrate")),
+    ("phd", _("PHD")),
+)
 
+ART_STATUS_CHOICES = (
+    ("Enrolled", _("Enrolled")),
+    ("Not Enrolled", _("Not Enrolled")),
+)
+HIV_STATUS_CHOICES = (
+    ("Positive", _("Positive")),
+    ("Negative", _("Negative")),
+)
 
-class AgentDetail(models.Model):
+MARITAL_STATUS = (
+    ("single", _("Single")),
+    ("married", _("Married")),
+    ("seperated", _("Seperated")),
+    ("divorced", _("Divorced")),
+    ("widowed", _("Widowed")),
+)
+
+class Agent(models.Model):
     """
     Create agent detail table with its attributes or columns.
     """
+    user = models.OneToOneField(
+        'users.User',
+        on_delete=models.CASCADE
+    )
 
     first_name = models.CharField(
         _("First Name"),
@@ -35,7 +67,7 @@ class AgentDetail(models.Model):
         blank=True
     )
     last_name = models.CharField(
-        _("Second Name"),
+        _("Last Name"),
         max_length=200,
         null=False
     )
@@ -66,6 +98,9 @@ class AgentDetail(models.Model):
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
 
+    def get_absolute_url(self):
+        return reverse('beneficiary:agent_detail', kwargs={'pk': self.pk})
+
 
 class Beneficiary(models.Model):
     """
@@ -75,7 +110,6 @@ class Beneficiary(models.Model):
         ("Enrolled", _("Enrolled")),
         ("Not Enrolled", _("Not Enrolled")),
     )
-    
     HIV_STATUS_CHOICES = (
         ("Positive", _("Positive")),
         ("Negative", _("Negative")),
@@ -87,6 +121,12 @@ class Beneficiary(models.Model):
         ("seperated", _("Seperated")),
         ("divorced", _("Divorced")),
         ("widowed", _("Widowed")),
+    )
+
+    HIV_STATUS = (
+        ("positive", _("Positive")),
+        ("negative", _("Negative")),
+        ("unkown", _("Uknown")),
     )
 
     EDUCATION_LEVEL = (
@@ -165,13 +205,13 @@ class Beneficiary(models.Model):
     )
     hiv_status = models.CharField(
         _("HIV Status"),
-        max_length=10,
-        choices=HIV_STATUS_CHOICES,
+        choices=HIV_STATUS,
+        max_length=100,
         null=True,
         blank=True,
     )
     agent = models.ForeignKey(
-        AgentDetail,
+        Agent,
         on_delete=models.PROTECT,
         null=True,
         blank=True
@@ -231,7 +271,7 @@ class Beneficiary(models.Model):
     class Meta:
         verbose_name = "Beneficiary"
         verbose_name_plural = "Beneficiaries"
-        ordering = ["created"]
+        ordering = ["-created"]
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
@@ -240,7 +280,7 @@ class Beneficiary(models.Model):
         """
         Calculates the Beneficiaries age from birth date.
         """
-        days_in_year = 365.2425   
+        days_in_year = 365.2425
         age = int((datetime.date.today() - self.date_of_birth).days / days_in_year)
         return age
 
@@ -252,10 +292,8 @@ class Beneficiary(models.Model):
         time_diff = datetime.datetime.now(timezone.utc) - datetime.timedelta(hours=1)
         return Beneficiary.objects.filter(created__gt=time_diff).count()
 
-
-    def  get_absolute_url(self):
+    def get_absolute_url(self):
         return reverse('beneficiary:details', kwargs={'pk': self.pk})
- 
 
 
 class BeneficiaryParent(models.Model):
@@ -325,6 +363,7 @@ class BeneficiaryParent(models.Model):
             Father: {self.father_first_name} {self.father_last_name}, \
             Mother: {self.mother_first_name} {self.mother_last_name}"
 
+
 class Province(models.Model):
     """
     Implements province properties and required methods.
@@ -349,7 +388,7 @@ class District(models.Model):
     """
 
     name = models.CharField(
-        _("District"), 
+        _("District"),
         max_length=255
     )
 
@@ -370,12 +409,12 @@ class ServiceArea(models.Model):
     """
 
     name = models.CharField(
-        _("Service Area"), 
+        _("Service Area"),
         max_length=200
     )
 
     district = models.ForeignKey(
-        District, 
+        District,
         on_delete=models.PROTECT
     )
 
@@ -386,6 +425,7 @@ class ServiceArea(models.Model):
     def __str__(self):
         return self.name
 
+
 class WorkDetail(models.Model):
     """
     Include Work Detail properties.
@@ -394,7 +434,7 @@ class WorkDetail(models.Model):
     gross_pay = models.DecimalField(
         _("Monthly Salary"),
         decimal_places=2,
-  
+
         max_digits=1000,
         null=False
     )
@@ -427,12 +467,14 @@ NGO = 1
 COMPANY = 2
 GOVERNMENT = 3
 OTHER = 4
-IP_TYPES =  (
+IP_TYPES = (
     (NGO, _('Non-Profit Organization')),
     (COMPANY, _('Company')),
     (GOVERNMENT, _('Government')),
     (OTHER, _('Other')),
 )
+
+
 class ImplementingPartner(models.Model):
     name = models.CharField(
         _('Name'),
@@ -453,6 +495,7 @@ class ImplementingPartner(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class FacilityType(models.Model):
     name = models.CharField(
@@ -524,12 +567,15 @@ class Facility(models.Model):
     def __str__(self):
         return str(self.name)
 
+
 class ServiceProviderPersonelQualification(models.Model):
     name = models.CharField(
         max_length=200
     )
+
     def __str__(self):
         return self.name
+
 
 class ServiceProviderPersonel(models.Model):
     first_name = models.CharField(
@@ -557,12 +603,14 @@ class ServiceProviderPersonel(models.Model):
         blank=True,
         on_delete=models.SET_NULL
     )
+
     class Meta:
         verbose_name = _("Service Provider")
         verbose_name_plural = _("Service Providers")
-    
+
     def __str__(self):
         return f"Service Provider: {self.first_name} {self.last_name}"
+
 
 class Drug(models.Model):
     """
@@ -591,7 +639,7 @@ class Drug(models.Model):
         blank=True
     )
     created = models.DateTimeField(auto_now_add=True)
-    
+
     def __str__(self):
         return self.name
 
@@ -618,13 +666,15 @@ class Prescription(models.Model):
         _("Extra Details/Comment"),
         null=True,
         blank=True
-    )
+    ) 
+
     class Meta:
         verbose_name = _("Prescription")
         verbose_name_plural = _("Prescriptions")
-    
+
     def __str__(self):
         return f"{self.title}"
+
 
 class Lab(models.Model):
     """
@@ -656,28 +706,29 @@ class Lab(models.Model):
         _("Extra Details/Comment"),
         null=True,
         blank=True
-    )
+    )   
+    
     created = models.DateTimeField(auto_now_add=True)
+
     class Meta:
         verbose_name = _("Lab")
         verbose_name_plural = _("Labs")
-    
+
     def __str__(self):
         return f"Lab: {self.title}"
 
 
-SERVICE_TYPES =  (
+SERVICE_TYPES = (
     ("HTS", _('HTS (HIV Testing Services)')),
     ("LAB", _('LAB')),
     ("PHARMACY", _('PHARMACY')),
 )
 
 
-CLIENT_TYPES =  (
+CLIENT_TYPES = (
     ("OPD", _('OPD (Outpatient Departments )')),
     ("ART", _('ART (Antiretroviral Therapy)')),
 )
-
 
 class Service(models.Model):
     """
@@ -723,12 +774,14 @@ class Service(models.Model):
         blank=True,
         help_text=_("Extra comments if any."),
     )
+
     class Meta:
         verbose_name = 'Service'
         verbose_name_plural = 'Services'
 
     def __str__(self):
         return self.title
+
 
 class MedicalRecord(models.Model):
     """
@@ -741,7 +794,7 @@ class MedicalRecord(models.Model):
     service = models.ForeignKey(
         Service,
         on_delete=models.CASCADE,
-    )    
+    )
     service_facility = models.ForeignKey(
         'Facility',
         on_delete=models.PROTECT,
@@ -749,7 +802,7 @@ class MedicalRecord(models.Model):
         blank=True
     )
     provider_comments = models.TextField(
-        _("Extra Details/Comment"),
+        _("Provider Comments"),
         null=True,
         blank=True
     )
@@ -781,14 +834,21 @@ class MedicalRecord(models.Model):
         blank=True,
         on_delete=models.CASCADE
     )
+    document = models.FileField(
+        _("Supporting Documents"),
+        null=True,
+        blank=True,
+        upload_to="supporting_documents/%Y/%m/%d/"
+    )
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name = _("Medical Record")
         verbose_name_plural = _("Medical Records")
-    
+        ordering = ['-created']
+
     def __str__(self):
         return f"Medical Record for: {self.beneficiary}, service: {self.service}"
     
     def  get_absolute_url(self):
-        return reverse('beneficiary:detail', kwargs={'pk': self.beneficiary.pk})
+        return reverse('beneficiary:details', kwargs={'pk': self.beneficiary.pk})
