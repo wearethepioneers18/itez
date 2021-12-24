@@ -41,3 +41,4 @@ django-cors-headers==3.10.0 # https://github.com/adamchainz/django-cors-headers
 djangorestframework-simplejwt==5.0.0  # https://github.com/jazzband/djangorestframework-simplejwt
 drf-spectacular==0.20.2     # https://drf-spectacular.readthedocs.io/en/latest/index.html
 PyJWT==2.1.0
+fpdf2==2.4.6  # https://pyfpdf.github.io/fpdf2/

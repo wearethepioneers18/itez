@@ -9,9 +9,7 @@ from itez.beneficiary.models import (
     ServiceArea,
     WorkDetail,
     Drug,
-    Lab,
     Service,
-    Prescription,
     Facility,
     FacilityType,
     ImplementingPartner,
@@ -30,17 +28,6 @@ class DrugSerializer(serializers.ModelSerializer):
         model = Drug
         fields = "__all__"
 
-
-class LabSerializer(serializers.ModelSerializer):
-    """
-    Lab serializer.
-    """
-
-    class Meta:
-        model = Lab
-        fields = "__all__"
-
-
 class ServiceSerializer(serializers.ModelSerializer):
     """
     Service serializer.
@@ -49,17 +36,6 @@ class ServiceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Service
         fields = "__all__"
-
-
-class PrescriptionSerializer(serializers.ModelSerializer):
-    """
-    Prescription serializer.
-    """
-
-    class Meta:
-        model = Prescription
-        fields = "__all__"
-
 
 class FacilityTypeSerializer(serializers.ModelSerializer):
     """

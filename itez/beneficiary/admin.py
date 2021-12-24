@@ -2,11 +2,9 @@ from django.contrib import admin
 from django.contrib.gis.db import models
 from itez.beneficiary.models import (
     MedicalRecord,
-    Lab,
     Drug,
     Province,
     District,
-    Prescription,
     ServiceArea,
     WorkDetail,
     Agent,
@@ -26,24 +24,6 @@ from import_export.admin import ImportExportModelAdmin
 from mapwidgets.widgets import GooglePointFieldWidget
 
 
-class LabResource(resources.ModelResource):
-    class Meta:
-        model = Lab
-
-
-@admin.register(Lab)
-class LabAdmin(ImportExportModelAdmin):
-    resource_class = LabResource
-
-    list_display = ("title", "requested_date")
-
-    search_fields = (
-        "title",
-        "facility__name",
-        "beneficiary__beneficiary_id",
-    )
-
-
 class DrugResource(resources.ModelResource):
     class Meta:
         model = Drug
@@ -59,19 +39,6 @@ class DrugAdmin(ImportExportModelAdmin):
         "name",
         "beneficiary__beneficiary_id",
     )
-
-
-class PrescriptionResource(resources.ModelResource):
-    class Meta:
-        model = Prescription
-
-
-@admin.register(Prescription)
-class PrescriptionAdmin(ImportExportModelAdmin):
-    resource_class = PrescriptionResource
-    list_display = ("title", "date")
-
-    search_fields = ("title",)
 
 
 class ServiceResource(resources.ModelResource):
@@ -225,7 +192,7 @@ class MedicalRecordAdmin(admin.ModelAdmin):
         "service",
         "prescription",
         "lab",
-        "service_facility",
+        "service"
     ]
 
     list_filter = [

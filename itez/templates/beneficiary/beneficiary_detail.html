@@ -315,7 +315,6 @@
               align-items-center
               justify-content-between
               py-2
-              
             "
           >
             <div class="d-flex">
@@ -338,7 +337,7 @@
 				<div class="d-flex justify-content-between">	<h2 class="mt-1">
 					Last Visit
 				</h2>
-				<button class="btn btn-primary btn-sm text-white" style="border-radius: 2px;">Download</button>
+				<button id="download-medical-report-button" class="btn btn-primary btn-sm text-white" style="border-radius: 2px;">Download</button>
 			</div>
 					<div class="card" style="margin-top: 10px; 
 					border-radius: 2px;
@@ -419,8 +418,7 @@
 
 <script src="/static/assets/js/dashboard.js"></script>
 <script src="/static/assets/js/Chart.roundedBarCharts.js"></script>
-<script>
-	$('.collapse').collapse()
+<script src="/static/assets/js/medical_report_download.js">
 </script>
 
 {% endblock javascripts %}

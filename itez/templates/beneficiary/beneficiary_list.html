@@ -62,9 +62,9 @@
                             </div></div>
 
                             <div>
-                            	<button id="download-report-button" type="button" class="btn btn-success btn-icon-text btn-lg text-white mb-0 me-0" data-toggle="tooltip" title="Download Records">
+                            	<button type="button" class="btn btn-success btn-icon-text btn-lg text-white mb-0 me-0" data-toggle="tooltip" title="Download Records">
                                 {% comment %} <i class="fa fa-circle-o-notch fa-spin px-2"></i> {% endcomment %}
-                                <i id="download-icon" class="mdi mdi-download"></i>
+                                <i id="download-report-button" class="mdi mdi-download"></i>
                                             </button>
                                             <button class="btn btn-primary btn-lg text-white mb-0 me-0" type="button">                             
                                                 <a href="{% url 'beneficiary:create' %}" class="text-white" style="text-decoration: none;" data-toggle="tooltip" title="Add Beneficiary">
@@ -236,56 +236,16 @@
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
 
-<script src="/static/assets/js/dashboard.js"></script>
-<script src="/static/assets/js/Chart.roundedBarCharts.js"></script>
-<script src="/static/assets/js/modal.js"></script>
-<script src="/static/assets/js/datatables.min.js"></script>
+  <script src="/static/assets/js/dashboard.js"></script>
+  <script src="/static/assets/js/Chart.roundedBarCharts.js"></script>
+  <script src="/static/assets/js/modal.js"></script>        
 
-
-<script>
-  $('#download-report-button').on('click', function (e) {
-    e.preventDefault();
-
-    $.notifyBar({ cssClass: "success", html: "Your request is being processed. You download will start automatically once the file is ready ...", delay: 5000 });
-    // see the URL Setup for where this url came from
-    const url = 'export_beneficiary_data';
-    $.get(url)
-      .done(function pollAsyncResults(data) {
-        $('#download-report-button').addClass('buttonload disabled').html('Processing');
-        // bind pollAsyncResults to itself to avoid clashing with 
-        // the prior get request
-        context: this
-        // see the URL setup for where this url came from
-        const pollAsyncUrl = `poll_async_results/${data.task_id}`
-        $.get(pollAsyncUrl)
-          .done(function (asyncData, status, xhr) {
-            context: this
-            // if the status doesn't respond with 202, that means 
-            // that the task finished successfully
-            if (asyncData.state === "SUCCESS") {
-              // stop making get requests to pollAsyncResults
-              clearTimeout(pollAsyncResults);
-              $('#download-report-button').removeClass('buttonload disabled');
-              $('#download-icon').removeClass('fa fa-circle-o-notch fa-spin px-2').addClass('mdi mdi-download');
-              // add a message, modal, or something to show the user 
-              // that there was an error the error in this case 
-              // would be related to the asynchronous task's
-              // error message
-            })
-        })
-        .fail(function(xhr, status, error) {
-          // add a message, modal, or something to show the user 
-          // that there was an error
-          // The error in this case would be related to the main 
-          // function that makes a request to start the async task
-        })
-    })
+  <script src="/static/assets/js/download_beneficiary_data.js">
   </script>
   <script>
     $(document).ready(function(){
       $('[data-toggle="tooltip"]').tooltip();
     });
-    </script>
-
-	
+  });
+</script>
 {% endblock javascripts %}

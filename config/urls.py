@@ -12,8 +12,6 @@ from drf_spectacular.views import (
 
 from itez.beneficiary.api.views import (
     DrugAPIView,
-    LabAPIView,
-    PrescriptionAPIView,
     FacilityAPIView,
     FacilityTypeAPIView,
     ImplementingPartnerAPIView,
@@ -47,11 +45,6 @@ urlpatterns += [
 
     # Additional APIViews
     path(
-        "lab/", 
-        LabAPIView.as_view(), 
-        name='lab'
-        ),
-    path(
         "drug/", 
         DrugAPIView.as_view(), 
         name='drug'
@@ -65,11 +58,6 @@ urlpatterns += [
         "facility/", 
         FacilityAPIView.as_view(), 
         name='facility'
-        ),
-    path(
-        "prescription/", 
-        PrescriptionAPIView.as_view(), 
-        name='prescription'
         ),
     path(
         "facility_type/", 

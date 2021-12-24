@@ -1,5 +1,5 @@
 import datetime
-
+import json
 from django.urls import reverse
 from django.utils import timezone
 from django.contrib.gis.db import models
@@ -232,7 +232,7 @@ class Beneficiary(models.Model):
         blank=True
     )
     name_of_spouse = models.CharField(
-        _("Phone Number"),
+        _("Name of Spouse"),
         max_length=200,
         null=True,
         blank=True
@@ -644,80 +644,6 @@ class Drug(models.Model):
         return self.name
 
 
-class Prescription(models.Model):
-    """
-    Beneficiary health Facility Prescription data.
-    """
-    title = models.CharField(
-        _("Prescription Title"),
-        max_length=200,
-        null=True,
-        blank=True
-    )
-    drugs = models.ManyToManyField(
-        Drug
-    )
-    date = models.DateTimeField(
-        auto_now_add=False,
-        null=True,
-        blank=True
-    )
-    comment = models.TextField(
-        _("Extra Details/Comment"),
-        null=True,
-        blank=True
-    ) 
-
-    class Meta:
-        verbose_name = _("Prescription")
-        verbose_name_plural = _("Prescriptions")
-
-    def __str__(self):
-        return f"{self.title}"
-
-
-class Lab(models.Model):
-    """
-    Beneficiary's Lab Tests.
-    """
-    title = models.CharField(
-        _("Lab Diagnosis Title"),
-        max_length=200,
-        null=True,
-        blank=True
-    )
-    results = models.TextField(
-        _("Lab Results"),
-        null=True,
-        blank=True
-    )
-    results_status = models.CharField(
-        _("Lab Results Status"),
-        max_length=200,
-        null=True,
-        blank=True
-    )
-    requested_date = models.DateTimeField(
-        auto_now_add=False,
-        null=True,
-        blank=True
-    )
-    comment = models.TextField(
-        _("Extra Details/Comment"),
-        null=True,
-        blank=True
-    )   
-    
-    created = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        verbose_name = _("Lab")
-        verbose_name_plural = _("Labs")
-
-    def __str__(self):
-        return f"Lab: {self.title}"
-
-
 SERVICE_TYPES = (
     ("HTS", _('HTS (HIV Testing Services)')),
     ("LAB", _('LAB')),
@@ -758,11 +684,12 @@ class Service(models.Model):
         blank=True,
         choices=SERVICE_TYPES
     )
-    document = models.FileField(
-        _("Supporting Document"),
+    documents = models.CharField(
+        max_length=300,
         null=True,
         blank=True,
-        upload_to="lab_documents/%Y/%m/%d/"
+        editable=False,
+        help_text="A string representing a path to a directory where supporting documents are saved."
     )
     datetime = models.DateTimeField(
         auto_now_add=True
@@ -795,6 +722,12 @@ class MedicalRecord(models.Model):
         Service,
         on_delete=models.CASCADE,
     )
+    service_facility = models.ForeignKey(
+        'Facility',
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True
+    )
     provider_comments = models.TextField(
         _("Provider Comments"),
         null=True,
@@ -805,11 +738,10 @@ class MedicalRecord(models.Model):
         null=True,
         blank=True
     )
-    prescription = models.ForeignKey(
-        Prescription,
+    prescription = models.TextField(
+        _("Prescription Comments"),
         null=True,
-        blank=True,
-        on_delete=models.CASCADE
+        blank=True
     )
     no_of_days = models.IntegerField(
         _("No of Days"),
@@ -822,17 +754,27 @@ class MedicalRecord(models.Model):
         null=True,
         blank=True
     )
-    lab = models.ForeignKey(
-        Lab,
+    lab = models.TextField(
+        _("Lab Comments"),
         null=True,
-        blank=True,
-        on_delete=models.CASCADE
+        blank=True
     )
-    document = models.FileField(
-        _("Supporting Documents"),
+    documents = models.CharField(
+        max_length=300,
         null=True,
         blank=True,
-        upload_to="supporting_documents/%Y/%m/%d/"
+        editable=False,
+        help_text="A jsonified object containing meta data where documents are stored."
+    )
+    approved_by = models.CharField(_("Approved by"), max_length=200, help_text="Name of senior doctor or other official approving this medical record.")
+    approver_signature = ProcessedImageField(
+        upload_to='other',
+        processors=[ResizeToFill(512, 512)],
+        format='JPEG',
+        options={'quality': 100},
+        null=True,
+        blank=True,
+        help_text="An image containing the signature of the approver."
     )
     created = models.DateTimeField(auto_now_add=True)
 
@@ -846,3 +788,6 @@ class MedicalRecord(models.Model):
     
     def  get_absolute_url(self):
         return reverse('beneficiary:details', kwargs={'pk': self.beneficiary.pk})
+
+    def get_files_dict(self):
+        return json.loads(self.documents)
