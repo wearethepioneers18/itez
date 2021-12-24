@@ -512,13 +512,13 @@ class BeneficiaryDetailView(LoginRequiredMixin, DetailView):
         services = {"services": []}
 
         latest_beneficiary_service = {
-            "service_name": latest_beneficiary_medical_record.service,
-            "service_facility": latest_beneficiary_medical_record.service_facility,
-            "interaction_date": latest_beneficiary_medical_record.interaction_date,
-            "service_provider": service_provider_name,
-            "service_provider_comments": latest_beneficiary_medical_record.provider_comments,
-            "prescription": latest_beneficiary_medical_record.prescription.title,
-            "when_to_take": latest_beneficiary_medical_record.when_to_take,
+            "service_name": latest_beneficiary_medical_record.service or "",
+            "service_facility": latest_beneficiary_medical_record.service_facility or "",
+            "interaction_date": latest_beneficiary_medical_record.interaction_date or "",
+            "service_provider": service_provider_name or "",
+            "service_provider_comments": latest_beneficiary_medical_record.provider_comments or "",
+            "prescription": latest_beneficiary_medical_record.prescription.title or "",
+            "when_to_take": latest_beneficiary_medical_record.when_to_take or "",
         }
 
         # Get all services for the beneficiary
@@ -531,10 +531,10 @@ class BeneficiaryDetailView(LoginRequiredMixin, DetailView):
 
             services["services"].append(
                 {
-                    "service_object": medical_record.service,
-                    "service_facility": medical_record.service_facility,
-                    "service_provider": service_personnel_name,
-                    "service_comments": medical_record.provider_comments,
+                    "service_object": medical_record.service or "",
+                    "service_facility": medical_record.service_facility or "",
+                    "service_provider": service_personnel_name or "",
+                    "service_comments": medical_record.provider_comments or "",
                 }
             )
 
