@@ -489,20 +489,28 @@ class BeneficiaryDetailView(LoginRequiredMixin, DetailView):
         context = super(BeneficiaryDetailView, self).get_context_data(**kwargs)
         current_beneficiary_id = self.kwargs.get("pk")
         current_beneficiary = Beneficiary.objects.get(id=current_beneficiary_id)
-        beneficiary_medical_records = MedicalRecord.objects.filter(
-            beneficiary__id=current_beneficiary_id
-        )
-        latest_beneficiary_medical_record = MedicalRecord.objects.filter(
-            beneficiary__id=current_beneficiary_id
-        ).latest("created")
-
+        
+        try:
+            beneficiary_medical_records = MedicalRecord.objects.filter(
+                beneficiary__id=current_beneficiary_id
+            )
+            latest_beneficiary_medical_record = MedicalRecord.objects.filter(
+                beneficiary__id=current_beneficiary_id
+            ).latest("created")
+            
+            service_provider_name = (
+                latest_beneficiary_medical_record.service.service_personnel.first_name
+                + ""
+                + latest_beneficiary_medical_record.service.service_personnel.last_name
+            )
+        except: # improve catching of empty result QS here
+            beneficiary_medical_records = None
+            latest_beneficiary_medical_record = None
+            
+            service_provider_name = ""
+            
         services = {"services": []}
 
-        service_provider_name = (
-            latest_beneficiary_medical_record.service.service_personnel.first_name
-            + ""
-            + latest_beneficiary_medical_record.service.service_personnel.last_name
-        )
         latest_beneficiary_service = {
             "service_name": latest_beneficiary_medical_record.service,
             "service_facility": latest_beneficiary_medical_record.service_facility,
