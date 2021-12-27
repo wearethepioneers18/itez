@@ -110,14 +110,21 @@ class PDF(FPDF, HTMLMixin):
         self.set_y(220)
         self.set_x(45)
         self.set_font("helvetica", "", 12)
-        
+
         try:
             if self.beneficiary_obj.profile_photo:
                 self.image(f"{self.beneficiary_obj.profile_photo.path}", 150, 72, 50)
             elif self.beneficiary_obj.sex == "Male":
-                self.image(f"{settings.STATIC_ROOT}/assets/images/faces/male.jpeg", 150, 72, 50)
+                self.image(
+                    f"{settings.STATIC_ROOT}/assets/images/faces/male.jpeg", 150, 72, 50
+                )
             elif self.beneficiary_obj.sex == "Female":
-                self.image(f"{settings.STATIC_ROOT}/assets/images/faces/female.jpeg", 150, 72, 50)
+                self.image(
+                    f"{settings.STATIC_ROOT}/assets/images/faces/female.jpeg",
+                    150,
+                    72,
+                    50,
+                )
             else:
                 print("no image")
                 pass
@@ -128,12 +135,17 @@ class PDF(FPDF, HTMLMixin):
         record_approver = self.medical_records.first()
 
         self.set_x(70)
-        self.cell(60, 8, f"Approved By: {record_approver.approved_by}", ln=1)
-        if record_approver.approver_signature:
-            self.image(f"{record_approver.approver_signature.path}", 82, 228, 25, 15)
-            self.line(70, 245, 130, 245)
-        else:
-            self.line(70, 230, 130, 230)
+        try:
+            self.cell(60, 8, f"Approved By: {record_approver.approved_by}", ln=1)
+            if record_approver.approver_signature:
+                self.image(
+                    f"{record_approver.approver_signature.path}", 82, 228, 25, 15
+                )
+                self.line(70, 245, 130, 245)
+            else:
+                self.line(70, 230, 130, 230)
+        except AttributeError:
+            pass
 
     def print_footer(self, beneficiary_id):
         self.set_y(-35)
@@ -234,12 +246,16 @@ class PDF(FPDF, HTMLMixin):
 
             table_data = [
                 [
-                    f"Service Facility:", record.service_facility.name,
-                    f"Service Name:", record.service.title
+                    f"Service Facility:",
+                    record.service_facility.name,
+                    f"Service Name:",
+                    record.service.title,
                 ],
                 [
-                    f"Provider Personel:", service_personnel_name,
-                    f"Comments:", record.provider_comments,
+                    f"Provider Personel:",
+                    service_personnel_name,
+                    f"Comments:",
+                    record.provider_comments,
                 ],
             ]
 
@@ -250,30 +266,30 @@ class PDF(FPDF, HTMLMixin):
                     if index == 0:
                         self.set_font("helvetica", "B", 10)
                         self.multi_cell(
-                        col_width - 14,
-                        line_height,
-                        datum,
-                        ln=3,
-                        max_line_height=self.font_size
-                    )
+                            col_width - 14,
+                            line_height,
+                            datum,
+                            ln=3,
+                            max_line_height=self.font_size,
+                        )
                     elif index == 2:
                         self.set_font("helvetica", "B", 10)
                         self.multi_cell(
-                        col_width - 20,
-                        line_height,
-                        datum,
-                        ln=3,
-                        max_line_height=self.font_size
-                    )
+                            col_width - 20,
+                            line_height,
+                            datum,
+                            ln=3,
+                            max_line_height=self.font_size,
+                        )
                     elif index == 1:
                         self.set_font("helvetica", "", 10)
                         self.multi_cell(
-                        col_width - 5,
-                        line_height,
-                        datum,
-                        ln=3,
-                        max_line_height=self.font_size
-                    )
+                            col_width - 5,
+                            line_height,
+                            datum,
+                            ln=3,
+                            max_line_height=self.font_size,
+                        )
                     else:
                         self.set_font("helvetica", "", 10)
                         self.multi_cell(
@@ -281,10 +297,9 @@ class PDF(FPDF, HTMLMixin):
                             line_height,
                             datum,
                             ln=3,
-                            max_line_height=self.font_size
+                            max_line_height=self.font_size,
                         )
                 self.ln(line_height)
-
 
             TABLE_HEADERS = [
                 "Interraction Date",
