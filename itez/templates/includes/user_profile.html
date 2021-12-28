@@ -26,7 +26,6 @@
             <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview"> 
                 <div class="row">
                     <div class="col-lg-12 d-flex flex-column">
-
                         <div class="row flex-grow">
                             <div class="col-md-6 col-lg-8 grid-margin stretch-card">
                                 <div class="card card-rounded">
@@ -94,7 +93,7 @@
                                                         <small class="text-muted mb-0">District: </small> 
                                                     </div>
                                                     </div>
-                                                    <span style="float: right; margin-right: 10px;">{{user.city}}</span>
+                                                    <span style="float: right; margin-right: 10px;">{{user.city.name}}</span>
                                                 </div>
                                                 <div class="wrapper d-flex align-items-center justify-content-between py-2 border-bottom">
                                                     <div class="d-flex">
@@ -102,7 +101,7 @@
                                                         <small class="text-muted mb-0">Province: </small> 
                                                     </div>
                                                     </div>
-                                                    <span style="float: right; margin-right: 10px;">{{province.name}}</span>
+                                                    <span style="float: right; margin-right: 10px;">{{user.city.province.name}}</span>
                                                 </div>
                                                 <div class="wrapper d-flex align-items-center justify-content-between py-2 border-bottom">
                                                     <div class="d-flex">
@@ -266,9 +265,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <button style="border-top-left-radius: 0px; border-top-right-radius: 0px; margin-bottom: -1em;" class="open-modal button self-align-end" data-open="modal1">
-                                        edit user profile
-                                    </button>
+                                    <button onclick="document.getElementById('id01').style.display='block'" class="w3-button w3-blue button block_">Update User Profile</button>
+                                    
                                 </div>
                             </div>
                             <div class="row">

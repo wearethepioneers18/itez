@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from django.views.generic import DetailView, RedirectView, UpdateView, CreateView
 from itez.users.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponse
 from itez.users.models import User as user_model
 from itez.users.models import Profile
 from itez.beneficiary.models import District, Province
@@ -33,8 +33,12 @@ user_detail_view = UserDetailView.as_view()
 
 @login_required(login_url="/login/")
 def user_profile(request):
-    user_profile = Profile.objects.get(id=request.user.id)
     current_user = user_model.objects.get(id=request.user.id)
+    user_profile = Profile.objects.get(id=current_user.id)
+    # user_district = District.objects.get(id=user_profile.id)
+    # user_province = Province.objects.get(id=user_profile.id)
+    
+    
     if request.method == "POST":
         phone_no_1 = request.POST.get("phone-no-1", user_profile.phone_number)
         phone_no_2 = request.POST.get("phone-no-2", user_profile.phone_number_2)
@@ -44,7 +48,7 @@ def user_profile(request):
         address = request.POST.get("address", user_profile.address)
         postal_code = request.POST.get("postal-code", user_profile.postal_code)
         # province = request.POST.get("province", user_province.name)
-        district = request.POST.get("district", user_profile.city)
+        # district = request.POST.get("district", user_district.name)
         email = request.POST.get("email", user_profile.user.email)
         gender = request.POST.get("gender", user_profile.gender)
         sex = request.POST.get("sex", user_profile.sex)
@@ -74,11 +78,11 @@ def user_profile(request):
         current_user.username = username
         current_user.save()
 
-        user_district.name = district
-        user_district.save()
+        # user_district.name = district
+        # user_district.save()
 
-        user_province.name = province
-        user_province.save()
+        # user_province.name = province
+        # user_province.save()
         return redirect("/user/profile")
 
     education_levels = [level[1] for level in EDUCATION_LEVEL]
@@ -86,7 +90,8 @@ def user_profile(request):
     gender_array = [gender[1] for gender in GENDER_CHOICES]
 
     context = {
-        # "province": user_province,
+        # "user_district": user_district,
+        # "user_province": user_province,
         "user": user_profile,
         "education_levels": education_levels,
         "gender_array": gender_array,

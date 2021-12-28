@@ -1,121 +1,164 @@
-<form method="POST" enctype="multipart/form-data">{% csrf_token %}
-    <div class="modal" id="modal1" data-animation="slideInOutLeft">
-        <div class="modal-dialog">
-            <header class="modal-header">
-                <div class="close-modal" aria-label="close modal" data-close>
-                    <img width="40" height="30" src="/static/assets/images/sprites/close-icon.png" />  
-                </div>
-            </header>
-            <section class="modal-content">
-            <div class="col-sm-18 card mb-2">
-                <label for="profile_photo" class="form-label text-muted">Profile Photo:</label>
-                <input name="profile-photo" id="profile_photo" type="file" class="form-control">
-            </div>
-            <div class="col-12 mt-2 mb-2">
-                <div class="row g-3">
-                    <div class="col-sm-7">
-                        <label for="sex" class="form-label text-muted">Sex:</label>
-                        <select name="sex" id="sex" class="form-select mt-2 mb-2">
-                            {% for sex in sex_array %}
-                                {% if sex == user.sex %}
-                                    <option value="{{sex}}" selected>{{user.sex|title}}</option>
-                                {% else %}
-                                    <option value="{{sex}}">{{sex|title}}</option>
-                                {% endif %}
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div class="col-sm">
-                        <label for="gender" class="text-muted form-label">Gender:</label>
-                        <select name="gender"  id="gender" class="form-select mt-2 mb-2"> 
-                        {% for gender in gender_array %}
-                            {% if gender == user.gender %}
-                                <option value="{{gender}}" selected>{{user.gender}}</option>
-                            {% else %}
-                                <option value="{{gender}}">{{gender|title}}</option>
-                            {% endif %}
-                        {% endfor %}
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <label for="education_level" class="text-muted form-label">Education Level: </label>
-            <select name="education-level"  id="education_level" class="form-select mt-1" id="floatingSelect">
-                {% for level in education_levels %}
-                    {% if level|title == user.education_level %}
-                        <option value="{{level}}" selected>{{user.education_level|title}}</option>
-                    {% else %}
-                        <option value="{{level}}">{{level|title}}</option>
-                    {% endif %}
-                {% endfor %}
-            </select>
-
-            <div class="col-12 mt-2 mb-2">
-                <div class="row g-3">
-                    <div class="col-sm-7">
-                        <label for="phone_no" class="text-muted form-label">Phone number:</label>
-                        <input type="Number" id="phone_no" name="phone-no-1" class="form-control" placeholder="Phone number" aria-label="phone-no" value="{{user.phone_number}}">
-                    </div>
-                    <div class="col-sm">
-                        <label for="other_phone_no" class="text-muted form-label">Other phone number:</label>
-                        <input type="Number" id="other_phone_no" name="phone-no-2" class="form-control" placeholder="Other Phone Number (optional)" aria-label="phone-number" value="{{user.phone_number_2}}">
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 mt-2 mb-2">
-                <div class="row g-3">
-                    <div class="col-sm-7">
-                        <label for="first_name" class="text-muted form-label">First Name:</label>
-                        <input type="First Name" id="first_name" name="first-name" class="form-control" placeholder="First Name" value="{{user.user.first_name}}">
-                    </div>
-                    <div class="col-sm">
-                        <label for="last_name" class="text-muted form-label">Last Name:</label>
-                        <input type="text" id="last_name" name="last-name" class="form-control" placeholder="Last Name" value="{{user.user.last_name}}">
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 mt-2 mb-2">
-                <div class="row g-3">
-                    <div class="col-sm-7">
-                        <label for="district" class="text-muted form-label">District:</label>
-                    <input type="text" id="district" name="district" class="form-control" placeholder="District Name" value="{{user.city.name}}">
-                    </div>
-                    <div class="col-sm">
-                        <label for="province" class="text-muted form-label">Province:</label>
-                        <input type="text" id="province" name="province" class="form-control" placeholder="Province Name" value="{{province.name}}">
-                    </div>
-                    <div class="col-sm">
-                        <label for="postal_code" class="text-muted form-label">Postal code:</label>
-                        <input type="text" id="postal_code" name="postal-code" class="form-control" placeholder="Postal Code" aria-label="postal-code" value="{{user.postal_code}}">
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 mt-2 mb-2">
-                <label for="username" class="text-muted form-label">Username:</label>
-                <input name="username" id="username" type="text" class="form-control" placeholder="Username" value="{{user.user.username}}">
-            </div>
-            <div class="col-12 mt-2 mb-2">
-                <label for="email" class="text-muted form-label">Email Address:</label>
-            <input name="email" id="email" type="email" class="form-control" placeholder="Email Address" value="{{user.user.email}}">
-            </div>
-            <div class="col-12 mt-2 mb-2">
-                <label for="address" class="text-muted form-label">Home Address:</label>
-                <input name="address" id="address" type="text" class="form-control" placeholder="Address" value="{{user.address}}">
-            </div>
-            <div class="col-12 mt-2 mb-2">
-                <label for="birth_date" class="text-muted form-label">Birth Date:</label>
-                <input name="birth-date" id="birth_date" type="date" class="form-control" placeholder="Birth Date">
-            </div> 
-            <div class="col-12 mb-1">
-                <label for="about_me" class="text-muted form-label">About me:</label>
-                <textarea id="about_me" maxlength="300" style=" border-radius: 1px; border-radius: 4px;" name="about" cols="46" class="mb-1 mt-1" placeholder="About you">{{user.about_me}}</textarea>
-            </div>
-            <button class="card-footer btn-btn-primary" type="submit" onMouseOver="this.style.color='lime'"
-                onMouseOut="this.style.color='white'" class="btn btn-lg btn-block" 
-                style="background: #000080; font-size: 1.4em; color: white; padding: 12px; max-width: 960px; margin-left: -1em; margin-right: -1em; margin-bottom: -1em;">
-                update
-            </button>
-            </section>
-        </div>
-    </div>
-</form>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <div id="id01" class="w3-modal">
+   <div class="w3-modal-content w3-card-4 w3-animate-zoom">
+    <header class="w3-container" style="background: linear-gradient(0deg, rgba(43, 110, 116, 1) 0%,rgba(210, 234, 236, 1) 100%)"> 
+     <span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-red w3-xsmall w3-display-topright" style="border-radius: 6em; max-width: 30px; padding-top: -3px; padding: 4px; margin-right: 6px; margin-top: 8px; max-height: 30px;">&times;</span>
+     <h2 style="font-weight: bold; color: white;">user profile update</h2>
+    </header>
+    <form method="post" enctype="multipart/form-data">{% csrf_token %} 
+       <div class="w3-container">
+             <div class="col-sm-12 card mb-2">
+                 <label for="profile_photo" class="form-label text-muted">Profile Photo:</label>
+                 <input name="profile-photo" id="profile_photo" type="file" class="form-control">
+             </div>
+             <div class="col-12 mt-2 mb-2">
+                 <div class="row g-3">
+                     <div class="col-sm-7">
+                         <label for="sex" class="form-label text-muted">Sex:</label>
+                         <select name="sex" id="sex" class="form-select mt-2 mb-2">
+                             {% for sex in sex_array %}
+                             {% if sex == user.sex %}
+                             <option value="{{sex}}" selected>{{user.sex|title}}</option>
+                             {% else %}
+                             <option value="{{sex}}">{{sex|title}}</option>
+                             {% endif %}
+                             {% endfor %}
+                         </select>
+                     </div>
+                     <div class="col-sm">
+                         <label for="gender" class="text-muted form-label">Gender:</label>
+                         <select name="gender"  id="gender" class="form-select mt-2 mb-2"> 
+                             {% for gender in gender_array %}
+                             {% if gender == user.gender %}
+                             <option value="{{gender}}" selected>{{user.gender}}</option>
+                             {% else %}
+                             <option value="{{gender}}">{{gender|title}}</option>
+                             {% endif %}
+                             {% endfor %}
+                         </select>
+                     </div>
+                 </div>
+             </div>
+             <label for="education_level" class="text-muted form-label">Education Level: </label>
+             <select name="education-level"  id="education_level" class="form-select mt-1" id="floatingSelect">
+                 {% for level in education_levels %}
+                 {% if level|title == user.education_level %}
+                 <option value="{{level}}" selected>{{user.education_level|title}}</option>
+                 {% else %}
+                 <option value="{{level}}">{{level|title}}</option>
+                 {% endif %}
+                 {% endfor %}
+             </select>
+             
+             <div class="col-12 mt-2 mb-2">
+                 <div class="row g-3">
+                     <div class="col-sm-7">
+                         <label for="phone_no" class="text-muted form-label">Phone number:</label>
+                         <input type="Number" id="phone_no" name="phone-no-1" class="form-control" placeholder="Phone number" aria-label="phone-no" value="{{ user.phone_number }}">
+                     </div>
+                     <div class="col-sm">
+                         <label for="other_phone_no" class="text-muted form-label">Other phone number:</label>
+                         <input type="Number" id="other_phone_no" name="phone-no-2" class="form-control" placeholder="Other Phone Number (optional)" aria-label="phone-number" value="{{ user.phone_number_2 }}">
+                     </div>
+                 </div>
+             </div>
+             <div class="col-12 mt-2 mb-2">
+                 <div class="row g-3">
+                     <div class="col-sm-7">
+                         <label for="first_name" class="text-muted form-label">First Name:</label>
+                         <input type="First Name" id="first_name" name="first-name" class="form-control" placeholder="First Name" value="{{ user.user.first_name }}">
+                     </div>
+                     <div class="col-sm">
+                         <label for="last_name" class="text-muted form-label">Last Name:</label>
+                         <input type="text" id="last_name" name="last-name" class="form-control" placeholder="Last Name" value="{{ user.user.last_name }}">
+                     </div>
+                 </div>
+             </div>
+             <div class="col-12 mt-2 mb-2">
+                 <div class="row g-3">
+                     <div class="col-sm-7">
+                         <label for="district" class="text-muted form-label">District:</label>
+                         <input type="text" id="district" name="district" class="form-control" placeholder="District Name" value="{{ user_district.name }}">
+                     </div>
+                     <div class="col-sm">
+                         <label for="province" class="text-muted form-label">Province:</label>
+                         <input type="text" id="province" name="province" class="form-control" placeholder="Province Name" value="{{ user_province.name }}">
+                     </div>
+                     <div class="col-sm">
+                         <label for="postal_code" class="text-muted form-label">Postal code:</label>
+                         <input type="text" id="postal_code" name="postal-code" class="form-control" placeholder="Postal Code" aria-label="postal-code" value="{{ user.postal_code }}">
+                     </div>
+                 </div>
+             </div>
+             
+             <div class="col-12 mt-2 mb-2">
+                 <div class="row g-3">
+                     <div class="col-6 mt-2 mb-2">
+                         <label for="username" class="text-muted form-label">Username:</label>
+                         <input name="username" id="username" type="text" class="form-control" placeholder="Username" value="{{ user.user.username }}">
+                     </div>
+                     <div class="col-6 mt-2 mb-2">
+                         <label for="birth_date" class="text-muted form-label">Birth Date:</label>
+                         <input name="birth-date" id="birth_date" type="date" class="form-control" placeholder="Birth Date">
+                     </div> 
+                 </div>
+             </div>
+ 
+             <div class="col-12 mt-2 mb-2">
+                 <div class="row g-3">
+                     <div class="col-6 mt-2 mb-2">
+                         <label for="email" class="text-muted form-label">Email Address:</label>
+                         <input name="email" id="email" type="email" class="form-control" placeholder="Email Address" value="{{ user.user.email }}">
+                     </div>
+                     <div class="col-6 mt-2 mb-2">
+                         <label for="address" class="text-muted form-label">Home Address:</label>
+                         <input name="address" id="address" type="text" class="form-control" placeholder="Address" value="{{ user.address }}">
+                     </div>
+                 </div>
+             </div>
+             
+             <div class="col-12 mb-2 mt-2">
+                 <label for="about_me" class="text-muted form-label">About me:</label><br>
+                 <textarea id="about_me" style=" border-radius: 1px; border-radius: 4px;" name="about" cols="46" class="mb-1 mt-1" placeholder="About you">{{ user.about_me }}</textarea>
+             </div>
+         </div>
+         <button id="button1" style="padding-top: 0.5em; padding-bottom: 0.5ems; font-size: 18px;" type="submit" class="w3-container w3-teal w3-padding-bottom w3-blue margin-bottom: -0.5em; padding-left: 8em;">
+             Update
+         </button>
+     </form>
+     <style>
+         #button1 {
+             display: block;
+             width: 100%;
+             padding: 12px;
+             border: none;
+             background-color: #0e83f0;
+             padding: 14px 28px;
+             font-size: 16px;
+             cursor: pointer;
+             text-align: center;
+           }
+     </style>
+   </div>
+  </div>
+  
+  </div>
+  
+  <script>
+  document.getElementsByClassName("tablink")[0].click();
+  
+  function openCity(evt, cityName) {
+    var i, x, tablinks;
+    x = document.getElementsByClassName("city");
+    for (i = 0; i < x.length; i++) {
+      x[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tablink");
+    for (i = 0; i < x.length; i++) {
+      tablinks[i].classList.remove("w3-light-grey");
+    }
+    document.getElementById(cityName).style.display = "block";
+    evt.currentTarget.classList.add("w3-light-grey");
+  }
+  </script>

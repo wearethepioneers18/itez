@@ -7,13 +7,12 @@ from django.http import HttpResponse
 from django.template import loader
 from rolepermissions.roles import assign_role
 from rolepermissions.decorators import has_role_decorator
-from rolepermissions.roles import RolesManager
 from django.urls import reverse
 from itez.authentication.forms import LoginForm, SignUpForm, UserCreationForm
 from itez.users.models import User
 from itez.users.models import Profile
 from rolepermissions.checkers import has_role
-
+from itez.authentication.user_roles import user_roles
 
 @login_required(login_url="/login/")
 def create_user(request):
@@ -53,16 +52,8 @@ def create_user(request):
 
         else:
             return redirect("login/")
-
-    uncleaned_user_roles = RolesManager.get_roles_names()
-    cleaned_user_roles = []
-    for user_role in uncleaned_user_roles:
-        splitted_user_role = user_role.split("_")
-        cleaned_user_role = " ".join(splitted_user_role).title()
-        cleaned_user_roles.append(
-            {"key": f"{user_role}", "value": f"{cleaned_user_role}"}
-        )
-    context = {"user_roles": cleaned_user_roles}
+    
+    context = {"user_roles": user_roles()}
 
     html_template = loader.get_template("accounts/register.html")
     return HttpResponse(html_template.render(context, request))

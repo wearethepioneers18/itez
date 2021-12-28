@@ -183,8 +183,6 @@ class ServiceProviderPersonelQualificationAdmin(admin.ModelAdmin):
 
 
 # register MedicalRecord class
-
-
 @admin.register(MedicalRecord)
 class MedicalRecordAdmin(admin.ModelAdmin):
     list_display = [
@@ -192,7 +190,7 @@ class MedicalRecordAdmin(admin.ModelAdmin):
         "service",
         "prescription",
         "lab",
-        "service"
+        "service",
     ]
 
     list_filter = [

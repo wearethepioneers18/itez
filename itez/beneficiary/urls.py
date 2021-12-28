@@ -12,6 +12,8 @@ urlpatterns = [
     path("beneficiary/list", views.BenenficiaryListView.as_view(), name="list"),
     path("beneficiary/create", views.BeneficiaryCreateView.as_view(), name="create"),
     path("agent/list", views.AgentListView.as_view(), name="agent_list"),
+    path("beneficiary/<int:pk>/service", views.service_details, name="service_details"),
+    
     path("agent/create", views.AgentCreateView.as_view(), name="agent_create"),
     path(
         "agent/<int:pk>/detail",
@@ -20,10 +22,20 @@ urlpatterns = [
     ),
     path(
         "agent/<int:pk>/delete",
-        views.agent_delete_view,
+        views.agent_delete,
         name="agent_delete",
     ),
     path(
+        "agent/delete/many",
+        views.agent_delete_many,
+        name="agent_delete_many",
+    ),
+    path(
+        "beneficiary/delete/many",
+        views.beneficiary_delete_many,
+        name="beneficiary_delete_many",
+    ),
+     path(
         "agent/<int:pk>/update",
         views.AgentUpdateView.as_view(),
         name="agent_update",
@@ -55,7 +67,7 @@ urlpatterns = [
     ),
     path(
         "beneficiary/<int:pk>/delete",
-        views.beneficiary_delete_view,
+        views.beneficiary_delete,
         name="delete",
     ),
     path(
