@@ -1,4 +1,6 @@
 {% load notifications_tags %}
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
 <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex align-items-top flex-row">
   <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">
     <div class="me-3">
@@ -15,7 +17,7 @@
   <div class="navbar-menu-wrapper d-flex align-items-top">
     <ul class="navbar-nav">
       <li class="nav-item font-weight-semibold d-none d-lg-block ms-0">
-        <h1 class="welcome-text">Hello, <span class="text-black fw-bold">
+        <h1 class="welcome-text">Hello, <span class="text-white fw-bold">
           {% if not request.user.first_name and not request.user.last_name %}
             {{ request.user.username }}
           {% else %}
@@ -64,56 +66,8 @@
         </form>
       </li>
       
-      <li class="nav-item dropdown"> 
-      <a class=nav-link text-dark notification-bell unread dropdown-toggle" data-unread-notifications="true" href="#" role="button" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">              
-        <div class="dropdown-toggle" data-unread-notifications="">
-        {% if user.is_authenticated %}
-        <svg class="icon icon-sm text-gray-900" fill="white" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"></path></svg>
-              <span id="notifications-count" class="badge-notifications badge badge-danger">
-                {% if  user.notifications.unread %}
-                  {% live_notify_badge %}
-                {% endif %}
-                {% else %}
-                ...
-                {% endif %} 
-              </span>
-             
-      </a>
-        <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list pb-0" aria-labelledby="countDropdown">
-          <a class="dropdown-item py-3">
-            <p class="mb-0 font-weight-bold float-left">You have 2 unread notifications </p>
-            <span class="badge badge-pill badge-primary float-right">View all</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item preview-item">
-            <div class="preview-item-content flex-grow py-2">
-              {% for notification in  user.notifications.unread %}
-              <p class="preview-subject ellipsis font-weight-medium text-dark">  
-              <div style="float: left; -10px;">
-                {% if request.user.profile.profile_photo %}
-                  <img width="30" height="30" style="float:left;" class="img-md rounded-circle" src="{{request.user.profile.profile_photo.url}}" alt="Profile image">
-              {% elif not request.user.profile_photo and request.user.gender == 'Male' %}
-                  <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
-              {% elif not request.user.profile_photo and request.user.gender == 'Female' %}
-                  <img class="img-xs rounded-circle" src="/static/assets/images/faces/female.jpeg" alt="Profile image">
-              {% else %}
-                  <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
-              {% endif %} 
-              </div>
-              <div style="align-content: center;overflow: hidden; white-space: nowrap; text-overflow: ellipsis; white-space: initial; max-width: 75%; margin-left: 8px;">{{ notification }}</div>
-              <span style="float:right; margin-top: -20px;"  id="{{notification.slug}}">&times;</span>
-              </p>
-              <script>
-                  document.getElementById('{{notification.slug}}').addEventListener("click", function() {
-                    const host = location.origin
-                    fetch(`${host}/inbox/notifications/mark-as-read/{{notification.slug}}`).then((res) => console.log(res))
-                  });
-                </script>
-                {% endfor %}
-            </div>
-          </a>
-        </div>
-      </li>
+   {% include "includes/notifications.html" %}
+
       <li class="nav-item dropdown d-none d-lg-block user-dropdown">
         <a class="nav-link" id="UserDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
           {% if request.user.profile.profile_photo %}
@@ -131,7 +85,7 @@
             <div class="dropdown-header text-center">
               {% if request.user.profile.profile_photo %}
               <img width="100" height="100" style="margin-right: 1em;" class="img-md rounded-circle"
-                src="{{ request.user.profile.profile_photo.url }}" alt="Profile image">
+                src="{{ request.user.profile.profile_photo }}" alt="Profile image">
               {% elif not request.user.profile_photo and request.user.gender == 'Male' %}
               <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
               {% elif not request.user.profile_photo and request.user.gender == 'Female' %}
@@ -157,3 +111,48 @@
     </button>
   </div>
 </nav>
+
+<script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+	<script>
+		$(document).ready(function(){
+			$(".profile .icon_wrap").click(function(){
+			  $(this).parent().toggleClass("active");
+			  $(".notifications").removeClass("active");
+			});
+
+			$(".notifications .icon_wrap").click(function(){
+			  $(this).parent().toggleClass("active");
+			   $(".profile").removeClass("active");
+			});
+
+			$(".show_all .link").click(function(){
+			  $(".notifications").removeClass("active");
+			  $(".popup").show();
+			});
+
+			$(".close").click(function(){
+			  $(".popup").hide();
+			});
+		});
+	</script>
+  <style>
+  .notification {
+    color: white;
+    text-decoration: none;
+    padding: 15px 26px;
+    position: relative;
+    display: inline-block;
+    border-radius: 20px;
+  }
+   
+  .notification .badge {
+    position: absolute;
+    top: 2px;
+    right: 30px;
+    padding: 5px 10px;
+    border-radius: 150%;
+    background-color: red;
+    color: white;
+  }
+  </style>

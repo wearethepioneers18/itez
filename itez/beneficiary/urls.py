@@ -41,8 +41,13 @@ urlpatterns = [
     ),
     path(
         "beneficiary/poll_async_results/<task_id>",
-        views.poll_async_resullt,
-        name="export_beneficiary_data",
+        views.poll_async_results,
+        name="poll_async_results",
+    ),
+    path(
+        "beneficiary/<int:id>/download_medical_report",
+        views.medical_record_pdf,
+        name="generate_medical_report",
     ),
     path(
         "beneficiary/<int:pk>/medical_record_list",

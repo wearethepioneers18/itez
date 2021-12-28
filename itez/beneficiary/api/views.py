@@ -20,9 +20,7 @@ from itez.beneficiary.models import (
     ServiceArea,
     WorkDetail,
     Drug,
-    Lab,
     Service,
-    Prescription,
     Facility,
     FacilityType,
     ImplementingPartner,
@@ -33,9 +31,7 @@ from itez.beneficiary.models import (
 
 from itez.beneficiary.api.serializers import (
     DrugSerializer,
-    LabSerializer,
     ServiceSerializer,
-    PrescriptionSerializer,
     FacilitySerializer,
     FacilityTypeSerializer,
     ImplementingPartnerSerializer,
@@ -79,66 +75,6 @@ class DrugAPIView(APIView):
     def delete(self, request, pk, format=None):
         drug = self.get_object(pk)
         drug.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-class LabAPIView(APIView):
-    """
-    Retrieve, update or delete a Lab instance.
-    """
-
-    def get_object(self, pk):
-        try:
-            return Lab.objects.get(pk=pk)
-        except Lab.DoesNotExist:
-            raise Http404
-
-    def get(self, request, format=None):
-        lab = Lab.objects.all()
-        serializer = LabSerializer(lab, many=True)
-        return Response(serializer.data)
-
-    def put(self, request, pk, format=None):
-        lab = self.get_object(pk)
-        serializer = LabSerializer(lab, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def delete(self, request, pk, format=None):
-        lab = self.get_object(pk)
-        lab.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-class PrescriptionAPIView(APIView):
-    """
-    Retrieve, update or delete a Prescription instance.
-    """
-
-    def get_object(self, pk):
-        try:
-            return Prescription.objects.get(pk=pk)
-        except Prescription.DoesNotExist:
-            raise Http404
-
-    def get(self, request, format=None):
-        prescription = Prescription.objects.all()
-        serializer = PrescriptionSerializer(prescription, many=True)
-        return Response(serializer.data)
-
-    def put(self, request, pk, format=None):
-        prescription = self.get_object(pk)
-        serializer = PrescriptionSerializer(prescription, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def delete(self, request, pk, format=None):
-        prescription = self.get_object(pk)
-        prescription.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 

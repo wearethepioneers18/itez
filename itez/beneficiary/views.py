@@ -1,6 +1,9 @@
 # -*- encoding: utf-8 -*-
 import json
+import os
+import uuid
 import datetime
+
 from django import template
 from django.contrib.gis.db.models import fields
 from django.db.models import query
@@ -9,6 +12,7 @@ from django.db.models.expressions import OrderBy
 from django.db.models.functions.datetime import TruncMonth, TruncWeek, TruncDay
 from django.views.generic import CreateView, FormView
 from django.views.generic.detail import DetailView
+from django.conf import settings
 from rolepermissions.roles import assign_role
 from rolepermissions.roles import RolesManager
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
@@ -19,8 +23,8 @@ from django.urls import reverse
 from django.shortcuts import render, redirect, get_object_or_404
 from itez.beneficiary.forms import BeneficiaryForm
 from itez.beneficiary.models import (
-    GENDER_CHOICES, 
-    SEX_CHOICES, 
+    GENDER_CHOICES,
+    SEX_CHOICES,
     EDUCATION_LEVEL,
     HIV_STATUS_CHOICES,
     MARITAL_STATUS,
@@ -50,6 +54,8 @@ from itez.beneficiary.models import (
     Agent,
     Service,
 )
+from itez.beneficiary.models import Service
+from django.db.models import Count
 
 from django.core.paginator import Paginator
 from .tasks import generate_export_file
@@ -59,10 +65,9 @@ from notifications.signals import notify
 from itez.beneficiary.forms import BeneficiaryForm, MedicalRecordForm, AgentForm
 from itez.users.models import User
 
-from .resources import BeneficiaryResource
-
-from .resources import BeneficiaryResource
-from .filters import BeneficiaryFilter
+from itez.beneficiary.resources import BeneficiaryResource
+from itez.beneficiary.filters import BeneficiaryFilter
+from itez.beneficiary.utils import create_files_dict, handle_upload
 
 
 @login_required(login_url="/login/")
@@ -77,6 +82,10 @@ def index(request):
     female = Beneficiary.objects.filter(gender="Female").count()
     transgender = Beneficiary.objects.filter(gender="Transgender").count()
     other = Beneficiary.objects.filter(gender="Other").count()
+
+    # notification filter
+    user = request.user
+    all_unread = user.notifications.unread()[:4]
 
     # Weekly Visits
     sun_day = MedicalRecord.objects.filter(interaction_date__week_day=1).count()
@@ -106,6 +115,7 @@ def index(request):
         "thursday": thu_day,
         "friday": fri_day,
         "saturday": sat_day,
+        "notifications": all_unread, #notifications context for filter
     }
     html_template = loader.get_template("home/index.html")
     return HttpResponse(html_template.render(context, request))
@@ -126,7 +136,20 @@ def export_beneficiary_data(request):
 
 
 @login_required(login_url="/login/")
-def poll_async_resullt(request, task_id):
+def medical_record_pdf(request, id):
+    """
+    This view handles the request for downloading Beneficiary medical record. The task is
+    call to generate a export file, the task returns an ID which is used by
+    the client to poll the status of the task.
+    """
+    task = generate_medical_report.delay(id)
+
+    # returns the task_id with the response
+    response = {"task_id": task.task_id}
+    return JsonResponse(response)
+
+
+def poll_async_results(request, task_id):
     """
     This view handles the polling of state of the task the generates
     the export file. If the task is finnished, the appropriate response
@@ -137,13 +160,21 @@ def poll_async_resullt(request, task_id):
     media_url = settings.MEDIA_URL
 
     if task.state == "SUCCESS":
-        download_url = f"{media_url}exports/{task.result}"
+        download_url = ""
+
+        if task.result["TASK_TYPE"] == "EXPORT_BENEFICIARY_DATA":
+            download_url = f"{media_url}exports/{task.result['RESULT']}"
+
+        elif task.result["TASK_TYPE"] == "GENERATE_MEDICAL_REPORT":
+            download_url = f"{media_url}temp/{task.result['RESULT']}"
+
         body = {"state": task.state, "location": download_url}
         return JsonResponse(body, status=201)
 
     elif task.state == "PENDING":
         body = {"state": task.state}
         return JsonResponse(body, status=200)
+
     else:
         return JsonResponse({"error": f"No task with id {task_id}"}, status=400)
 
@@ -161,7 +192,7 @@ class MedicalRecordListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         return MedicalRecord.objects.filter(beneficiary=self.kwargs["beneficiary_id"])
-
+        
     def get_context_data(self, **kwargs):
         # Benenficiary-098123hjkf/medical_record_list
         context = super(MedicalRecordListView, self).get_context_data(**kwargs)
@@ -182,6 +213,7 @@ class MedicalRecordDetailView(LoginRequiredMixin, DetailView):
     template_name = "beneficiary/medical_record_detail.html"
     model = MedicalRecord
 
+    
     def get_context_data(self, **kwargs):
         context = super(MedicalRecordDetailView, self).get_context_data(**kwargs)
         context["title"] = "Medical Record"
@@ -201,6 +233,9 @@ class MedicalRecordCreateView(LoginRequiredMixin, CreateView):
     def get_success_url(self):
         return reverse("beneficiary:details", kwargs={"pk": self.object.beneficiary.pk})
 
+    def get_success_url(self):
+        return reverse("beneficiary:details", kwargs={"pk": self.object.beneficiary.pk})
+
     def get_context_data(self, **kwargs):
         context = super(MedicalRecordCreateView, self).get_context_data(**kwargs)
         context["title"] = "add medical record"
@@ -213,19 +248,17 @@ class MedicalRecordCreateView(LoginRequiredMixin, CreateView):
         notify.send(self.request.user,  recipient=self.request.user, verb=f'{self.request.user} created medical record')
         return super(MedicalRecordCreateView, self).form_valid(form)
 
-      
-class BeneficiaryCreateView(LoginRequiredMixin, CreateView):
-    """
-    Create a new Beneficiary object.
-    """
+        files_dict = create_files_dict(
+            directory=beneficiary_obj.beneficiary_id, filenames=[f.name for f in files]
+        )
 
-    model = Beneficiary
-    form_class = BeneficiaryForm
-    template_name = "beneficiary/beneficiary_create.html"
+        for f in files:
+            handle_upload(f, destination_directory=beneficiary_obj.beneficiary_id)
 
-    def get_success_url(self):
-        beneficiary_id = self.kwargs.get("pk")
-        return redirect("beneficiary/list/")
+        form.instance.documents = json.dumps(files_dict)
+        form.instance.beneficiary = beneficiary_obj
+        form.save()
+        return super(MedicalRecordCreateView, self).form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = super(BeneficiaryCreateView, self).get_context_data(**kwargs)
@@ -238,10 +271,10 @@ class BeneficiaryUpdateView(LoginRequiredMixin, UpdateView):
     template_name = "beneficiary/beneficiary_update.html"
     success_url = "/beneficiary/list"
     form_class = BeneficiaryForm
-    
+
     def get_context_data(self, **kwargs):
         context = super(BeneficiaryUpdateView, self).get_context_data(**kwargs)
-        beneficiary_id = self.kwargs.get("pk")  
+        beneficiary_id = self.kwargs.get("pk")
         beneficiary = Beneficiary.objects.get(id=beneficiary_id)
         form = BeneficiaryForm(instance=beneficiary)
         context["title"] = "update beneficiary"
@@ -249,22 +282,17 @@ class BeneficiaryUpdateView(LoginRequiredMixin, UpdateView):
         notify.send(self.request.user,  recipient=self.request.user, verb=f'{self.request.user} updated beneficiary form')
         return context
 
+
 class AgentUpdateView(LoginRequiredMixin, UpdateView):
     model = Agent
     template_name = "agent/agent_update.html"
     success_url = "/agent/list"
     # form_class = AgentForm
-    fields = [
-        'first_name',
-        'last_name',
-        'location',
-        'birthdate',
-        'gender'
-    ]
-    
+    fields = ["first_name", "last_name", "location", "birthdate", "gender"]
+
     def get_context_data(self, **kwargs):
         context = super(AgentUpdateView, self).get_context_data(**kwargs)
-        agent_id = self.kwargs.get("pk")  
+        agent_id = self.kwargs.get("pk")
         agent = Agent.objects.get(id=agent_id)
         form = AgentForm(instance=agent)
         if form.is_valid():
@@ -282,13 +310,15 @@ def beneficiary_delete_view(request, pk):
     notify.send(self.request.user,  recipient=self.request.user, verb=f'{self.request.user} deleted beneficiary')
     return redirect(reverse("beneficiary:list"))
 
+
 @login_required(login_url="/login/")
 def agent_delete_view(request, pk):
     agent = Agent.objects.get(id=pk)
     agent.delete()
     notify.send(self.request.user,  recipient=self.request.user, verb=f'{self.request.user} deleted agent')
     return redirect(reverse("beneficiary:agent_list"))
-  
+
+
 class BenenficiaryListView(LoginRequiredMixin, ListView):
     """
     Beneficiary  List View.
@@ -318,6 +348,8 @@ class BenenficiaryListView(LoginRequiredMixin, ListView):
         beneficiary_resource = BeneficiaryResource()
         export_data = beneficiary_resource.export()
         export_type = export_data.json
+        user = self.request.user
+        all_unread = user.notifications.unread()[:4]
         context = super(BenenficiaryListView, self).get_context_data(**kwargs)
         context["opd"] = Service.objects.filter(client_type="OPD").count()
         context["hts"] = Service.objects.filter(service_type="HTS").count()
@@ -327,6 +359,7 @@ class BenenficiaryListView(LoginRequiredMixin, ListView):
         context["pharmacy"] = Service.objects.filter(service_type="PHARMACY").count()
         context["registered_today"] = Beneficiary.total_registered_today()
         context["title"] = "Beneficiaries"
+        context["notifications"] = all_unread
         notify.send(self.request.user,  recipient=self.request.user, verb=f'{self.request.user} accessed Beneficiary pages')
         return context
 
@@ -345,32 +378,45 @@ class BeneficiaryDetailView(LoginRequiredMixin, DetailView):
         context = super(BeneficiaryDetailView, self).get_context_data(**kwargs)
         current_beneficiary_id = self.kwargs.get("pk")
         current_beneficiary = Beneficiary.objects.get(id=current_beneficiary_id)
+
         beneficiary_medical_records = MedicalRecord.objects.filter(
             beneficiary__id=current_beneficiary_id
         )
+        user = self.request.user
+        all_unread = user.notifications.unread()[:4]
+        if not beneficiary_medical_records:
+            context["title"] = "Beneficiary Details"
+            context["service_title"] = "services"
+            context["medication_title"] = "medications"
+            context["lab_title"] = "labs"
+            context["beneficiary"] = current_beneficiary
+            context["service_paginator_list"] = ""
+            context["latest_beneficiary_service"] = ""
+            context["notifications"] = all_unread
+            return context
+
         latest_beneficiary_medical_record = MedicalRecord.objects.filter(
             beneficiary__id=current_beneficiary_id
         ).latest("created")
-        print(
-            "Service Provider" + str(latest_beneficiary_medical_record.service.document)
-        )
-
-        services = {"services": []}
-
         service_provider_name = (
             latest_beneficiary_medical_record.service.service_personnel.first_name
             + ""
             + latest_beneficiary_medical_record.service.service_personnel.last_name
         )
+
+        services = {"services": []}
+
         latest_beneficiary_service = {
-            "service_name": latest_beneficiary_medical_record.service,
-            "service_facility": latest_beneficiary_medical_record.service_facility,
-            "interaction_date": latest_beneficiary_medical_record.interaction_date,
-            "service_provider": service_provider_name,
-            "service_provider_comments": latest_beneficiary_medical_record.provider_comments,
-            "supporting_documents": latest_beneficiary_medical_record.document,
-            "prescription": latest_beneficiary_medical_record.prescription.title,
-            "when_to_take": latest_beneficiary_medical_record.when_to_take,
+            "service_name": latest_beneficiary_medical_record.service or "",
+            "service_facility": latest_beneficiary_medical_record.service_facility
+            or "",
+            "interaction_date": latest_beneficiary_medical_record.interaction_date
+            or "",
+            "service_provider": service_provider_name or "",
+            "service_provider_comments": latest_beneficiary_medical_record.provider_comments
+            or "",
+            "prescription": latest_beneficiary_medical_record.prescription.title or "",
+            "when_to_take": latest_beneficiary_medical_record.when_to_take or "",
         }
 
         # Get all services for the beneficiary
@@ -383,10 +429,10 @@ class BeneficiaryDetailView(LoginRequiredMixin, DetailView):
 
             services["services"].append(
                 {
-                    "service_object": medical_record.service,
-                    "service_facility": medical_record.service_facility,
-                    "service_provider": service_personnel_name,
-                    "service_comments": medical_record.provider_comments,
+                    "service_object": medical_record.service or "",
+                    "service_facility": medical_record.service_facility or "",
+                    "service_provider": service_personnel_name or "",
+                    "service_comments": medical_record.provider_comments or "",
                 }
             )
 
@@ -400,7 +446,7 @@ class BeneficiaryDetailView(LoginRequiredMixin, DetailView):
         service_paginator_list = service_paginator.get_page(service_page_number)
 
         medical_record_latest = MedicalRecord.objects.latest("created")
-
+        context["notifications"] = all_unread
         context["title"] = "Beneficiary Details"
         context["service_title"] = "services"
         context["medication_title"] = "medications"
@@ -426,6 +472,9 @@ class BeneficiaryCreateView(LoginRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super(BeneficiaryCreateView, self).get_context_data(**kwargs)
+        user = self.request.user
+        all_unread = user.notifications.unread()[:4]
+        context["notifications"] = all_unread
         context["title"] = "create new beneficiary"
         notify.send(self.request.user,  recipient=self.request.user, verb=f'{self.request.user} created beneficiary')
         return context
@@ -450,7 +499,9 @@ class AgentCreateView(LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super(AgentCreateView, self).get_context_data(**kwargs)
         roles = RolesManager.get_roles_names()
-
+        user = self.request.user
+        all_unread = user.notifications.unread()[:4]
+        context["notifications"] = all_unread
         context["title"] = "create agent"
         context["roles"] = roles
         notify.send(self.request.user,  recipient=self.request.user, verb=f'{self.request.user} created agent')
@@ -468,6 +519,9 @@ class AgentListView(LoginRequiredMixin, ListView):
     paginate_by = 10
     def get_context_data(self, **kwargs):
         context = super(AgentListView, self).get_context_data(**kwargs)
+        user = self.request.user
+        all_unread = user.notifications.unread()[:4]
+        context["notifications"] = all_unread
         context["title"] = "list all agents"
         notify.send(self.request.user,  recipient=self.request.user, verb=f'{self.request.user} accessed agents pages')
         return context
@@ -484,6 +538,9 @@ class AgentDetailView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(AgentDetailView, self).get_context_data(**kwargs)
+        user = self.request.user
+        all_unread = user.notifications.unread()[:4]
+        context["notifications"] = all_unread
         context["title"] = "Agent User Details"
         notify.send(self.request.user,  recipient=self.request.user, verb=f'{self.request.user.username} viewed agent details')
         return context
@@ -495,12 +552,14 @@ def user_events(request):
     # users_list = [user for user in users]
     page_num = request.GET.get("page", 1)
     p = Paginator(users, 2)
-
+    user = request.user
+    all_unread = user.notifications.unread()[:4]
     page_obj = p.get_page(page_num)
     context = {
         "users_list": page_obj,
+        "notifications": all_unread,
         }
-    notify.send(f'{request.user.first_name.title()} {request.user.last_name.title()}',  recipient="", verb=f' accessed events pages')
+    notify.send(request.user,  recipient=request.user, verb=f'{request.user.username} accessed event page')
     html_template = loader.get_template("home/events.html") 
     return HttpResponse(html_template.render(context, request))
 
@@ -509,27 +568,37 @@ def user_events(request):
 def beneficiary_report(request):
     # Graphs
     # Number of beneficiaries by year
-    
+
     current_year = datetime.datetime.now().year
     year_one = current_year - 1
     year_two = current_year - 2
     year_three = current_year - 3
     year_four = current_year - 4
-    
+
     year1 = (
-        Beneficiary.objects.filter(created__year=year_four).values("created__year").count()
+        Beneficiary.objects.filter(created__year=year_four)
+        .values("created__year")
+        .count()
     )
     year2 = (
-        Beneficiary.objects.filter(created__year=year_three).values("created__year").count()
+        Beneficiary.objects.filter(created__year=year_three)
+        .values("created__year")
+        .count()
     )
     year3 = (
-        Beneficiary.objects.filter(created__year=year_two).values("created__year").count()
+        Beneficiary.objects.filter(created__year=year_two)
+        .values("created__year")
+        .count()
     )
     year4 = (
-        Beneficiary.objects.filter(created__year=year_one).values("created__year").count()
+        Beneficiary.objects.filter(created__year=year_one)
+        .values("created__year")
+        .count()
     )
     year5 = (
-        Beneficiary.objects.filter(created__year=current_year).values("created__year").count()
+        Beneficiary.objects.filter(created__year=current_year)
+        .values("created__year")
+        .count()
     )
 
     # Number of beneficiaries by province
@@ -556,14 +625,14 @@ def beneficiary_report(request):
         province_labels.append(province.name)
         beneficiary_count_data.append(total_province_beneficiaries)
 
-        province_label_json_list = json.dumps(province_labels)
+    province_label_json_list = json.dumps(province_labels)
 
     # Service Counts by Month
 
     # Number of total interactions
     total_interactions = MedicalRecord.objects.all().count()
 
-    # Dashboar Cards Stats
+    # Dashboard Cards Stats
     opd = Service.objects.filter(client_type="OPD").count()
     hts = Service.objects.filter(service_type="HTS").count()
     vl = Service.objects.filter(service_type="VL").count()
@@ -576,8 +645,10 @@ def beneficiary_report(request):
     other = Beneficiary.objects.filter(gender="Other").count()
     male_sex = Beneficiary.objects.filter(sex="Male").count()
     female_sex = Beneficiary.objects.filter(sex="Female").count()
-
+    user = request.user
+    all_unread = user.notifications.unread()[:4]
     context = {
+        "notifications": all_unread,
         "data": [],
         "opd": opd,
         "hts": hts,

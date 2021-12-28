@@ -6,6 +6,7 @@
     {% for field in form %}
             <!-- Input:Text -->
         <div class="form-group">
+             {% include "includes/notifications_modal.html" %}
             <label for="formInput#text">{{field.label}}</label>
             {{field}}
         </div>

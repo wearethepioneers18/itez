@@ -6,7 +6,8 @@
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}{% endblock stylesheets %} {% block content %}
 
-<div class="content-wrapper" id="print">
+<div class="content-wrapper" id="print"> 
+  {% include "includes/notifications_modal.html" %}
   <div class="row">
     <div class="col-sm-12">
       <div class="home-tab">

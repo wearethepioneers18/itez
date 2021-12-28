@@ -1,0 +1,49 @@
+{% load notifications_tags %}
+
+<div class="w3-container">
+  <div id="id01" class="w3-modal">
+    <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
+
+      <div class="w3-center"><br>
+        <span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>
+        <h3>All Notifications</h3>
+      </div>
+
+      <form class="w3-container" action="/action_page.php">
+        <a class="dropdown-item preview-item">
+            <div class="preview-item-content flex-grow py-2">
+              {% for notification in  user.notifications.unread %}
+              <p class="preview-subject ellipsis font-weight-medium text-dark">  
+              <div style="float: left; margin-top: -10px;">
+                {% if request.user.profile.profile_photo %}
+                  <img width="30" height="30" style="float:left;" class="img-md rounded-circle" src="{{request.user.profile.profile_photo.url}}" alt="Profile image">
+              {% elif not request.user.profile_photo and request.user.gender == 'Male' %}
+                  <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
+              {% elif not request.user.profile_photo and request.user.gender == 'Female' %}
+                  <img class="img-xs rounded-circle" src="/static/assets/images/faces/female.jpeg" alt="Profile image">
+              {% else %}
+                  <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
+              {% endif %} 
+              </div>
+              <div style="align-content: center; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; white-space: initial; max-width: 75%; margin-left: 8px; margin-top:20px">{{ notification }}</div>
+              <span style="float:right; margin-top: -20px;"  id="{{notification.slug}}">&times;</span>
+              </p>
+              <script>
+                  document.getElementById('{{notification.slug}}').addEventListener("click", function() {
+                    const host = location.origin
+                    fetch(`${host}/inbox/notifications/mark-as-read/{{notification.slug}}`).then((res) => console.log(res))
+                  });
+                </script>
+                <hr />
+                {% endfor %}
+            </div>
+          </a>
+      </form>
+
+      <div class="w3-container w3-border-top w3-padding-16 w3-light-grey">
+        <button onclick="document.getElementById('id01').style.display='none'" type="button" class="w3-button w3-red">close</button>
+      </div>
+
+    </div>
+  </div>
+</div>

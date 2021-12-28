@@ -24,7 +24,7 @@ from itez.beneficiary.models import Agent
 
 
 class MedicalRecordForm(ModelForm):
-    document = forms.FileField(
+    documents = forms.FileField(
         widget=forms.ClearableFileInput(attrs={"multiple": True})
     )
 
@@ -33,17 +33,8 @@ class MedicalRecordForm(ModelForm):
         model = MedicalRecord
         exclude = ["created", "medical_record_id", "beneficiary"]
         widgets = {
-            "interaction_date": widgets.DateInput(
-                format=("%m/%d/%Y"), attrs={"class": "form-control", "type": "date"}
-            ),
-            "provider_comments": forms.TextInput(
-                attrs={
-                    "size": 500,
-                    "title": "Extra notes or comments",
-                    "required": False,
-                }
-            ),
-            # 'document': forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}))
+            'interaction_date': widgets.DateInput(format=('%m/%d/%Y'), attrs={'class':'form-control', 'type':'date'}),
+            'provider_comments': forms.TextInput(attrs={'size': 500, 'title': 'Extra notes or comments',  'required': False}),
         }
 
     def __init__(self, *args, **kwargs):
@@ -58,8 +49,14 @@ class MedicalRecordForm(ModelForm):
                     Column("service_facility", css_class="form-group col-md-6 mb-0"),
                     Column("interaction_date", css_class="form-group col-md-6 mb-0"),
                     Column("service", css_class="form-group col-md-6 mb-0"),
-                    Column("document", css_class="form-group col-md-6 mb-0"),
+                    Column("documents", css_class="form-group col-md-6 mb-0"),
                     Column("provider_comments", css_class="form-group col-md-12 mb-0"),
+                    Column("prescription", css_class="form-group col-md-12 mb-0"),
+                    Column("when_to_take", css_class="form-group col-md-12 mb-0"),
+                    Column("no_of_days", css_class="form-group col-md-12 mb-0"),
+                    Column("lab", css_class="form-group col-md-12 mb-0"),
+                    Column("approved_by", css_class="form-group col-md-12 mb-0"),
+                    Column("approver_signature", css_class="form-group col-md-12 mb-0"),
                     css_class="form-row",
                 ),
             ),

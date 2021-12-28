@@ -27,7 +27,6 @@ django-map-widgets==0.3.2
 django-celery-results==2.2.0 # https://github.com/celery/django-celery-results
 django-filter==21.1 
 django-notifications-hq==1.6.0 # https://github.com/django-notifications/django-notifications
-{% comment %} django-notifications-rest==0.0.1 # https://github.com/yhdelgado/django-notifications-rest {% endcomment %}
 
 # Common
 # ------------------------------------------------------------------------------
@@ -43,3 +42,4 @@ django-cors-headers==3.10.0 # https://github.com/adamchainz/django-cors-headers
 djangorestframework-simplejwt==5.0.0  # https://github.com/jazzband/djangorestframework-simplejwt
 drf-spectacular==0.20.2     # https://drf-spectacular.readthedocs.io/en/latest/index.html
 PyJWT==2.1.0
+fpdf2==2.4.6  # https://pyfpdf.github.io/fpdf2/
