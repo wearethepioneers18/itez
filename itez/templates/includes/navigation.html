@@ -10,7 +10,7 @@
     </div>
     <div>
       <a href="/" style="text-decoration: none;">
-        <h2 style="padding-left:0.3em"><b>ITEZ</b></h2>
+        <h2 style="padding-left:0.3em; color: white; text-emphasis-color: orange;"><b>ITEZ</b></h2>
       </a>
     </div>
   </div>
@@ -65,14 +65,14 @@
           <input type="search" class="form-control" placeholder="Search Here" title="Search here">
         </form>
       </li>
-      
-   {% include "includes/notifications.html" %}
+
+      {% include "includes/notifications.html" %}
 
       <li class="nav-item dropdown d-none d-lg-block user-dropdown">
         <a class="nav-link" id="UserDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
           {% if request.user.profile.profile_photo %}
           <img width="40" height="40" style="margin-right: 1em;" class="img-md rounded-circle"
-            src="{{ request.user.profile.profile_photo }}" alt="Profile image">
+            src="{{ request.user.profile.profile_photo.url }}" alt="Profile image">
           {% elif not request.user.profile_photo and request.user.gender == 'Male' %}
           <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
           {% elif not request.user.profile_photo and request.user.gender == 'Female' %}
@@ -85,7 +85,7 @@
             <div class="dropdown-header text-center">
               {% if request.user.profile.profile_photo %}
               <img width="100" height="100" style="margin-right: 1em;" class="img-md rounded-circle"
-                src="{{ request.user.profile.profile_photo }}" alt="Profile image">
+                src="{{ request.user.profile.profile_photo.url }}" alt="Profile image">
               {% elif not request.user.profile_photo and request.user.gender == 'Male' %}
               <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
               {% elif not request.user.profile_photo and request.user.gender == 'Female' %}
@@ -104,7 +104,7 @@
               <i class="dropdown-item-icon mdi mdi-power text-primary me-2"></i>Sign Out</a>
           </div>
       </li>
-    </ul>
+    </ul> 
     <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
       data-bs-toggle="offcanvas">
       <span class="mdi mdi-menu"></span>

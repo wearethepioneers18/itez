@@ -32,7 +32,6 @@
         </div>
         <div class="tab-content tab-content-basic">
           <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview">
-
             <div class="row">
               <div class="col-lg-12 d-flex flex-column">
                 <div class="row flex-grow">
@@ -64,25 +63,59 @@
                             <div>
                             	<button type="button" class="btn btn-success btn-icon-text btn-lg text-white mb-0 me-0" data-toggle="tooltip" title="Download Records">
                                 {% comment %} <i class="fa fa-circle-o-notch fa-spin px-2"></i> {% endcomment %}
-                                <i id="download-report-button" class="mdi mdi-download"></i>
-                                            </button>
-                                            <button class="btn btn-primary btn-lg text-white mb-0 me-0" type="button">                             
-                                                <a href="{% url 'beneficiary:create' %}" class="text-white" style="text-decoration: none;" data-toggle="tooltip" title="Add Beneficiary">
+                                <i id="download-icon" class="mdi mdi-download"></i>
+                                  </button>
+                                  <button class="btn btn-primary btn-lg text-white mb-0 me-0" type="button">                             
+                                      <a href="{% url 'beneficiary:create' %}" class="text-white" style="text-decoration: none;" data-toggle="tooltip" title="Add Beneficiary">
                                 <i class="mdi mdi-account-plus"></i >
                                 </a>
                               </button>
                           </div>
-
                         </div>
                         <div class="table-responsive  mt-1">
-                          <table class="table select-table" id="table_id">
+                          <form name="beneficiary_form" class="form-delete">{% csrf_token %}
+                            <select class="select-style" id="beneficiary-selector" name="beneficiary-action-select">
+                              <option id="negative-select" selected>-----------------</option>
+                              <option id="positive-select" value="delete selected">delete selected</option>
+                            </select>
+                            <button style="border-top-left-radius: 10px; border-top-right-radius: 10px; margin-top: -0.8em; padding-top: -10px; padding-bottom: 8px;" id="beneficiary-select-button" class="btn btn-primary text-white mb-0 me-0" type="submit">                             
+                              Go
+                            </button>
+
+                            <table class="table select-table" id="table_id">
                             <thead>
                               <tr>
                                 <th>
                                   <div class="form-check form-check-flat mt-0">
                                     <label class="form-check-label">
-                                      <input type="checkbox" class="form-check-input" aria-checked="false"><i
+                                      <input type="checkbox" class="form-check-input selectall" aria-checked="false"><i
                                         class="input-helper"></i></label>
+                                       <script>
+                                        var actionButton = document.getElementById("beneficiary-select-button");
+                                        var formAction = document.getElementById("form-delete");
+                                        var selectText = document.getElementById("beneficiary-selector");
+                                        actionButton.addEventListener("click", function(){
+                                          var value = selectText.options[selectText.selectedIndex].value;
+                                          var text = selectText.options[selectText.selectedIndex].text;
+                                          if(text == "delete selected"){
+                                            var confirmAction = confirm("Are you sure you want to delete selected beneficiaries?");
+                                            if(confirmAction){
+                                              document.beneficiary_form.method = "post";
+                                              document.beneficiary_form.action = "{% url 'beneficiary:beneficiary_delete_many' %}";
+                                              actionButton.click
+                                            }else{
+                                              console.log("delete action for selected beneficiaries was canceled")
+                                            }
+                                          }
+                                        });
+                                         $('.selectall').click(function() {
+                                            if ($(this).is(':checked')) {
+                                                $('input:checkbox').prop('checked', true);
+                                            } else {
+                                                $('input:checkbox').prop('checked', false);
+                                            }
+                                        });
+                                       </script>
                                   </div>
                                 </th>
                                   <th>Beneficiary  ID</th>
@@ -100,7 +133,7 @@
                                 <td>
                                   <div class="form-check form-check-flat mt-0">
                                     <label class="form-check-label">
-                                      <input type="checkbox" class="form-check-input" aria-checked="false"><i
+                                      <input name="beneficiary-ids" value="{{ beneficiary.beneficiary_id }}" type="checkbox" class="form-check-input"><i
                                         class="input-helper"></i></label>
                                   </div>
                                 </td>
@@ -130,10 +163,10 @@
                                   <p>{{ beneficiary.gender }}</p>
                                 </td>
                                 <td>
-                                  <h6>{{ beneficiary.registered_facility }}</h6>
+                                  <h6 style="font-weight: normal;">{{ beneficiary.registered_facility }}</h6>
                                 </td>
                                 <td>
-                                  <h6>{{ beneficiary.created }}</h6>
+                                  <h6 style="font-weight: normal;">{{ beneficiary.created }}</h6>
                                 </td>
                                 <td>
                                   <div class="badge badge-opacity-danger">
@@ -157,7 +190,7 @@
                                             const deleteButton = document.getElementById("{{ beneficiary.id }}");
                                             deleteButton.addEventListener("click", () => {
                                               var response;
-                                              response = confirm("Are you sure you want to delete this post");
+                                              response = confirm("Are you sure you want to delete this beneficiary");
                                               if(response){
                                                 const setProperty = deleteButton.href = "{% url 'beneficiary:delete' pk=beneficiary.id %}";
                                                 setProperty.click()
@@ -170,16 +203,18 @@
                                           console.log(error)
                                         }
                                     </script>
+                                    
                                   </a>
                                   </div>
                                 </td>
                               </tr>
                               {% endfor %}
                               {% else %}
-                              <h3>No Beneficiaries Available</h3>
+                              <h3 style="margin-top: 1em;">No Beneficiaries Available</h3>
                               {% endif %}
                             </tbody>
                           </table>
+                          </form>
                         </div>
                         <div class="m-3">
 
@@ -218,7 +253,45 @@
     </div>
   </div>
 </div>
+<style>
+  .select-style {
+    -webkit-appearance: button;
+    -moz-appearance: button;
+    -webkit-padding-end: 2px;
+    -moz-padding-end: 2px;
+    -webkit-padding-start: 2px;
+    animation-delay: 1s;
+    -moz-padding-start: 2px;
+    background-color: #AAA; /* Fallback color if gradients are not supported */
+    background-position: center right;
+    border: 1px solid #AAA;
+    border-radius: 2px;
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+    color: #555;
+    font-size: inherit;
+    overflow: hidden;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    border: 1px solid #ccc;
+    width: 160px;
+    border-radius: 3px;
+    overflow: hidden;
+    background: #fafafa url("img/icon-select.png") no-repeat 90% 50%;
+}
 
+.select-style select {
+    padding: 5px 8px;
+    width: 130%;
+    border: none;
+    box-shadow: 12px;
+    background: transparent;
+    -webkit-appearance: none;
+}
+
+.select-style select:focus {
+    outline: none;
+}
+</style>
 {% endblock content %}
 
 <!-- Specific JS Plugins goes HERE  -->
@@ -240,12 +313,50 @@
   <script src="/static/assets/js/Chart.roundedBarCharts.js"></script>
   <script src="/static/assets/js/modal.js"></script>        
 
-  <script src="/static/assets/js/download_beneficiary_data.js">
+
+<script>
+  $('#download-report-button').on('click', function (e) {
+    e.preventDefault();
+
+    $.notifyBar({ cssClass: "success", html: "Your request is being processed. You download will start automatically once the file is ready ...", delay: 5000 });
+    // see the URL Setup for where this url came from
+    const url = 'export_beneficiary_data';
+    $.get(url)
+      .done(function pollAsyncResults(data) {
+        $('#download-report-button').addClass('buttonload disabled').html('Processing');
+        // bind pollAsyncResults to itself to avoid clashing with 
+        // the prior get request
+        context: this
+        // see the URL setup for where this url came from
+        const pollAsyncUrl = `poll_async_results/${data.task_id}`
+        $.get(pollAsyncUrl)
+          .done(function (asyncData, status, xhr) {
+            context: this
+            // if the status doesn't respond with 202, that means 
+            // that the task finished successfully
+            if (asyncData.state === "SUCCESS") {
+              // stop making get requests to pollAsyncResults
+              clearTimeout(pollAsyncResults);
+              $('#download-report-button').removeClass('buttonload disabled');
+              $('#download-icon').removeClass('fa fa-circle-o-notch fa-spin px-2').addClass('mdi mdi-download');
+              // add a message, modal, or something to show the user 
+              // that there was an error the error in this case 
+              // would be related to the asynchronous task's
+              // error message
+            }
+          })
+        })
+        .fail(function(xhr, status, error) {
+          // add a message, modal, or something to show the user 
+          // that there was an error
+          // The error in this case would be related to the main 
+          // function that makes a request to start the async task
+        })
+    })
   </script>
   <script>
     $(document).ready(function(){
       $('[data-toggle="tooltip"]').tooltip();
     });
-  });
 </script>
 {% endblock javascripts %}

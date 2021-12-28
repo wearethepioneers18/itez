@@ -88,3 +88,12 @@ def generate_medical_report(id):
     os.remove(f"{path_to_save_docs}/{filename}.pdf")
 
     return {"TASK_TYPE": "GENERATE_MEDICAL_REPORT", "RESULT": f"{filename}.zip"}
+
+
+@celery_app.task()
+def delete_temporary_files(directory):
+    try:
+        shutil.rmtree(directory)
+        return f"The directory {directory} was deleted."
+    except FileNotFoundError as err:
+        print(err)

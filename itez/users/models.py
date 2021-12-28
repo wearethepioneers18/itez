@@ -42,8 +42,7 @@ class UserManager(BaseUserManager):
         """
         if not password:
             raise TypeError("Superusers must have a password.")
-        # if email is None:
-        #     raise TypeError("Superusers may have an email.")
+
         if not username:
             raise TypeError("Superusers must have a unique username.")
 
