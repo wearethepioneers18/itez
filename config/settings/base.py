@@ -5,6 +5,10 @@ from datetime import timedelta
 from pathlib import Path
 import environ
 
+from django.conf import settings
+
+from celery.schedules import crontab
+
 
 ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 # itez/
@@ -42,13 +46,13 @@ LOCALE_PATHS = [str(ROOT_DIR / "locale")]
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
 DATABASES = {
-    'default': {
-        'ENGINE': "django.contrib.gis.db.backends.postgis",
-        'NAME': env("DATABASE_NAME"),
-        'USER': env("DATABASE_USERNAME"),
-        'PASSWORD': env("DATABASE_PASSWORD"),
-        'HOST': env("DATABASE_HOST"),
-        'PORT': env("DATABASE_PORT"),
+    "default": {
+        "ENGINE": "django.contrib.gis.db.backends.postgis",
+        "NAME": env("DATABASE_NAME"),
+        "USER": env("DATABASE_USERNAME"),
+        "PASSWORD": env("DATABASE_PASSWORD"),
+        "HOST": env("DATABASE_HOST"),
+        "PORT": env("DATABASE_PORT"),
     }
 }
 
@@ -72,7 +76,7 @@ DJANGO_APPS = [
     "djangocms_admin_style",
     "django.contrib.admin",
     "django.contrib.gis",
-    "django.forms"
+    "django.forms",
 ]
 THIRD_PARTY_APPS = [
     "crispy_forms",
@@ -117,7 +121,7 @@ LOGIN_REDIRECT_URL = "beneficiary:home"
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-url
 LOGIN_URL = "login"
 
-LOGOUT_REDIRECT_URL = '/login'
+LOGOUT_REDIRECT_URL = "/login"
 # PASSWORDS
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#password-hashers
@@ -302,6 +306,16 @@ CELERY_TASK_SOFT_TIME_LIMIT = 60
 # http://docs.celeryproject.org/en/latest/userguide/configuration.html#beat-scheduler
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 # django-allauth
+
+CELERY_BEAT_SCHEDULE = {
+    "delete_temporary_files": {
+        "task": "itez.beneficiary.tasks.delete_temporary_files",
+        "schedule": crontab(
+            hour="*/2", minute="00", day_of_week="mon,tue,wed,thu,fri,sat,sun"
+        ),
+        "args": (f"{MEDIA_ROOT}/temp"),
+    },
+}
 # ------------------------------------------------------------------------------
 ACCOUNT_ALLOW_REGISTRATION = env.bool("DJANGO_ACCOUNT_ALLOW_REGISTRATION", True)
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
@@ -326,29 +340,27 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "itez.authentication.backends.ActiveSessionAuthentication",
     ),
-    "DEFAULT_RENDERER_CLASSES": (
-        "rest_framework.renderers.JSONRenderer",
-    ),
+    "DEFAULT_RENDERER_CLASSES": ("rest_framework.renderers.JSONRenderer",),
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
-    "PAGE_SIZE": 10
+    "PAGE_SIZE": 10,
 }
 
 
 CORS_ORIGIN_ALLOW_ALL = True
 # CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOW_HEADERS = ['*']
+CORS_ALLOW_HEADERS = ["*"]
 CORS_URLS_REGEX = r"^/api/.*$"
 # ------------------------------------------------------------------------------
 
 # django-role-permissions
-ROLEPERMISSIONS_MODULE = 'config.settings.roles'
+ROLEPERMISSIONS_MODULE = "config.settings.roles"
 
 # DRF SPECTACULAR CONFIGS
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'ITEZ API',
-    'DESCRIPTION': "Comprehensive data management of Intersex and Trans-persons in Zambia",
-    'VERSION': '1.0.0',
+    "TITLE": "ITEZ API",
+    "DESCRIPTION": "Comprehensive data management of Intersex and Trans-persons in Zambia",
+    "VERSION": "1.0.0",
 }
 
 CMS_ENABLE_UPDATE_CHECK = False
@@ -363,12 +375,12 @@ SPECTACULAR_SETTINGS = {
         "persistAuthorization": True,
         "displayOperationId": True,
     },
-    'TITLE': 'ITEZ API',
-    'DESCRIPTION': 'Comprehensive data management of Intersex and Trans-persons in Zambia',
+    "TITLE": "ITEZ API",
+    "DESCRIPTION": "Comprehensive data management of Intersex and Trans-persons in Zambia",
     # Statically set schema version. May also be an empty string. When used together with
     # view versioning, will become '0.0.0 (v2)' for 'v2' versioned requests.
     # Set VERSION to None if only the request version should be rendered.
-    'VERSION': '1.3.0',
+    "VERSION": "1.3.0",
     # available SwaggerUI versions: https://github.com/swagger-api/swagger-ui/releases
     # "SWAGGER_UI_DIST": "//unpkg.com/swagger-ui-dist@2.0",
     # "REDOC_DIST": "https://cdn.jsdelivr.net/npm/redoc@latest",
@@ -383,8 +395,11 @@ MAP_WIDGETS = {
     "GooglePointFieldWidget": (
         ("zoom", 15),
         ("mapCenterLocation", [-15.4164488, 28.2821535]),
-        ("GooglePlaceAutocompleteOptions", {'componentRestrictions': {'country': 'zambia'}}),
+        (
+            "GooglePlaceAutocompleteOptions",
+            {"componentRestrictions": {"country": "zambia"}},
+        ),
         ("markerFitZoom", 12),
     ),
-    "GOOGLE_MAP_API_KEY": "AIzaSyDZMi5ucoQwtfIX7023ezUac8mQG2vrMpM"
+    "GOOGLE_MAP_API_KEY": "AIzaSyDZMi5ucoQwtfIX7023ezUac8mQG2vrMpM",
 }

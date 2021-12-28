@@ -174,13 +174,6 @@ def poll_async_results(request, task_id):
         return JsonResponse({"error": f"No task with id {task_id}"}, status=400)
 
 
-@login_required(login_url="/login/")
-def uielements(request):
-    context = {"title": "UI Elements"}
-    html_template = loader.get_template("beneficiary/test_details.html")
-    return HttpResponse(html_template.render(context, request))
-
-
 class MedicalRecordListView(LoginRequiredMixin, ListView):
     template_name = "beneficiary/medical_record_list.html"
     model = MedicalRecord
@@ -583,7 +576,7 @@ def beneficiary_report(request):
         province_labels.append(province.name)
         beneficiary_count_data.append(total_province_beneficiaries)
 
-        province_label_json_list = json.dumps(province_labels)
+    province_label_json_list = json.dumps(province_labels)
 
     # Service Counts by Month
 

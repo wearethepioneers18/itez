@@ -8,7 +8,6 @@ app_name = "beneficiary"
 urlpatterns = [
     path("", views.index, name="home"),
     path("events", views.user_events, name="user_events"),
-    path("uielements", views.uielements, name="uielements"),
     path("report", views.beneficiary_report, name="report"),
     path("beneficiary/list", views.BenenficiaryListView.as_view(), name="list"),
     path("beneficiary/create", views.BeneficiaryCreateView.as_view(), name="create"),
@@ -24,7 +23,7 @@ urlpatterns = [
         views.agent_delete_view,
         name="agent_delete",
     ),
-     path(
+    path(
         "agent/<int:pk>/update",
         views.AgentUpdateView.as_view(),
         name="agent_update",
