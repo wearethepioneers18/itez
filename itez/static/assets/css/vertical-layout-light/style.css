@@ -2789,11 +2789,8 @@ progress {
 
 .table {
   --bs-table-bg: transparent;
-  --bs-table-accent-bg: linear-gradient(
-    0deg,
-    rgba(43, 110, 116, 1) 0%,
-    rgba(210, 234, 236, 1) 100%
-  );
+  --bs-table-accent-bg: #dcdcdc
+  ;
   --bs-table-striped-color: #212529;
   --bs-table-striped-bg: rgba(0, 0, 0, 0.05);
   --bs-table-active-color: #212529;
@@ -13710,11 +13707,7 @@ code {
 
 /* Footer */
 .footer {
-  background: linear-gradient(
-    0deg,
-    rgba(43, 110, 116, 1) 0%,
-    rgba(210, 234, 236, 1) 100%
-  );
+  background: #C2CAEC;
   color: color(dark);
   padding: 30px 2.45rem;
   transition: all 0.25s ease;
@@ -14012,11 +14005,7 @@ code {
   padding-top: 16px;
   padding-bottom: 16px;
   z-index: 10;
-  background: linear-gradient(
-    0deg,
-    rgba(43, 110, 116, 1) 0%,
-    rgba(210, 234, 236, 1) 100%
-  );
+  background: #C2CAEC;
 }
 
 .doc-content {
@@ -19309,7 +19298,7 @@ dl li {
   padding-right: 10px;
 }
 .table.select-table th {
-  color: #a3a3a3;
+  color: black;
   font-style: normal;
   font-weight: bold;
   font-size: 11px;
@@ -19328,7 +19317,7 @@ dl li {
   font-weight: normal;
   font-size: 20px;
   line-height: 16px;
-  color: white;
+  color: black;
   padding-top: 20px;
   padding-bottom: 20px;
   padding-left: 0;
@@ -22875,10 +22864,7 @@ div.tagsinput span.tag a {
 
 .content-wrapper {
   background: linear-gradient(
-    0deg,
-    rgba(43, 110, 116, 1) 0%,
-    rgba(210, 234, 236, 1) 100%
-  );
+180deg, rgba(51, 108, 251, 0.2) 0%, rgba(51, 108, 251, 0.02) 100%);
   padding: 1.5rem 2.187rem 1.5rem 3.5rem;
   width: 100%;
   flex-grow: 1;
@@ -22893,13 +22879,11 @@ div.tagsinput span.tag a {
 .sidebar {
   min-height: calc(100vh - 97px);
   background: linear-gradient(
-    0deg,
-    rgba(68, 70, 71, 1) 0%,
-    rgba(29, 32, 32, 1) 100%
-  );
+180deg, rgba(51, 108, 251, 0.2) 0%, rgba(51, 108, 251, 0.02) 100%);
   font-family: "Shippori Antique", sans-serif;
   font-color: white;
   font-weight: 500;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   padding: 0;
   width: 220px;
   z-index: 11;
@@ -22954,6 +22938,7 @@ div.tagsinput span.tag a {
 }
 .sidebar .nav .nav-item .nav-link i.menu-icon:before {
   vertical-align: middle;
+  color: black;
 }
 .sidebar .nav .nav-item .nav-link i.menu-arrow {
   -webkit-font-smoothing: antialiased;
@@ -22976,7 +22961,7 @@ div.tagsinput span.tag a {
   transition: all 0.2s ease-in;
 }
 .sidebar .nav .nav-item .nav-link .menu-title {
-  color: white;
+  color: black;
   display: inline-block;
   font-size: 14px;
   line-height: 2;
@@ -23037,7 +23022,7 @@ div.tagsinput span.tag a {
 }
 .sidebar .nav:not(.sub-menu) > .nav-item {
   margin-top: 0.2rem;
-  color: white;
+  color: black;
 }
 .sidebar .nav:not(.sub-menu) > .nav-item:hover > .nav-link,
 .sidebar .nav:not(.sub-menu) > .nav-item:hover[aria-expanded="true"] {
@@ -23220,22 +23205,16 @@ div.tagsinput span.tag a {
   -ms-transition: background 0.25s ease;
   box-shadow: none;
   background: linear-gradient(
-    0deg,
-    rgba(43, 110, 116, 1) 0%,
-    rgba(210, 234, 236, 1) 100%
-  );
+180deg, rgba(51, 108, 251, 0.2) 0%, rgba(51, 108, 251, 0.02) 100%);
   /* Navbar color variations */
 }
 .sidebar-dark .navbar {
   box-shadow: none;
 }
 .navbar .navbar-brand-wrapper {
-  background: linear-gradient(
-    0deg,
-    rgba(68, 70, 71, 1) 0%,
-    rgba(29, 32, 32, 1) 100%
-  );
-  transition: width 0.25s ease, background 0.25s ease;
+background: linear-gradient(
+180deg, rgba(51, 108, 251, 0.2) 0%, rgba(51, 108, 251, 0.02) 100%);  
+transition: width 0.25s ease, background 0.25s ease;
   -webkit-transition: width 0.25s ease, background 0.25s ease;
   -moz-transition: width 0.25s ease, background 0.25s ease;
   -ms-transition: width 0.25s ease, background 0.25s ease;
@@ -23245,18 +23224,12 @@ div.tagsinput span.tag a {
 }
 .sidebar-dark .navbar .navbar-brand-wrapper {
   background: linear-gradient(
-    0deg,
-    rgba(68, 70, 71, 1) 0%,
-    rgba(29, 32, 32, 1) 100%
-  );
+180deg, rgba(51, 108, 251, 0.2) 0%, rgba(51, 108, 251, 0.02) 100%);
 }
 @media (max-width: 991px) {
   .sidebar-dark .navbar .navbar-brand-wrapper {
     background: linear-gradient(
-      0deg,
-      rgba(43, 110, 116, 1) 0%,
-      rgba(210, 234, 236, 1) 100%
-    );
+180deg, rgba(51, 108, 251, 0.2) 0%, rgba(51, 108, 251, 0.02) 100%);
   }
 }
 @media (max-width: 991px) {
@@ -23331,10 +23304,11 @@ div.tagsinput span.tag a {
 }
 .navbar .navbar-menu-wrapper {
   background: linear-gradient(
-    0deg,
-    rgba(43, 110, 116, 1) 0%,
-    rgba(210, 234, 236, 1) 100%
-  );
+    90deg, 
+    rgba(51,108,251,0.20258525773590685) 0%, 
+    rgba(51,108,251,0.017711308156074912) 100%);
+
+  .navbar .navbar-menu-wrapper 
   transition: width 0.25s ease;
   -webkit-transition: width 0.25s ease;
   -moz-transition: width 0.25s ease;
@@ -24669,7 +24643,7 @@ div.tagsinput span.tag a {
   font-weight: normal;
   font-size: 28px;
   line-height: 38px;
-  color: #584f4f;
+  color: black;
   margin-bottom: 10px;
 }
 .navbar .navbar-menu-wrapper .navbar-nav .nav-item .welcome-text .text-dark {
@@ -24681,7 +24655,7 @@ div.tagsinput span.tag a {
   font-weight: normal;
   font-size: 17px;
   line-height: 22px;
-  color: #584f4f;
+  color: black;
   margin-bottom: 0;
 }
 .navbar .navbar-menu-wrapper .navbar-nav .nav-item .dropdown-bordered {

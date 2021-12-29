@@ -4,7 +4,7 @@
 
       <a href="#" class="notification dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true">
         {% if user.is_authenticated %}
-           <i class="fa fa-bell" style="font-size:18px;color:white"></i>             
+           <i class="fa fa-bell" style="font-size:18px;color:black"></i>             
            <span class="badge" style="float:right; margin-bottom:-3px; margin-top: -2px !important; margin-left:10px !important; font-size: 0.6rem;">
                 {% if  user.notifications.unread.count %}
                   {% live_notify_badge %}
