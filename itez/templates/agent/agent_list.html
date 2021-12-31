@@ -56,7 +56,7 @@
                             </div>
                           </div>
                           <div>
-                            <button class="btn btn-primary btn-lg text-white mb-0 me-0" type="button">
+                            <button class="btn btn-info btn-lg text-white mb-0 me-0" type="button">
                               <a href="{% url 'beneficiary:agent_create' %}" class="text-white"
                                 style="text-decoration: none;">
                                 <i class="mdi mdi-account-plus"></i>Add new Agent User</button>
@@ -163,15 +163,15 @@
                                   <h6>{{ agent.Location }}</h6>
                                 </td> -->
                                 <td>
-                                  <div class="badge badge-opacity-danger">
+                                  <div class="badge ">
                                     <a href="{% url 'beneficiary:agent_update' pk=agent.id %}" data-toggle="tooltip" title="Edit">
-                                      <i class="menu-icon mdi mdi-pencil" class="tooltiptext"></i>
+                                      <i class="menu-icon mdi mdi-pencil" class="tooltiptext" style="color:#458ff6"></i>
                                     </a>
                                   </div>
 
-                                  <div class="badge badge-opacity-danger">
+                                  <div class="badge">
                                     <a id="{{ agent.id }}" data-toggle="tooltip" title="Delete">
-                                      <i class="menu-icon mdi mdi-delete-forever"></i>
+                                      <i class="menu-icon mdi mdi-delete-forever" style="color:red"></i>
                                       <script>
                                         try{
                                           if("{{ agent.id }}" === "{{ agent.id }}"){

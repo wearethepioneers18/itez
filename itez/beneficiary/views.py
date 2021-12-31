@@ -60,7 +60,7 @@ from itez.beneficiary.models import Service
 from django.db.models import Count
 
 from django.core.paginator import Paginator
-from .tasks import generate_export_file
+from .tasks import generate_export_file, generate_medical_report
 from notifications.signals import notify
 
 
@@ -196,7 +196,7 @@ class MedicalRecordListView(LoginRequiredMixin, ListView):
             pk=self.kwargs["beneficiary_id"]
         )
         context["title"] = "Medical Records"
-        notify.send(self.request.user,  recipient=self.request.user, verb=f'{self.request.user} accessed Medical Record list')
+        # notify.send(self.request.user,  recipient=self.request.user, verb=f'{self.request.user} accessed Medical Record list')
         return context
 
 
@@ -213,7 +213,7 @@ class MedicalRecordDetailView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(MedicalRecordDetailView, self).get_context_data(**kwargs)
         context["title"] = "Medical Record"
-        notify.send(self.request.user,  recipient=self.request.user, verb=f'{self.request.user} accessed medical record pages')
+        # notify.send(self.request.user,  recipient=self.request.user, verb=f'{self.request.user} accessed medical record pages')
         return context
 
 
@@ -234,15 +234,14 @@ class MedicalRecordCreateView(LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super(MedicalRecordCreateView, self).get_context_data(**kwargs)
         context["title"] = "add medical record"
-        notify.send(self.request.user,  recipient=self.request.user, verb=f'{self.request.user} accessed the medical create page')
+        # notify.send(self.request.user,  recipient=self.request.user, verb=f'{self.request.user} accessed the medical create page')
         return context
 
     def form_valid(self, form):
         beneficiary_object_id = self.kwargs.get("beneficiary_id", None)
-        form.instance.beneficiary = Beneficiary.objects.get(id=beneficiary_object_id)
+        beneficiary_obj = Beneficiary.objects.get(id=beneficiary_object_id)
         notify.send(self.request.user,  recipient=self.request.user, verb=f'{self.request.user} created medical record')
-        return super(MedicalRecordCreateView, self).form_valid(form)
-
+        files = form.files.getlist("documents")
         files_dict = create_files_dict(
             directory=beneficiary_obj.beneficiary_id, filenames=[f.name for f in files]
         )
@@ -255,11 +254,6 @@ class MedicalRecordCreateView(LoginRequiredMixin, CreateView):
         form.save()
         return super(MedicalRecordCreateView, self).form_valid(form)
 
-    def get_context_data(self, **kwargs):
-        context = super(BeneficiaryCreateView, self).get_context_data(**kwargs)
-        context["title"] = "create new beneficiary"
-        notify.send(self.request.user,  recipient=self.request.user, verb=f'{self.request.user} created a beneficiary')
-        return context
 
 class BenenficiaryListView(LoginRequiredMixin, ListView):
     """
@@ -492,7 +486,7 @@ def agent_delete_many(request):
 def agent_delete(request, pk):
     agent = Agent.objects.get(id=pk)
     agent.delete()
-    notify.send(self.request.user,  recipient=self.request.user, verb=f'{self.request.user} deleted agent')
+    notify.send(request.user,  recipient=request.user, verb=f'{request.user} deleted agent')
     return redirect(reverse("beneficiary:agent_list"))
 
 
@@ -538,7 +532,6 @@ class BenenficiaryListView(LoginRequiredMixin, ListView):
         context["user_roles"] = user_roles()
         context["title"] = "Beneficiaries"
         context["notifications"] = all_unread
-        notify.send(self.request.user,  recipient=self.request.user, verb=f'{self.request.user} accessed Beneficiary pages')
         return context
 
 
@@ -635,7 +628,7 @@ class BeneficiaryDetailView(LoginRequiredMixin, DetailView):
         context["beneficiary"] = current_beneficiary
         context["service_paginator_list"] = service_paginator_list
         context["latest_beneficiary_service"] = latest_beneficiary_service
-        notify.send(self.request.user,  recipient=self.request.user, verb=f'{self.request.user} viewed beneficiary')
+        notify.send(self.request.user,  recipient=self.request.user, verb=f'{self.request.user} created medical record')
         context["user_roles"] = user_roles()
         return context
 
@@ -672,7 +665,7 @@ class AgentCreateView(LoginRequiredMixin, CreateView):
     form_class = AgentForm
     template_name = "agent/agent_create.html"
 
-    def get_success_url(self):
+    def get_success_url(self):        
         return reverse("beneficiary:agent_list")
 
     def form_valid(self, form):
@@ -687,8 +680,8 @@ class AgentCreateView(LoginRequiredMixin, CreateView):
         context["notifications"] = all_unread
         context["title"] = "create agent"
         context["roles"] = roles
-        notify.send(self.request.user,  recipient=self.request.user, verb=f'{self.request.user} created agent')
         context["user_roles"] = user_roles()
+        notify.send(self.request.user,  recipient=self.request.user, verb=f'{self.request.user} created agent')
         return context
 
 
@@ -707,7 +700,6 @@ class AgentListView(LoginRequiredMixin, ListView):
         all_unread = user.notifications.unread()[:4]
         context["notifications"] = all_unread
         context["title"] = "list all agents"
-        notify.send(self.request.user,  recipient=self.request.user, verb=f'{self.request.user} accessed agents pages')
         context["user_roles"] = user_roles()
         return context
 
@@ -727,7 +719,6 @@ class AgentDetailView(LoginRequiredMixin, DetailView):
         all_unread = user.notifications.unread()[:4]
         context["notifications"] = all_unread
         context["title"] = "Agent User Details"
-        notify.send(self.request.user,  recipient=self.request.user, verb=f'{self.request.user.username} viewed agent details')
         context["user_roles"] = user_roles()
         return context
 
@@ -746,7 +737,6 @@ def user_events(request):
         "notifications": all_unread,
         "user_roles": user_roles()
         }
-    notify.send(request.user,  recipient=request.user, verb=f'{request.user.username} accessed event page')
     html_template = loader.get_template("home/events.html") 
     return HttpResponse(html_template.render(context, request))
 

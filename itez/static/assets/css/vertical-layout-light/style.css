@@ -2789,7 +2789,7 @@ progress {
 
 .table {
   --bs-table-bg: transparent;
-  --bs-table-accent-bg: #dcdcdc
+  --bs-table-accent-bg: #F6F8FB
   ;
   --bs-table-striped-color: #212529;
   --bs-table-striped-bg: rgba(0, 0, 0, 0.05);
@@ -2799,6 +2799,7 @@ progress {
   --bs-table-hover-bg: #eaeaf1;
   width: 100%;
   margin-bottom: 1rem;
+  margin-top: 20;
   color: #212529;
   vertical-align: top;
   border-color: #dee2e6;
@@ -10247,7 +10248,7 @@ fieldset:disabled .swal2-modal .swal2-buttonswrapper .swal2-styled,
 
 .text-info {
   --bs-text-opacity: 1;
-  color: rgba(var(--bs-info-rgb), var(--bs-text-opacity)) !important;
+  color: white;
 }
 
 .text-warning {
@@ -13707,7 +13708,7 @@ code {
 
 /* Footer */
 .footer {
-  background: #C2CAEC;
+  background: #deeefe;
   color: color(dark);
   padding: 30px 2.45rem;
   transition: all 0.25s ease;
@@ -14735,8 +14736,7 @@ code {
 }
 
 .badge-opacity-info {
-  background: white;
-  color: #1fbeff;
+  color: #458ff6;
 }
 
 .badge-opacity-warning {
@@ -14771,8 +14771,7 @@ code {
 
 .badge-success,
 .preview-list .preview-item .preview-thumbnail .badge.badge-online {
-  color: #34b1aa;
-  border: 1px solid #34b1aa;
+  color: #26938ce6;
 }
 
 .badge-info,
@@ -15141,8 +15140,7 @@ code {
 
 /*social buttons*/
 .btn-primary {
-  background: #1f3bb3;
-  color: #ffffff;
+  background: #4992f6;
 }
 .btn-primary.btn-light,
 .btn-primary.btn-secondary {
@@ -15260,7 +15258,7 @@ code {
 }
 
 .btn-info {
-  background: #52cdff;
+  background: #458ff6;
   color: #ffffff;
 }
 .btn-info.btn-light,
@@ -20795,6 +20793,7 @@ body.avgrund-active {
 .dataTables_wrapper {
   padding-left: 0;
   padding-right: 0;
+  margin-top: 20,
 }
 .dataTables_wrapper label {
   font-size: 0.8125rem;
@@ -22863,8 +22862,7 @@ div.tagsinput span.tag a {
 }
 
 .content-wrapper {
-  background: linear-gradient(
-180deg, rgba(51, 108, 251, 0.2) 0%, rgba(51, 108, 251, 0.02) 100%);
+  background: #deeefe;
   padding: 1.5rem 2.187rem 1.5rem 3.5rem;
   width: 100%;
   flex-grow: 1;
@@ -22878,8 +22876,7 @@ div.tagsinput span.tag a {
 /* Sidebar */
 .sidebar {
   min-height: calc(100vh - 97px);
-  background: linear-gradient(
-180deg, rgba(51, 108, 251, 0.2) 0%, rgba(51, 108, 251, 0.02) 100%);
+  background: #ffffff;
   font-family: "Shippori Antique", sans-serif;
   font-color: white;
   font-weight: 500;
@@ -23204,16 +23201,14 @@ div.tagsinput span.tag a {
   -moz-transition: background 0.25s ease;
   -ms-transition: background 0.25s ease;
   box-shadow: none;
-  background: linear-gradient(
-180deg, rgba(51, 108, 251, 0.2) 0%, rgba(51, 108, 251, 0.02) 100%);
+  background: #deeefe;
   /* Navbar color variations */
 }
 .sidebar-dark .navbar {
   box-shadow: none;
 }
 .navbar .navbar-brand-wrapper {
-background: linear-gradient(
-180deg, rgba(51, 108, 251, 0.2) 0%, rgba(51, 108, 251, 0.02) 100%);  
+background: #ffffff;  
 transition: width 0.25s ease, background 0.25s ease;
   -webkit-transition: width 0.25s ease, background 0.25s ease;
   -moz-transition: width 0.25s ease, background 0.25s ease;
@@ -23223,8 +23218,7 @@ transition: width 0.25s ease, background 0.25s ease;
   padding: 20px 35px;
 }
 .sidebar-dark .navbar .navbar-brand-wrapper {
-  background: linear-gradient(
-180deg, rgba(51, 108, 251, 0.2) 0%, rgba(51, 108, 251, 0.02) 100%);
+  background: #ffffff;
 }
 @media (max-width: 991px) {
   .sidebar-dark .navbar .navbar-brand-wrapper {
@@ -23303,10 +23297,7 @@ transition: width 0.25s ease, background 0.25s ease;
   color: #ffffff;
 }
 .navbar .navbar-menu-wrapper {
-  background: linear-gradient(
-    90deg, 
-    rgba(51,108,251,0.20258525773590685) 0%, 
-    rgba(51,108,251,0.017711308156074912) 100%);
+  background: #deeefe;
 
   .navbar .navbar-menu-wrapper 
   transition: width 0.25s ease;
@@ -31113,7 +31104,7 @@ transition: width 0.25s ease, background 0.25s ease;
   right: 30px;
   height: 45px;
   width: 45px;
-  background: #1f3bb3;
+  background: #458FF6;
   z-index: 99;
   display: flex;
   align-items: center;

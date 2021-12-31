@@ -1,5 +1,5 @@
 $(
-    $('#download-report-button').on('click', function(e) {
+    $('#download-icon').on('click', function(e) {
         e.preventDefault();
         
         $.notifyBar({ cssClass: "success", html: "Your request is being processed. You download will start automatically once the file is ready ...",delay: 5000});
@@ -7,7 +7,7 @@ $(
         const url = 'export_beneficiary_data';
         $.get(url)
         .done(function pollAsyncResults(data) {
-            $('#download-report-button').addClass('buttonload disabled').html('Processing');
+            $('#download-icon').addClass('buttonload disabled').html('Processing');
             // bind pollAsyncResults to itself to avoid clashing with 
             // the prior get request
             context: this
@@ -22,8 +22,8 @@ $(
                 if (asyncData.state === "SUCCESS") {
                 // stop making get requests to pollAsyncResults
                 clearTimeout(pollAsyncResults);
-                $('#download-report-button').removeClass('buttonload disabled')
-                $('#download-report-button').addClass('mdi mdi-download').html('')
+                $('#download-icon').removeClass('buttonload disabled')
+                $('#download-icon').addClass('mdi mdi-download').html('')
                 // to download - create an anchor element and
                 // simulate a click
                 const a = document.createElement('a');
@@ -57,7 +57,7 @@ $(
                 
                 clearTimeout(pollAsyncResults);
                 
-                $('#download-report-button').removeClass('buttonload disabled');
+                $('#download-icon').removeClass('buttonload disabled');
                 $('#download-icon').removeClass('fa fa-circle-o-notch fa-spin px-2').addClass('mdi mdi-download');
                 // add a message, modal, or something to show the user 
                 // that there was an error the error in this case 
