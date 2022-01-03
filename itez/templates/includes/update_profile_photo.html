@@ -1,0 +1,29 @@
+<div class="w3-container">
+  <div id="profile_photo_update_modal" class="w3-modal">
+    <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
+
+      <div class="w3-center"><br>
+        <span onclick="document.getElementById('profile_photo_update_modal').style.display='none'" class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>
+        <img src="img_avatar4.png" alt="Avatar" style="width:30%" class="w3-circle w3-margin-top">
+      </div>
+
+      <form class="w3-container" method="post"  enctype="multipart/form-data" action="{% url 'user:profile_photo' %}"> 
+          {% csrf_token %}
+        <div class="w3-section">
+           <div class="col-sm-12 card mb-2">
+                 <label for="profile_photo" class="form-label text-muted">Profile Photo:</label>
+                 <input name="profile-photo" id="profile_photo" type="file" class="form-control">
+             </div>
+        </div>
+
+          <div class="w3-container w3-border-top w3-padding-16 w3-light-grey">
+            <button type="submit" class="w3-button w3-blue">Upload</button>
+        </div>
+
+        <div class="w3-container w3-border-top w3-padding-16 w3-light-grey">
+         <button onclick="document.getElementById('profile_photo_update_modal').style.display='none'" type="button" class="w3-button w3-red">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

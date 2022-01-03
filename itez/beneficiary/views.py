@@ -166,12 +166,14 @@ def poll_async_results(request, task_id):
         download_url = ""
 
         if task.result["TASK_TYPE"] == "EXPORT_BENEFICIARY_DATA":
+            print("download ready")
             download_url = f"{media_url}exports/{task.result['RESULT']}"
 
         elif task.result["TASK_TYPE"] == "GENERATE_MEDICAL_REPORT":
             download_url = f"{media_url}temp/{task.result['RESULT']}"
 
         body = {"state": task.state, "location": download_url}
+        print("download response")
         return JsonResponse(body, status=201)
 
     elif task.state == "PENDING":
@@ -196,7 +198,6 @@ class MedicalRecordListView(LoginRequiredMixin, ListView):
             pk=self.kwargs["beneficiary_id"]
         )
         context["title"] = "Medical Records"
-        # notify.send(self.request.user,  recipient=self.request.user, verb=f'{self.request.user} accessed Medical Record list')
         return context
 
 
@@ -213,7 +214,6 @@ class MedicalRecordDetailView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(MedicalRecordDetailView, self).get_context_data(**kwargs)
         context["title"] = "Medical Record"
-        # notify.send(self.request.user,  recipient=self.request.user, verb=f'{self.request.user} accessed medical record pages')
         return context
 
 
@@ -234,13 +234,13 @@ class MedicalRecordCreateView(LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super(MedicalRecordCreateView, self).get_context_data(**kwargs)
         context["title"] = "add medical record"
-        # notify.send(self.request.user,  recipient=self.request.user, verb=f'{self.request.user} accessed the medical create page')
         return context
 
     def form_valid(self, form):
         beneficiary_object_id = self.kwargs.get("beneficiary_id", None)
         beneficiary_obj = Beneficiary.objects.get(id=beneficiary_object_id)
-        notify.send(self.request.user,  recipient=self.request.user, verb=f'{self.request.user} created medical record')
+        notify.send(self.request.user,  recipient=self.request.user, verb= "created medical record")
+
         files = form.files.getlist("documents")
         files_dict = create_files_dict(
             directory=beneficiary_obj.beneficiary_id, filenames=[f.name for f in files]
@@ -371,40 +371,26 @@ class BeneficiaryDetailView(LoginRequiredMixin, DetailView):
         return context
 
 
-class BeneficiaryCreateView(LoginRequiredMixin, CreateView):
-    """
-    Create a new Beneficiary object.
-    """
-
-    model = Beneficiary
-    form_class = BeneficiaryForm
-    template_name = "beneficiary/beneficiary_create.html"
-
-    def get_success_url(self):
-        return reverse("beneficiary:list")
-
-    def get_context_data(self, **kwargs):
-        context = super(BeneficiaryCreateView, self).get_context_data(**kwargs)
-        context["title"] = "create new beneficiary"
-        context["user_roles"] = user_roles()
-        return context
-
-
-
 class BeneficiaryUpdateView(LoginRequiredMixin, UpdateView):
     model = Beneficiary
     template_name = "beneficiary/beneficiary_update.html"
     success_url = "/beneficiary/list"
     form_class = BeneficiaryForm
 
+    def form_valid(self, form):
+        notify.send(request.user,  recipient=request.user, verb= "updated beneficiary form")
+        return super(BeneficiaryUpdateView, self).form_valid(form)
+
     def get_context_data(self, **kwargs):
         context = super(BeneficiaryUpdateView, self).get_context_data(**kwargs)
         beneficiary_id = self.kwargs.get("pk")
         beneficiary = Beneficiary.objects.get(id=beneficiary_id)
         form = BeneficiaryForm(instance=beneficiary)
+        user = self.request.user
+        all_unread = user.notifications.unread()[:4]
+        context["notifications"] = all_unread        
         context["title"] = "update beneficiary"
         context["form"] = form
-        notify.send(self.request.user,  recipient=self.request.user, verb=f'{self.request.user} updated beneficiary form')
         context["user_roles"] = user_roles()
         return context
 
@@ -424,6 +410,7 @@ class AgentUpdateView(LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         if form.is_valid():
             form.save()
+            notify.send(self.request.user,  recipient=self.request.user, verb= "updated agent form")
             return redirect(reverse("beneficiary:agent_list"))
     
     def get_context_data(self, **kwargs):
@@ -431,9 +418,11 @@ class AgentUpdateView(LoginRequiredMixin, UpdateView):
         agent_id = self.kwargs.get("pk")
         agent = Agent.objects.get(id=agent_id)
         form = AgentForm(instance=agent)
+        user = self.request.user
+        all_unread = user.notifications.unread()[:4]
+        context["notifications"] = all_unread       
         context["title"] = "update agent"
         context["form"] = form
-        notify.send(self.request.user,  recipient=self.request.user, verb=f'{self.request.user} updated agent form')
         context["user_roles"] = user_roles()
         return context
 
@@ -442,7 +431,7 @@ class AgentUpdateView(LoginRequiredMixin, UpdateView):
 def beneficiary_delete(request, pk):
     beneficiary = Beneficiary.objects.get(id=pk)
     beneficiary.delete()
-    notify.send(self.request.user,  recipient=self.request.user, verb=f'{self.request.user} deleted beneficiary')
+    notify.send(request.user,  recipient=request.user, verb= "deleted beneficiary")
     return redirect(reverse("beneficiary:list"))
 
 
@@ -453,8 +442,10 @@ def beneficiary_delete_many(request):
         if not '--' in beneficiary_action:
             beneficiary_id_list = request.POST.getlist('beneficiary-ids', [])
             for beneficiary_id in beneficiary_id_list:
+                print(beneficiary_id_list)
                 beneficiary = Beneficiary.objects.get(beneficiary_id=beneficiary_id)
                 beneficiary.delete()
+            notify.send(request.user,  recipient=request.user, verb= "deleted beneficiaries")
             return redirect(reverse("beneficiary:list"))
     return redirect(reverse("beneficiary:list"))
 
@@ -478,6 +469,7 @@ def agent_delete_many(request):
             for agent_id in agent_id_list:
                 agent = Agent.objects.get(agent_id=agent_id)
                 agent.delete()
+            notify.send(request.user,  recipient=request.user, verb= "deleted agents")
             return redirect(reverse("beneficiary:agent_list"))
     return redirect(reverse("beneficiary:agent_list"))
 
@@ -486,7 +478,8 @@ def agent_delete_many(request):
 def agent_delete(request, pk):
     agent = Agent.objects.get(id=pk)
     agent.delete()
-    notify.send(request.user,  recipient=request.user, verb=f'{request.user} deleted agent')
+    notify.send(request.user,  recipient=request.user, verb= "deleted agent")
+
     return redirect(reverse("beneficiary:agent_list"))
 
 
@@ -628,7 +621,6 @@ class BeneficiaryDetailView(LoginRequiredMixin, DetailView):
         context["beneficiary"] = current_beneficiary
         context["service_paginator_list"] = service_paginator_list
         context["latest_beneficiary_service"] = latest_beneficiary_service
-        notify.send(self.request.user,  recipient=self.request.user, verb=f'{self.request.user} created medical record')
         context["user_roles"] = user_roles()
         return context
 
@@ -644,6 +636,10 @@ class BeneficiaryCreateView(LoginRequiredMixin, CreateView):
 
     def get_success_url(self):
         return reverse("beneficiary:list")
+    
+    def form_valid(self, form):
+        notify.send(self.request.user,  recipient=self.request.user, verb= "created beneficiary")
+        return super(BeneficiaryCreateView, self).form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = super(BeneficiaryCreateView, self).get_context_data(**kwargs)
@@ -652,7 +648,6 @@ class BeneficiaryCreateView(LoginRequiredMixin, CreateView):
         context["notifications"] = all_unread
         context["user_roles"] = user_roles()
         context["title"] = "create new beneficiary"
-        notify.send(self.request.user,  recipient=self.request.user, verb=f'{self.request.user} created beneficiary')
         return context
 
 
@@ -670,6 +665,7 @@ class AgentCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.author = self.request.user
+        notify.send(self.request.user,  recipient=self.request.user, verb= "created agent")
         return super(AgentCreateView, self).form_valid(form)
 
     def get_context_data(self, **kwargs):

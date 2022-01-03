@@ -19,8 +19,7 @@
           {% include 'beneficiary/service_detail_modal.html' %}
           {% for service in service_paginator_list %}
           <tr class="first_td{{ service.service_id }}">
-              <td><a style="text-decoration: none; cursor: pointer; color: blue;" onclick="document.getElementById('id01').style.display='block'">{{ service.service_object }}</a></td>
-              <td>{{ service.service_provider }}</td>
+  <td><a style="text-decoration: none; cursor: pointer; color: blue;" onclick="document.getElementById('service_detail_modal').style.display='block'">{{ service.service_object }}</a></td>              <td>{{ service.service_provider }}</td>
               <td>{{ service.service_comments }}</td>
               <td>{{ service.service_facility }}</td>
           </tr>

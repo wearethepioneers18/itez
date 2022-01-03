@@ -69,7 +69,7 @@
       {% include "includes/notifications.html" %}
 
       <li class="nav-item dropdown d-none d-lg-block user-dropdown">
-        <a class="nav-link" id="UserDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+        <a class="nav-link" id="UserDropdown" data-bs-toggle="dropdown" aria-expanded="false">
           {% if request.user.profile.profile_photo %}
           <img width="40" height="40" style="margin-right: 1em;" class="img-md rounded-circle"
             src="{{ request.user.profile.profile_photo.url }}" alt="Profile image">
@@ -85,18 +85,23 @@
             <div class="dropdown-header text-center">
               {% if request.user.profile.profile_photo %}
               <img width="100" height="100" style="margin-right: 1em;" class="img-md rounded-circle"
-                src="{{ request.user.profile.profile_photo.url }}" alt="Profile image">
+                src="{{ request.user.profile.profile_photo.url }}" alt="Profile image" onclick="document.getElementById('profile_photo_update_modal').style.display='block'"> 
               {% elif not request.user.profile_photo and request.user.gender == 'Male' %}
-              <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
+              <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image" onclick="document.getElementById('profile_photo_update_modal').style.display='block'"> 
               {% elif not request.user.profile_photo and request.user.gender == 'Female' %}
-              <img class="img-xs rounded-circle" src="/static/assets/images/faces/female.jpeg" alt="Profile image">
+              <img class="img-xs rounded-circle" src="/static/assets/images/faces/female.jpeg" alt="Profile image" onclick="document.getElementById('profile_photo_update_modal').style.display='block'"> 
               {% else %}
-              <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
+              <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image" onclick="document.getElementById('profile_photo_update_modal').style.display='block'"> 
               {% endif %}
               <p class="mb-1 mt-3 font-weight-semibold">
-                {{ request.user.first_name|title }}
-                {{ request.user.last_name|title }}</p>
-              <p class="fw-light text-muted mb-0">{{ request.user.username }}</p>
+               {% if not request.user.first_name and not request.user.last_name %}
+                   <p class="fw-light text-muted mb-0">{{ request.user.username }}</p>
+                {% else %}
+                  {{ request.user.first_name|title }}
+                  {{ request.user.last_name|title }}</span>
+                </h1>
+                {% endif %}
+              </p>
             </div>
             <a class="dropdown-item" href="{% url 'user:profile' %}"><i
                 class="dropdown-item-icon mdi mdi-account-outline text-primary me-2"></i> My Profile</a>

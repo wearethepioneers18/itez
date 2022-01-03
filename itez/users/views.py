@@ -11,6 +11,8 @@ from itez.users.models import User as user_model
 from itez.users.models import Profile
 from itez.beneficiary.models import District, Province
 from itez.users.models import EDUCATION_LEVEL, GENDER_CHOICES, SEX_CHOICES
+from notifications.signals import notify
+
 
 
 User = get_user_model()
@@ -30,6 +32,14 @@ class UserDetailView(LoginRequiredMixin, DetailView):
 
 
 user_detail_view = UserDetailView.as_view()
+
+@login_required(login_url="/login/")
+def user_profile_photo_update(request):
+    current_profile_object = Profile.objects.get(id=request.user.id)
+    profile_photo = request.FILES.get("profile-photo", current_profile_object.profile_photo)
+    current_profile_object.profile_photo = profile_photo
+    current_profile_object.save()
+    return redirect(reverse("beneficiary:home"))
 
 
 @login_required(login_url="/login/")

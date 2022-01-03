@@ -1,12 +1,13 @@
  {% load notifications_tags %}
 
- <li class="nav-item dropdown"> 
+ <li id="notification-counter" class="nav-item dropdown"> 
 
       <a href="#" class="notification dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true">
         {% if user.is_authenticated %}
+        
            <i class="fa fa-bell" style="font-size:18px;color:black"></i>             
-           <span class="badge" style="float:right; margin-bottom:-3px; margin-top: -2px !important; margin-left:10px !important; font-size: 0.6rem;">
-                {% if  user.notifications.unread.count %}
+           <span class="badge circle" style="float:right; margin-bottom:-3px; margin-top: -2px !important; margin-left:10px !important; font-size: 0.6rem;">
+                {% if  user.notifications.read%}
                   {% live_notify_badge %}
                 {% else %}
                 ...
@@ -45,7 +46,7 @@
                     const host = location.origin
                     fetch(`${host}/inbox/notifications/mark_all_as_read/{{notification.slug}}`).then((res) => console.log(res))
                   });
-                </script>
+              </script>
                 <hr />
                 {% endfor %}
             </div>
@@ -53,3 +54,9 @@
         </div>  
 
     </li>
+    <script>
+      document.getElementById('notification-counter').addEventListener("click", function() {
+        const host = location.origin
+        fetch(`${host}/inbox/notifications/mark-all-as-read/`).then((res) => console.log(res))
+      });
+    </script>

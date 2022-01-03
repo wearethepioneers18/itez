@@ -21,6 +21,7 @@ from mapwidgets.widgets import GooglePointFieldWidget
 
 from itez.beneficiary.models import Beneficiary, MedicalRecord
 from itez.beneficiary.models import Agent
+from notifications.signals import notify
 
 
 class MedicalRecordForm(ModelForm):
@@ -185,6 +186,6 @@ class BeneficiaryForm(ModelForm):
     def save(self, commit=True):
         instance = super(BeneficiaryForm, self).save(commit=False)
         if commit:
-            instance.save()
+            instance.save()       
         # self.save_m2m()  # we  can use this if we have many to many field on the model i.e Service
         return instance
