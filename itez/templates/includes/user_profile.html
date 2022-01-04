@@ -195,7 +195,7 @@
                                     <div class="card-body">
                                         <div style="margin-right: 12em;" class="wrapper d-flex align-items-center justify-content-between py-2 border-bottom">
                                             {% if request.user.profile.profile_photo %}
-                                                <img height="100" width="100" style="border-radius: 0.6em;"  class="img-md zoom rounded-square  mt-4" src="{{ request.user.profile.profile_photo.url }}" alt="Profile image">
+                                                <img height="100" width="100" style="border-radius: 0.6em; margin-left: 135;"  class="img-md zoom rounded-square  mt-4" src="{{ request.user.profile.profile_photo.url }}" alt="Profile image">
                                             {% elif not request.user.profile_photo and request.user.gender == 'Male' %}
                                                 <img style="border-radius: 0.6em;" class="img-xs rounded-square  mt-4" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
                                             {% elif not request.user.profile_photo and request.user.gender == 'Female' %}

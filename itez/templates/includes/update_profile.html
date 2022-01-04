@@ -2,9 +2,9 @@
   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
   <div id="update_modal" class="w3-modal">
    <div class="w3-modal-content w3-card-4 w3-animate-zoom">
-    <header class="w3-container" style="background: linear-gradient(0deg, rgba(43, 110, 116, 1) 0%,rgba(210, 234, 236, 1) 100%)"> 
+    <header class="w3-container" style="background: #deeefe"> 
      <span onclick="document.getElementById('update_modal').style.display='none'" class="w3-button w3-red w3-xsmall w3-display-topright" style="border-radius: 6em; max-width: 30px; padding-top: -3px; padding: 4px; margin-right: 6px; margin-top: 8px; max-height: 30px;">&times;</span>
-     <h2 style="font-weight: bold; color: white;">user profile update</h2>
+     <h2 style="font-weight: bold; color: black;">user profile update</h2>
     </header>
     <form method="post" enctype="multipart/form-data">{% csrf_token %} 
        <div class="w3-container">
@@ -123,12 +123,24 @@
                  <textarea id="about_me" style=" border-radius: 1px; border-radius: 4px;" name="about" cols="46" class="mb-1 mt-1" placeholder="About you">{{ user.about_me }}</textarea>
              </div>
          </div>
-         <button id="button1" style="padding-top: 0.5em; padding-bottom: 0.5ems; font-size: 18px;" type="submit" class="w3-container w3-teal w3-padding-bottom w3-blue margin-bottom: -0.5em; padding-left: 8em;">
+         <button id="button2" style="padding-top: 0.5em; padding-bottom: 0.5ems; font-size: 18px;" type="submit" class="w3-container w3-teal w3-padding-bottom w3-blue margin-bottom: -0.5em; padding-left: 8em;">
              Update
          </button>
      </form>
      <style>
          #button1 {
+             display: block;
+             width: 100%;
+             padding: 12px;
+             border: none;
+             background-color: #0e83f0;
+             padding: 14px 28px;
+             font-size: 16px;
+             cursor: pointer;
+             text-align: center;
+           }
+
+           #button2 {
              display: block;
              width: 100%;
              padding: 12px;

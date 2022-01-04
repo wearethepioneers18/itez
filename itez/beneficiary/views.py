@@ -17,7 +17,7 @@ from rolepermissions.roles import assign_role
 from rolepermissions.roles import RolesManager
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, request
 from django.template import loader
 from django.urls import reverse
 from django.shortcuts import render, redirect, get_object_or_404
@@ -378,7 +378,7 @@ class BeneficiaryUpdateView(LoginRequiredMixin, UpdateView):
     form_class = BeneficiaryForm
 
     def form_valid(self, form):
-        notify.send(request.user,  recipient=request.user, verb= "updated beneficiary form")
+        notify.send(self.request.user,  recipient=self.request.user, verb= "updated beneficiary form")
         return super(BeneficiaryUpdateView, self).form_valid(form)
 
     def get_context_data(self, **kwargs):
