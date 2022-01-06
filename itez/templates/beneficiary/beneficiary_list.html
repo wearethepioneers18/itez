@@ -41,7 +41,7 @@
                           <div>
 
                             <h4 class="card-title card-title-dash">All Beneficiaries</h4>
-                            <p class="card-subtitle card-subtitle-dash">{{ registered_today }} new beneficicary
+                            <p class="card-subtitle card-subtitle-dash">{{ registered_today }} new beneficiary
                               registrations today</p>
                           </div>
 
@@ -73,9 +73,8 @@
                         </div>
                         <div class="table-responsive  mt-1">
                           <form name="beneficiary_form" class="form-delete">{% csrf_token %}
-                            <select class="select-style" id="beneficiary-selector" name="beneficiary-action-select">
-                              <option id="negative-select" selected>-----------------</option>
-                              <option id="positive-select" value="delete selected">delete selected</option>
+                            <select class="select-style" id="beneficiary-selector" name="beneficiary-action-select" style="font-size: 14px; color: lightgrey;">
+                            <option id="positive-select" value="delete selected">delete selected</option>
                             </select>
                             <button style="border-top-left-radius: 10px; background:#458FF6; border-top-right-radius: 10px; margin-top: -0.8em; padding-top: -10px; padding-bottom: 8px;" id="beneficiary-select-button" class="btn btn-primary text-white mb-0 me-0" type="submit">                             
                               Go

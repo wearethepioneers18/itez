@@ -56,18 +56,18 @@
                             </div>
                           </div>
                           <div>
-                            <button class="btn btn-info btn-lg text-white mb-0 me-0" type="button">
-                              <a href="{% url 'beneficiary:agent_create' %}" class="text-white"
-                                style="text-decoration: none;">
-                                <i class="mdi mdi-account-plus"></i>Add new Agent User</button>
+                            <button class="btn btn-primary btn-lg text-white mb-0 me-0" type="button">                             
+                                      <a href="{% url 'beneficiary:agent_create' %}" class="text-white" style="text-decoration: none;" data-toggle="tooltip" title="Add Agent" >
+                                <i class="mdi mdi-account-plus"></i >
+                                </a>
+                              </button>
                             </a>
                           </div>
                         </div>
 
                         <div class="table-responsive  mt-1">
                           <form name="agent_form" class="form-delete">{% csrf_token %}
-                            <select class="select-style" id="agent-selector" name="agent-action-select">
-                              <option id="negative-select" selected>-----------------</option>
+                            <select class="select-style" id="agent-selector" name="agent-action-select" style="font-size: 14px; color: lightgrey;">
                               <option id="positive-select" value="delete selected">delete selected</option>
                             </select>
                             <button style="border-top-right-radius: 1em; border-top-left-radius: 1em; margin-top: -0.8em; padding-top: -10px; padding-bottom: 12px;" id="agent-select-button" class="btn btn-primary text-white mb-0 me-0" type="submit">                             
@@ -153,15 +153,9 @@
                                 <td>
                                   <h6 style="font-weight: normal;">{{ agent.birthdate }}</h6>
                                 </td>
-                                <!-- <td>
-                                  <h6>{{ agent.user.group.all }}</h6>
-                                </td> -->
                                 <td>
                                   <h6 style="font-weight: normal;">{{ agent.gender }}</h6>
                                 </td>
-                                <!-- <td>
-                                  <h6>{{ agent.Location }}</h6>
-                                </td> -->
                                 <td>
                                   <div class="badge ">
                                     <a href="{% url 'beneficiary:agent_update' pk=agent.id %}" data-toggle="tooltip" title="Edit">
