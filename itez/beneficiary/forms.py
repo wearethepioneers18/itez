@@ -4,54 +4,60 @@ from django.forms import ModelForm, widgets
 from django.contrib.gis.geos import Point
 
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Fieldset, HTML, Submit, Row, Column, Field, Div, MultiField
+from crispy_forms.layout import (
+    Layout,
+    Fieldset,
+    HTML,
+    Submit,
+    Row,
+    Column,
+    Field,
+    Div,
+    MultiField,
+)
 from crispy_forms.bootstrap import FormActions
 from crispy_forms.bootstrap import TabHolder, Tab
 from mapwidgets.widgets import GooglePointFieldWidget
 
 from itez.beneficiary.models import Beneficiary, MedicalRecord
 from itez.beneficiary.models import Agent
-
+from notifications.signals import notify
 
 
 class MedicalRecordForm(ModelForm):
+    documents = forms.FileField(
+        widget=forms.ClearableFileInput(attrs={"multiple": True})
+    )
+
     class Meta:
 
         model = MedicalRecord
-        exclude = ["created"]
+        exclude = ["created", "medical_record_id", "beneficiary"]
         widgets = {
             'interaction_date': widgets.DateInput(format=('%m/%d/%Y'), attrs={'class':'form-control', 'type':'date'}),
             'provider_comments': forms.TextInput(attrs={'size': 500, 'title': 'Extra notes or comments',  'required': False}),
         }
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_tag = False
-        self.helper.form_method = 'post'
+        self.helper.form_method = "post"
         self.helper.layout = Layout(
             Fieldset(
                 "Service",
                 Row(
-                    Column("service", css_class="form-group col-md-6 mb-0"),
-                    Column("provider_comments", css_class="form-group col-md-6 mb-0"),
+                    Column("service_facility", css_class="form-group col-md-6 mb-0"),
                     Column("interaction_date", css_class="form-group col-md-6 mb-0"),
-                    Column("service_facility", css_class="form-group col-md-4 mb-0"),
-                    css_class="form-row",
-                ),
-            ),
-            Fieldset(
-                "Medication",
-                Row(
-                    Column("prescription", css_class="form-group col-md-4 mb-0"),
-                    Column("no_of_days", css_class="form-group col-md-4 mb-0"),
-                    Column("when_to_take", css_class="form-group col-md-4 mb-0"),
-                    css_class="form-row",
-                ),
-            ),
-            Fieldset(
-                "Lab",
-                Row(
-                    Column("lab", css_class="form-group col-md-12  mb-0"),
+                    Column("service", css_class="form-group col-md-6 mb-0"),
+                    Column("documents", css_class="form-group col-md-6 mb-0"),
+                    Column("provider_comments", css_class="form-group col-md-12 mb-0"),
+                    Column("prescription", css_class="form-group col-md-12 mb-0"),
+                    Column("when_to_take", css_class="form-group col-md-12 mb-0"),
+                    Column("no_of_days", css_class="form-group col-md-12 mb-0"),
+                    Column("lab", css_class="form-group col-md-12 mb-0"),
+                    Column("approved_by", css_class="form-group col-md-12 mb-0"),
+                    Column("approver_signature", css_class="form-group col-md-12 mb-0"),
                     css_class="form-row",
                 ),
             ),
@@ -67,30 +73,31 @@ class MedicalRecordForm(ModelForm):
         self.save_m2m()
         return instance
 
+
 class AgentForm(ModelForm):
     class Meta:
 
         model = Agent
         exclude = ["created", "agent_id"]
         widgets = {
-            'birthdate': widgets.DateInput(attrs={'type': 'date'}),
-            'location': GooglePointFieldWidget
+            "birthdate": widgets.DateInput(attrs={"type": "date"}),
+            "location": GooglePointFieldWidget,
         }
-       
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
-        self.helper.form_tag = False    
+        self.helper.form_tag = False
         self.helper.layout = Layout(
             Fieldset(
                 "Personal Details",
-             Row(
+                Row(
                     Div("user", css_class="form-group col-md-6 mb-0"),
                     Div("first_name", css_class="form-group col-md-6 mb-0"),
                     Div("last_name", css_class="form-group col-md-6 mb-0"),
                     Div("birthdate", css_class="form-group col-md-6 mb-0"),
                     Div("gender", css_class="form-group col-md-6 mb-0"),
-             ),
+                ),
             ),
             Fieldset(
                 "Other Meta Data",
@@ -104,6 +111,7 @@ class AgentForm(ModelForm):
                 HTML('<a class="btn btn-danger" href="/agent/list">Cancel</a>'),
             ),
         )
+
     def save(self, commit=True):
         instance = super(AgentForm, self).save(commit=False)
         if commit:
@@ -111,20 +119,23 @@ class AgentForm(ModelForm):
         # self.save_m2m()  # we  can use this if we have many to many field on the model i.e Service
         return instance
 
+
 class BeneficiaryForm(ModelForm):
     class Meta:
 
         model = Beneficiary
         exclude = ["created", "beneficiary_id"]
         widgets = {
-            'date_of_birth': widgets.DateInput(format=('%m/%d/%Y'), attrs={'class':'form-control', 'type':'date'}),
+            "date_of_birth": widgets.DateInput(
+                format=("%m/%d/%Y"), attrs={"class": "form-control", "type": "date"}
+            ),
         }
 
     def __init__(self, *args, **kwargs):
         # super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_tag = False
-        self.helper.form_method = 'post'
+        self.helper.form_method = "post"
         self.helper.layout = Layout(
             Fieldset(
                 "Personal Information",
@@ -171,10 +182,10 @@ class BeneficiaryForm(ModelForm):
             ),
         )
         super(BeneficiaryForm, self).__init__(*args, **kwargs)
-    
+
     def save(self, commit=True):
         instance = super(BeneficiaryForm, self).save(commit=False)
         if commit:
-            instance.save()
+            instance.save()       
         # self.save_m2m()  # we  can use this if we have many to many field on the model i.e Service
         return instance

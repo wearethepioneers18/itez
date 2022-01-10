@@ -1,11 +1,12 @@
 {% extends "layouts/base.html" %}
 
-{% block title %} Dashboard {% endblock %} 
+{% block title %} Dashboard {% endblock %}
 
 <!-- Specific CSS Plugins goes HERE  -->
 {% block css_plugins %}
 
-  <link rel="stylesheet" href="/static/assets/js/select.dataTables.min.css">
+<link rel="stylesheet" href="/static/assets/css/loading_button.css">
+<link rel="stylesheet" href="/static/assets/css/datatables.min.css" />
 
 {% endblock css_plugins %}
 
@@ -15,6 +16,7 @@
 {% block content %}
 
   <div class="content-wrapper">
+     {% include "includes/notifications_modal.html" %}
     <div class="row">
       <div class="col-sm-12">
         <div class="home-tab">
@@ -24,140 +26,203 @@
             align-items-center
             justify-content-between
             border-bottom
-          "
-        >
+          ">
           <h2>Agents</h2>
         </div>
-          <div class="tab-content tab-content-basic">
-            <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview"> 
-              
-              <div class="row">
-                <div class="col-lg-12 d-flex flex-column">
-                  <div class="row flex-grow">
-                    <div class="col-12 grid-margin stretch-card">
-                      <div class="card card-rounded">
-                        <div class="card-body">
-                          <div class="d-sm-flex justify-content-between align-items-start">
-                            <div>
-                              <h4 class="card-title card-title-dash">All Agent Users</h4>
-                            </div>
-                            <div class="form-group">
-                              <form class="search-form" action="#">
-                                <input type="search" class="form-control" placeholder="Search agents here..." title="Search here">
-                                <!-- <i class="icon-search"></i> -->
+        <div class="tab-content tab-content-basic">
+          <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview">
+
+            <div class="row">
+              <div class="col-lg-12 d-flex flex-column">
+                <div class="row flex-grow">
+                  <div class="col-12 grid-margin stretch-card">
+                    <div class="card card-rounded">
+                      <div class="card-body">
+                        <div class="d-sm-flex justify-content-between align-items-start">
+                          <div>
+                            <h4 class="card-title card-title-dash">All Agent Users</h4>
+                          </div>
+                          <div class="form-group inline ">
+                            <div class="search">
+                              <form class="search-form flex-column search" autocomplete='off' action="#" id="search">
+                                <input type="search" class="form-control search " name="q" id="q"
+                                  placeholder="Search beneficiary here" title="Search here" id="search_here">
+                                <div>
+                                  <svg>
+                                    <i class="icon-search"></i>
+                                  </svg>
+                                </div>
                               </form>
                             </div>
-                            <div>
-                              <button class="btn btn-primary btn-lg text-white mb-0 me-0" type="button">
-                                
-                                <a href="{% url 'beneficiary:agent_create' %}" class="text-white" style="text-decoration: none;">
-                                <i class="mdi mdi-account-plus"></i>Add new Agent User</button>
+                          </div>
+                          <div>
+                            <button class="btn btn-primary btn-lg text-white mb-0 me-0" type="button">                             
+                                      <a href="{% url 'beneficiary:agent_create' %}" class="text-white" style="text-decoration: none;" data-toggle="tooltip" title="Add Agent" >
+                                <i class="mdi mdi-account-plus"></i >
                                 </a>
-                                
-                            </div>
+                              </button>
+                            </a>
                           </div>
-                          
-                          <div class="table-responsive  mt-1">
-                            <table class="table select-table">
-                              <thead>
-                                <tr>
-                                  <th>
-                                    <div class="form-check form-check-flat mt-0">
-                                      <label class="form-check-label">
-                                        <input type="checkbox" class="form-check-input" aria-checked="false"><i class="input-helper"></i></label>
-                                    </div>
-                                  </th>
-                                  <th>Agent ID</th>
-                                  <th>Full Name</th>
-                                  <th>Related User</th>
-                                  <th>Date of Birth</th>
-                                  <th>Role</th>
-                                  <th>Gender</th>
-                                  <th>Location</th>
-                                  <th>Action</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                {% if agents %}
-                                {% for agent in agents %}
-                                <tr>
-                                  <td>
-                                    <div class="form-check form-check-flat mt-0">
-                                      <label class="form-check-label">
-                                      <input type="checkbox" class="form-check-input" aria-checked="false"><i class="input-helper"></i></label>
-                                    </div>
-                                  </td>
-                                  <td>
-                                    {% if agent.user.profile.profile_photo %}
-                                        <img src="{{ agent.user.profile.profile_photo.url }}">
-                                      {% elif not agent.user.profile.profile_photo and agent.gender == "Male" %}
-                                        <img src="/static/assets/images/faces/male.jpeg" alt="">
-                                      {% else %}
-                                        <img src="/static/assets/images/faces/female.jpeg" alt="">
-                                      {% endif %}
-                                    <a style="text-decoration: none;" href="{{ agent.get_absolute_url }}">{{ agent.agent_id }}</a>
-                                  </td>
-                                  <td>
-                                    <h6>{{ agent.first_name|title }} {{ agent.last_name|title }}</h6>
-                                  </td>
-                                  <td>
-                                    {% if agent.user.first_name and agent.user.last_name %}
-                                      <h6>{{ agent.user.first_name }} {{ agent.user.last_name }}</h6>
-                                    {% else %}
-                                      <h6>{{ agent.user.username }}</h6>
-                                    {% endif%}
-                                  </td>
-                                  <td>
-                                    <h6>{{ agent.birthdate }}</h6>
-                                  </td>
-                                    <td>
-                                    <h6>{{ agent.user.group.all }}</h6>
-                                  </td>
-                                  <td>
-                                    <h6>{{ agent.gender }}</h6>
-                                  </td>
-                                  <td>
-                                    <h6>{{ agent.Location }}</h6>
-                                  </td>
-                                  <td>
-                                    <div class="badge badge-opacity-danger">
-                                    <a href="#">
-                                          <i class="menu-icon mdi mdi-delete-forever"></i>
-                                        </a>
-                                      </div>
-                                  </td>
-                                </tr>
-                                {% endfor %}
-                                {% else %}
-                                <h3>No Agent Users Available</h3>
-                                {% endif %}
-                              </tbody>
-                            </table>
-                          </div>
+                        </div>
 
-                          <div class="m-3">
+                        <div class="table-responsive  mt-1">
+                          <form name="agent_form" class="form-delete">{% csrf_token %}
+                            <select class="select-style" id="agent-selector" name="agent-action-select" style="font-size: 14px; color: lightgrey;">
+                              <option id="positive-select" value="delete selected">delete selected</option>
+                            </select>
+                            <button style="border-top-right-radius: 1em; border-top-left-radius: 1em; margin-top: -0.8em; padding-top: -10px; padding-bottom: 12px;" id="agent-select-button" class="btn btn-primary text-white mb-0 me-0" type="submit">                             
+                              Go
+                            </button>
+                          <table class="table select-table" id="table_id">
+                            <thead>
+                              <tr>
+                                <th>
+                                  <div class="form-check form-check-flat mt-0">
+                                    <label class="form-check-label">
+                                      <input type="checkbox" class="form-check-input selectall" aria-checked="false"><i
+                                        class="input-helper"></i></label>
+                                      <script>
+                                        var actionButton = document.getElementById("agent-select-button");
+                                        var formAction = document.getElementById("form-delete");
+                                        var selectText = document.getElementById("agent-selector");
+                                        actionButton.addEventListener("click", function(){
+                                          var value = selectText.options[selectText.selectedIndex].value;
+                                          var text = selectText.options[selectText.selectedIndex].text;
+                                          if(text == "delete selected"){
+                                            var confirmAction = confirm("Are you sure you want to delete selected agents?");
+                                            if(confirmAction){
+                                              document.agent_form.method = "post";
+                                              document.agent_form.action = "{% url 'beneficiary:agent_delete_many' %}";
+                                              actionButton.click
+                                            }else{
+                                              console.log("delete action for selected agents was canceled")
+                                            }
+                                          }
+                                        });
+                                        $('.selectall').click(function() {
+                                          if ($(this).is(':checked')) {
+                                              $('input:checkbox').prop('checked', true);
+                                              alert(document.getElementById("#agent-selector").innerHTML)
+                                          } else {
+                                              $('input:checkbox').prop('checked', false);
+                                          }
+                                      });
+                                      </script>
+                                  </div>
+                                </th>
+                                <th>Agent ID</th>
+                                <th>Full Name</th>
+                                <th>Related User</th>
+                                <th>Date of Birth</th>
+                                <th>Gender</th>
+                                <th>Action</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {% if agents %}
+                              {% for agent in agents %}
+                              <tr>
+                                <td>
+                                  <div class="form-check form-check-flat mt-0">
+                                    <label class="form-check-label">
+                                      <input name="agent-ids" value="{{ agent.agent_id }}" type="checkbox" class="form-check-input" aria-checked="false"><i
+                                        class="input-helper"></i></label>
+                                  </div>
+                                </td>
+                                <td>
+                                  {% if agent.user.profile.profile_photo %}
+                                  <img src="{{ agent.user.profile.profile_photo.url }}">
+                                  {% elif not agent.user.profile.profile_photo and agent.gender == "Male" %}
+                                  <img src="/static/assets/images/faces/male.jpeg" alt="">
+                                  {% else %}
+                                  <img src="/static/assets/images/faces/female.jpeg" alt="">
+                                  {% endif %}
+                                  <a style="text-decoration: none; font-weight: normal;" href="{{ agent.get_absolute_url }}">
+                                    {{ agent.agent_id }}</a>
+                                </td>
+                                <td>
+                                  <h6 style="font-weight: normal;">{{ agent.first_name|title }} {{ agent.last_name|title }}</h6>
+                                </td>
+                                <td>
+                                  {% if agent.user.first_name and agent.user.last_name %}
+                                  <h6 style="font-weight: normal;">{{ agent.user.first_name }} {{ agent.user.last_name }}</h6>
+                                  {% else %}
+                                  <h6 style="font-weight: normal;">{{ agent.user.username }}</h6>
+                                  {% endif%}
+                                </td>
+                                <td>
+                                  <h6 style="font-weight: normal;">{{ agent.birthdate }}</h6>
+                                </td>
+                                <td>
+                                  <h6 style="font-weight: normal;">{{ agent.gender }}</h6>
+                                </td>
+                                <td>
+                                  <div class="badge ">
+                                    <a href="{% url 'beneficiary:agent_update' pk=agent.id %}" data-toggle="tooltip" title="Edit">
+                                      <i class="menu-icon mdi mdi-pencil" class="tooltiptext" style="color:#458ff6"></i>
+                                    </a>
+                                  </div>
 
-                            {% if is_paginated %}
-
-                              {% if page_obj.has_previous %}
-                                <a class="btn btn-primary btn-lg text-white mb-0 me-0" href="?page=1">First</a>
-                                <a class="btn btn-primary btn-lg text-white mb-0 me-0" href="?page={{ page_obj.previous_page_number }}">Previous</a>
-                              {% endif %}
-
-                              {% for num in page_obj.paginator.page_range %}
-                                {% if page_obj.number == num %}
-                                  <a class="btn btn-lg mb-0 me-0" href="?page={{ num }}">{{ num }}</a>
-                                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-                                  <a class="btn btn-primary btn-lg text-white mb-0 me-0" href="?page={{ num }}">{{ num }}</a>
-                                {% endif %}
+                                  <div class="badge">
+                                    <a id="{{ agent.id }}" data-toggle="tooltip" title="Delete">
+                                      <i class="menu-icon mdi mdi-delete-forever" style="color:red"></i>
+                                      <script>
+                                        try{
+                                          if("{{ agent.id }}" === "{{ agent.id }}"){
+                                            const deleteButton = document.getElementById("{{ agent.id }}");
+                                            deleteButton.addEventListener("click", () => {
+                                              var response;
+                                              response = confirm("Are you sure you want to delete this agent");
+                                              if(response){
+                                                const setProperty = deleteButton.href = "{% url 'beneficiary:agent_delete' pk=agent.id %}";
+                                                setProperty.click()
+                                              }else if(!(response)){
+                                                console.log("cancelled post delete");
+                                              }
+                                            });
+                                          }
+                                        }catch(error){
+                                          console.log(error)
+                                        }
+                                    </script>
+                                  </a>
+                                  </div>
+                                </td>
+                              </tr>
                               {% endfor %}
-
-                              {% if page_obj.has_next %}
-                                <a class="btn btn-primary btn-lg text-white mb-0 me-0" href="?page={{ page_obj.next_page_number }}">Next</a>
-                                <a class="btn btn-primary btn-lg text-white mb-0 me-0" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+                              {% else %}
+                                <h3 style="margin-top: 1em;">No Agent Users Available</h3>
                               {% endif %}
+                            </tbody>
+                          </table>
+                          </form>
+                        </div>
+
+                        <div class="m-3">
+
+                          {% if is_paginated %}
+
+                          {% if page_obj.has_previous %}
+                            <a class="btn btn-primary btn-lg text-white mb-0 me-0" href="?page=1">First</a>
+                            <a class="btn btn-primary btn-lg text-white mb-0 me-0"
+                              href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                          {% endif %}
+
+                          {% for num in page_obj.paginator.page_range %}
+                          {% if page_obj.number == num %}
+                          <a class="btn btn-lg mb-0 me-0" href="?page={{ num }}">{{ num }}</a>
+                          {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %} <a
+                            class="btn btn-primary btn-lg text-white mb-0 me-0" href="?page={{ num }}">{{ num }}</a>
                             {% endif %}
-                          </div>
+                            {% endfor %}
+
+                            {% if page_obj.has_next %}
+                            <a class="btn btn-primary btn-lg text-white mb-0 me-0"
+                              href="?page={{ page_obj.next_page_number }}">Next</a>
+                            <a class="btn btn-primary btn-lg text-white mb-0 me-0"
+                              href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+                            {% endif %}
+                            {% endif %}
                         </div>
                       </div>
                     </div>
@@ -170,22 +235,73 @@
       </div>
     </div>
   </div>
+</div>
+<style>
+  .select-style {
+    -webkit-appearance: button;
+    -moz-appearance: button;
+    -webkit-padding-end: 2px;
+    -moz-padding-end: 2px;
+    -webkit-padding-start: 2px;
+    animation-delay: 1s;
+    -moz-padding-start: 2px;
+    background-color: #AAA; /* Fallback color if gradients are not supported */
+    background-position: center right;
+    border: 1px solid #AAA;
+    border-radius: 2px;
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+    color: #555;
+    font-size: inherit;
+    overflow: hidden;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    border: 1px solid #ccc;
+    width: 160px;
+    border-radius: 3px;
+    overflow: hidden;
+    background: #fafafa url("img/icon-select.png") no-repeat 90% 50%;
+}
 
+.select-style select {
+    padding: 5px 8px;
+    width: 130%;
+    border: none;
+    box-shadow: 12px;
+    background: transparent;
+    -webkit-appearance: none;
+}
+
+.select-style select:focus {
+    outline: none;
+}
+</style>
 {% endblock content %}
 
 <!-- Specific JS Plugins goes HERE  -->
 {% block js_plugins %}
 
-  <script src="/static/assets/vendors/chart.js/Chart.min.js"></script>
-  <script src="/static/assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
-  <script src="/static/assets/vendors/progressbar.js/progressbar.min.js"></script>
+<script src="/static/assets/vendors/chart.js/Chart.min.js"></script>
+<script src="/static/assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+<script src="/static/assets/vendors/progressbar.js/progressbar.min.js"></script>
 
 {% endblock js_plugins %}
 
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
 
-  <script src="/static/assets/js/dashboard.js"></script>
-  <script src="/static/assets/js/Chart.roundedBarCharts.js"></script>
+<script src="/static/assets/js/dashboard.js"></script>
+<script src="/static/assets/js/Chart.roundedBarCharts.js"></script>
+<script src="/static/assets/js/datatables.min.js"></script>
+
+<script>
+  $(document).ready(function () {
+    var table = $('#table_id').DataTable({
+      "dom": '<"top"i>rt<"bottom"><"clear">'
+    });
+    $('#q').on('keyup', function () {
+      table.search($('#q').val()).draw();
+    });
+  });
+</script>
 
 {% endblock javascripts %}

@@ -8,16 +8,37 @@ app_name = "beneficiary"
 urlpatterns = [
     path("", views.index, name="home"),
     path("events", views.user_events, name="user_events"),
-    path("uielements", views.uielements, name="uielements"),
     path("report", views.beneficiary_report, name="report"),
     path("beneficiary/list", views.BenenficiaryListView.as_view(), name="list"),
     path("beneficiary/create", views.BeneficiaryCreateView.as_view(), name="create"),
     path("agent/list", views.AgentListView.as_view(), name="agent_list"),
+    path("beneficiary/<int:pk>/service", views.service_details, name="service_details"),
+    
     path("agent/create", views.AgentCreateView.as_view(), name="agent_create"),
     path(
         "agent/<int:pk>/detail",
         views.AgentDetailView.as_view(),
         name="agent_detail",
+    ),
+    path(
+        "agent/<int:pk>/delete",
+        views.agent_delete,
+        name="agent_delete",
+    ),
+    path(
+        "agent/delete/many",
+        views.agent_delete_many,
+        name="agent_delete_many",
+    ),
+    path(
+        "beneficiary/delete/many",
+        views.beneficiary_delete_many,
+        name="beneficiary_delete_many",
+    ),
+     path(
+        "agent/<int:pk>/update",
+        views.AgentUpdateView.as_view(),
+        name="agent_update",
     ),
     path(
         "beneficiary/<int:pk>/detail",
@@ -31,13 +52,28 @@ urlpatterns = [
     ),
     path(
         "beneficiary/poll_async_results/<task_id>",
-        views.poll_async_resullt,
-        name="export_beneficiary_data",
+        views.poll_async_results,
+        name="poll_async_results",
+    ),
+    path(
+        "beneficiary/<int:id>/download_medical_report",
+        views.medical_record_pdf,
+        name="generate_medical_report",
     ),
     path(
         "beneficiary/<int:pk>/medical_record_list",
         views.MedicalRecordListView.as_view(),
         name="medical_record_list",
+    ),
+    path(
+        "beneficiary/<int:pk>/delete",
+        views.beneficiary_delete,
+        name="delete",
+    ),
+    path(
+        "beneficiary/<int:pk>/update",
+        views.BeneficiaryUpdateView.as_view(),
+        name="update",
     ),
     # Medical Record `beneficiary:medical_record_list`
     path(

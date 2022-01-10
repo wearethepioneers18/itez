@@ -1,0 +1,61 @@
+ {% load notifications_tags %}
+
+ <li id="notification-counter" class="nav-item dropdown"> 
+
+      <a href="#" class="notification dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true">
+        {% if user.is_authenticated %}
+        
+           <i class="fa fa-bell" style="font-size:18px;color:black"></i>             
+           <span class="badge circle" style="float:right; margin-bottom:-3px; margin-top: -2px !important; margin-left:10px !important; font-size: 0.6rem;">
+                {% if  user.notifications.read%}
+                  {% live_notify_badge %}
+                {% else %}
+                ...
+                {% endif %} 
+              </span> 
+
+        {% endif %}
+      </a>
+
+        <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list pb-0" aria-labelledby="countDropdown">
+          <a class="dropdown-item py-3">
+            <p class="mb-0 font-weight-bold float-left" style="padding-right: 20em; font-size: 20px;">Notifications</p>
+              <button onclick="document.getElementById('id01').style.display='block'" class="w3-button w3-blue">View All</button>
+          </a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item preview-item">
+            <div class="preview-item-content flex-grow py-2">
+              {% for notification in  notifications %}
+              <p class="preview-subject ellipsis font-weight-medium text-dark">  
+              <div style="float: left; margin-top: -10px;">
+                {% if request.user.profile.profile_photo %}
+                  <img width="30" height="30" style="float:left;" class="img-md rounded-circle" src="{{request.user.profile.profile_photo.url}}" alt="Profile image">
+              {% elif not request.user.profile_photo and request.user.gender == 'Male' %}
+                  <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
+              {% elif not request.user.profile_photo and request.user.gender == 'Female' %}
+                  <img class="img-xs rounded-circle" src="/static/assets/images/faces/female.jpeg" alt="Profile image">
+              {% else %}
+                  <img class="img-xs rounded-circle" src="/static/assets/images/faces/male.jpeg" alt="Profile image">
+              {% endif %} 
+              </div>
+              <div style="align-content: center; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; white-space: initial; max-width: 75%; margin-left: 8px; margin-top:20px">{{ notification }}</div>
+              </p>
+              <script>
+                  document.getElementById('{{notification.slug}}').addEventListener("click", function() {
+                    const host = location.origin
+                    fetch(`${host}/inbox/notifications/mark_all_as_read/{{notification.slug}}`).then((res) => console.log(res))
+                  });
+              </script>
+                <hr />
+                {% endfor %}
+            </div>
+          </a>
+        </div>  
+
+    </li>
+    <script>
+      document.getElementById('notification-counter').addEventListener("click", function() {
+        const host = location.origin
+        fetch(`${host}/inbox/notifications/mark-all-as-read/`).then((res) => console.log(res))
+      });
+    </script>

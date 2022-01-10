@@ -42,8 +42,7 @@ class UserManager(BaseUserManager):
         """
         if not password:
             raise TypeError("Superusers must have a password.")
-        # if email is None:
-        #     raise TypeError("Superusers may have an email.")
+
         if not username:
             raise TypeError("Superusers must have a unique username.")
 
@@ -57,6 +56,11 @@ class UserManager(BaseUserManager):
 
         return user
 
+class NotificationActive(models.Manager):
+    def get_queryset(self):
+        from datetime import datetime
+        return super(NotificationActive, self).get_queryset().order_by("-date") 
+
 
 class User(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(db_index=True, unique=True, max_length=255)
@@ -67,9 +71,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     date_joined = models.DateTimeField(default=timezone.now)
-
     is_active = models.BooleanField(default=True)
     date = models.DateTimeField(auto_now_add=True)
+    # manager_is_active = NotificationActive()
 
     USERNAME_FIELD = "username"
     REQUIRED_FIELDS = []
@@ -153,6 +157,7 @@ class Profile(models.Model):
     postal_code = models.CharField(
         _("Postal Code"), max_length=100, null=True, blank=True
     )
+
     class Meta:
         verbose_name = "User Profile"
         verbose_name_plural = "User Profiles"
@@ -162,6 +167,7 @@ class Profile(models.Model):
             return f"{self.user.first_name} {self.user.last_name}'s Profile"
         else:
             return f"{self.user.username}'s Profile"
+
 
 class UserWorkDetail(models.Model):
     """

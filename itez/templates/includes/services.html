@@ -1,8 +1,10 @@
+
 <div class="card">
   <div class="card-body">
     <h4 class="card-title">{{ service_title|title }}</h4>
     <div class="table-responsive">
-      <table class="table table-hover">
+      
+      <table id="services_table" class="table table-hover">
         <thead>
           <tr>
             <th>Service Name</th>
@@ -12,40 +14,70 @@
           </tr>
         </thead>
         <tbody>
-          {% for service in services.services %}
-          <tr>
-            <td>{{ service.service_object }}</td>
-            <td>{{ service.service_provider }}</td>
-            <td>{{ service.comments }}</td>
-            <td>{{ service.service_facility }}</td>
+          <script>
+          </script>
+          {% include 'beneficiary/service_detail_modal.html' %}
+          {% for service in service_paginator_list %}
+          <tr class="first_td{{ service.service_id }}">
+              <td><a style="text-decoration: none; cursor: pointer; color: blue;" onclick="document.getElementById('service_detail_modal').style.display='block'">{{ service.service_object }}</a></td>              
+              <td>{{ service.service_provider }}</td>
+              <td>{{ service.service_comments }}</td>
+              <td>{{ service.service_facility }}</td>
+
           </tr>
+          <script>
+              var uniqueSelectorButton = document.querySelector(".first_td{{ service.service_id }}");
+              uniqueSelectorButton.addEventListener("click", () => {
+                if("{{ service.service_id }}" == "{{ service.service_id }}"){
+                  document.getElementById("service-name").innerHTML = "{{ service.service_object }}";
+                  document.getElementById("service-facility").innerHTML = "{{ service.service_facility }}";
+                  document.getElementById("provider-personnel").innerHTML = "{{ service.service_provider }}";
+                  document.getElementById("provider-comments").innerHTML = "{{ service.service_comments }}";
+                  document.getElementById("created").innerHTML = "{{ service.service_created }}";
+                  document.getElementById("span1").innerHTML = "{{ service.service_id }}";
+                }
+              })
+          </script>
           {% endfor %}
         </tbody>
       </table>
     </div>
-    <hr />
-    <div style="float: right">
-      <fieldset class="border p-2">
-        {% if service_paginator_list.has_previous %}
-        <a href="?page=1">&laquo; first</a>
-        <span class="current">
-          Page {{ service_paginator_list.number }} of {{
-          service_paginator_list.paginator.num_pages }}.
-        </span>
-        <a href="?page={{ service_paginator_list.previous_page_number }}"
-          >previous</a
-        >
-        {% endif %} {% if service_paginator_list.has_next %}
-        <a href="?page={{ service_paginator_list.next_page_number }}">next</a>
-        <span class="current">
-          Page {{ service_paginator_list.number }} of {{
-          service_paginator_list.num_pages }}.
-        </span>
-        <a href="?page={{ service_paginator_list.paginator.num_pages }}"
-          >last &raquo;</a
-        >
-        {% endif %}
-      </fieldset>
-    </div>
+
+     <div class="paginator" style="float: right;">
+       <span class="sr-only">
+         {% if service_paginator_list.has_previous %}
+            <a href="?service_page=1">&laquo; first</a>
+            <a href="?service_page={{service_paginator_list.previous_page_number}}">previous</a>
+          {% endif %}
+
+          <span class="current">
+            Page {{ service_paginator_list.number }} of {{ service_paginator_list.paginator.num_pages }}
+          </span>
+
+          {% if service_paginator_list.has_next %}
+            <a href="?service_page={{service_paginator_list.next_page_number}}">next</a>
+            <a href="?service_page={{service_paginator_list.paginator.num_pages}}">last &raquo;</a>
+          {% endif %}
+       </span>
+     </div>
   </div>
 </div>
+<script>
+  // modal popup code
+  document.getElementsByClassName("tablink")[0].click();
+  function openCity(evt, cityName) {
+    var i, x, tablinks;
+    x = document.getElementsByClassName("city");
+    for (i = 0; i < x.length; i++) {
+      x[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tablink");
+    for (i = 0; i < x.length; i++) {
+      tablinks[i].classList.remove("w3-light-grey");
+    }
+    document.getElementById(cityName).style.display = "block";
+    evt.currentTarget.classList.add("w3-black");
+  }
+</script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+

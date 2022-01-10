@@ -7,43 +7,88 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('beneficiary', '0012_auto_20211125_1027'),
+        ("beneficiary", "0012_auto_20211125_1027"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='ServiceProviderPersonel',
+            name="ServiceProviderPersonel",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('first_name', models.CharField(max_length=200, verbose_name='First Name')),
-                ('last_name', models.CharField(max_length=200, verbose_name='Last Name')),
-                ('date_of_birth', models.DateField(blank=True, null=True, verbose_name='Date of Birth')),
-                ('department', models.CharField(blank=True, max_length=200, null=True, verbose_name='Department')),
-                ('facility', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='beneficiary.facility')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "first_name",
+                    models.CharField(max_length=200, verbose_name="First Name"),
+                ),
+                (
+                    "last_name",
+                    models.CharField(max_length=200, verbose_name="Last Name"),
+                ),
+                (
+                    "date_of_birth",
+                    models.DateField(
+                        blank=True, null=True, verbose_name="Date of Birth"
+                    ),
+                ),
+                (
+                    "department",
+                    models.CharField(
+                        blank=True, max_length=200, null=True, verbose_name="Department"
+                    ),
+                ),
+                (
+                    "facility",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to="beneficiary.facility",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Service Provider',
-                'verbose_name_plural': 'Service Providers',
+                "verbose_name": "Service Provider",
+                "verbose_name_plural": "Service Providers",
             },
         ),
         migrations.CreateModel(
-            name='ServiceProviderPersonelQualification',
+            name="ServiceProviderPersonelQualification",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=200)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=200)),
             ],
         ),
         migrations.DeleteModel(
-            name='ServiceProvider',
+            name="ServiceProvider",
         ),
         migrations.AddField(
-            model_name='serviceproviderpersonel',
-            name='qualification',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='beneficiary.serviceproviderpersonelqualification'),
+            model_name="serviceproviderpersonel",
+            name="qualification",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to="beneficiary.serviceproviderpersonelqualification",
+            ),
         ),
         migrations.AlterField(
-            model_name='beneficiary',
-            name='service_provider',
-            field=models.ManyToManyField(to='beneficiary.ServiceProviderPersonel'),
+            model_name="beneficiary",
+            name="service_provider",
+            field=models.ManyToManyField(to="beneficiary.ServiceProviderPersonel"),
         ),
     ]

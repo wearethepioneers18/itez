@@ -15,6 +15,7 @@
 {% block content %}
 
   <div class="content-wrapper">
+   {% include "includes/notifications_modal.html" %}
     <div class="row">
       <div class="col-sm-12">
         <div class="home-tab">
@@ -101,16 +102,11 @@
                                     <h6>{{user.last_login}}</h6>
                                   </td>
                                   
-                                   <td><div class="badge badge-opacity-warning">
+                                   <td><div class="badge">
                                     <a href="http://localhost:8000/admin/users/user/{{user.id}}/change/">
-                                          <i class="menu-icon mdi mdi-pencil"></i>
+                                          <i class="menu-icon mdi mdi-pencil" style="color:blue"></i>
                                         </a>
                                     </div>
-                                    <div class="badge badge-opacity-danger">
-                                    <a href="#">
-                                          <i class="menu-icon mdi mdi-delete-forever"></i>
-                                        </a>
-                                      </div>
                                       </td>
                                   </td>
                                 </tr>

@@ -7,8 +7,8 @@ from rest_framework.mixins import (
     ListModelMixin,
     RetrieveModelMixin,
     UpdateModelMixin,
-    CreateModelMixin
-    )
+    CreateModelMixin,
+)
 from rest_framework.viewsets import GenericViewSet
 
 from itez.beneficiary.models import (
@@ -20,9 +20,7 @@ from itez.beneficiary.models import (
     ServiceArea,
     WorkDetail,
     Drug,
-    Lab,
     Service,
-    Prescription,
     Facility,
     FacilityType,
     ImplementingPartner,
@@ -33,9 +31,7 @@ from itez.beneficiary.models import (
 
 from itez.beneficiary.api.serializers import (
     DrugSerializer,
-    LabSerializer,
     ServiceSerializer,
-    PrescriptionSerializer,
     FacilitySerializer,
     FacilityTypeSerializer,
     ImplementingPartnerSerializer,
@@ -48,14 +44,15 @@ from itez.beneficiary.api.serializers import (
     ProvinceModelSerializer,
     DistrictModelSerializer,
     ServiceAreaModelSerializer,
-    WorkDetailModelSerializer
+    WorkDetailModelSerializer,
 )
 
-    
+
 class DrugAPIView(APIView):
     """
     Retrieve, update or delete a Drug instance.
     """
+
     def get_object(self, pk):
         try:
             return Drug.objects.get(pk=pk)
@@ -80,69 +77,12 @@ class DrugAPIView(APIView):
         drug.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-    
-class LabAPIView(APIView):
-    """
-    Retrieve, update or delete a Lab instance.
-    """
-    def get_object(self, pk):
-        try:
-            return Lab.objects.get(pk=pk)
-        except Lab.DoesNotExist:
-            raise Http404
-
-    def get(self, request, format=None):
-        lab = Lab.objects.all()
-        serializer = LabSerializer(lab, many=True)
-        return Response(serializer.data)
-
-    def put(self, request, pk, format=None):
-        lab = self.get_object(pk)
-        serializer = LabSerializer(lab, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def delete(self, request, pk, format=None):
-        lab = self.get_object(pk)
-        lab.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-class PrescriptionAPIView(APIView):
-    """
-    Retrieve, update or delete a Prescription instance.
-    """
-    def get_object(self, pk):
-        try:
-            return Prescription.objects.get(pk=pk)
-        except Prescription.DoesNotExist:
-            raise Http404
-
-    def get(self, request, format=None):
-        prescription = Prescription.objects.all()
-        serializer = PrescriptionSerializer(prescription, many=True)
-        return Response(serializer.data)
-
-    def put(self, request, pk, format=None):
-        prescription = self.get_object(pk)
-        serializer = PrescriptionSerializer(prescription, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def delete(self, request, pk, format=None):
-        prescription = self.get_object(pk)
-        prescription.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
 
 class FacilityAPIView(APIView):
     """
     Retrieve, update or delete a Facility instance.
     """
+
     def get_object(self, pk):
         try:
             return Facility.objects.get(pk=pk)
@@ -172,6 +112,7 @@ class FacilityTypeAPIView(APIView):
     """
     Retrieve, update or delete a Facility Type instance.
     """
+
     def get_object(self, pk):
         try:
             return FacilityType.objects.get(pk=pk)
@@ -196,10 +137,12 @@ class FacilityTypeAPIView(APIView):
         facility_type.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
 class ImplementingPartnerAPIView(APIView):
     """
     Retrieve, update or delete a Implementing Partner instance.
     """
+
     def get_object(self, pk):
         try:
             return ImplementingPartner.objects.get(pk=pk)
@@ -213,7 +156,9 @@ class ImplementingPartnerAPIView(APIView):
 
     def put(self, request, pk, format=None):
         implementing_partner = self.get_object(pk)
-        serializer = ImplementingPartnerSerializer(implementing_partner, data=request.data)
+        serializer = ImplementingPartnerSerializer(
+            implementing_partner, data=request.data
+        )
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -229,6 +174,7 @@ class ServiceAPIView(APIView):
     """
     Retrieve, update or delete a Service instance.
     """
+
     def get_object(self, pk):
         try:
             return Service.objects.get(pk=pk)
@@ -258,6 +204,7 @@ class ServiceProviderPersonelAPIView(APIView):
     """
     Retrieve, update or delete a Service Provider Personel instance.
     """
+
     def get_object(self, pk):
         try:
             return ServiceProviderPersonel.objects.get(pk=pk)
@@ -267,17 +214,15 @@ class ServiceProviderPersonelAPIView(APIView):
     def get(self, request, format=None):
         service_provider_personel = Service.objects.all()
         serializer = ServiceProviderPersonelSerializer(
-            service_provider_personel, 
-            many=True
-            )
+            service_provider_personel, many=True
+        )
         return Response(serializer.data)
 
     def put(self, request, pk, format=None):
         service_provider_personel = self.get_object(pk)
         serializer = ServiceProviderPersonelSerializer(
-            service_provider_personel, 
-            data=request.data
-            )
+            service_provider_personel, data=request.data
+        )
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -293,6 +238,7 @@ class ServiceProviderPersonelQualificationAPIView(APIView):
     """
     Retrieve, update or delete a Service Provider Personel Qualification instance.
     """
+
     def get_object(self, pk):
         try:
             return ServiceProviderPersonelQualification.objects.get(pk=pk)
@@ -302,17 +248,15 @@ class ServiceProviderPersonelQualificationAPIView(APIView):
     def get(self, request, format=None):
         service_provider_personel_qualification = Service.objects.all()
         serializer = ServiceProviderPersonelQualificationSerializer(
-            service_provider_personel_qualification, 
-            many=True
-            )
+            service_provider_personel_qualification, many=True
+        )
         return Response(serializer.data)
 
     def put(self, request, pk, format=None):
         service_provider_personel_qualification = self.get_object(pk)
         serializer = ServiceProviderPersonelSerializer(
-            service_provider_personel_qualification, 
-            data=request.data
-            )
+            service_provider_personel_qualification, data=request.data
+        )
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -324,11 +268,17 @@ class ServiceProviderPersonelQualificationAPIView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class AgentAPIView(ListModelMixin, CreateModelMixin,
-    GenericViewSet, RetrieveModelMixin, UpdateModelMixin):
+class AgentAPIView(
+    ListModelMixin,
+    CreateModelMixin,
+    GenericViewSet,
+    RetrieveModelMixin,
+    UpdateModelMixin,
+):
     """
     API end point for Agent model list, create and update.
     """
+
     queryset = Agent.objects.all()
     serializer_class = AgentSerializer
 
@@ -342,11 +292,17 @@ class AgentAPIView(ListModelMixin, CreateModelMixin,
         return self.update(request, *args, **kwargs)
 
 
-class BeneficiaryAPIView(ListModelMixin, CreateModelMixin,
-    GenericViewSet, RetrieveModelMixin, UpdateModelMixin):
+class BeneficiaryAPIView(
+    ListModelMixin,
+    CreateModelMixin,
+    GenericViewSet,
+    RetrieveModelMixin,
+    UpdateModelMixin,
+):
     """
     API end point for Beneficiary model list, create and update.
     """
+
     queryset = Beneficiary.objects.all()
     serializer_class = BeneficiarySerializer
 
@@ -360,11 +316,17 @@ class BeneficiaryAPIView(ListModelMixin, CreateModelMixin,
         return self.update(request, *args, **kwargs)
 
 
-class BeneficiaryParentAPIView(ListModelMixin, CreateModelMixin,
-    GenericViewSet, RetrieveModelMixin, UpdateModelMixin):
+class BeneficiaryParentAPIView(
+    ListModelMixin,
+    CreateModelMixin,
+    GenericViewSet,
+    RetrieveModelMixin,
+    UpdateModelMixin,
+):
     """
     API end point for BeneficiaryParent model list, create and update.
     """
+
     queryset = BeneficiaryParent.objects.all()
     serializer_class = BeneficiaryParentSerializer
 
@@ -378,11 +340,17 @@ class BeneficiaryParentAPIView(ListModelMixin, CreateModelMixin,
         return self.update(request, *args, **kwargs)
 
 
-class ProvinceAPIView(ListModelMixin,RetrieveModelMixin,
-    CreateModelMixin, UpdateModelMixin,GenericViewSet):
+class ProvinceAPIView(
+    ListModelMixin,
+    RetrieveModelMixin,
+    CreateModelMixin,
+    UpdateModelMixin,
+    GenericViewSet,
+):
     """
     API end point for Province model list, create and update.
     """
+
     queryset = Province.objects.all()
     serializer_class = ProvinceModelSerializer
 
@@ -396,11 +364,17 @@ class ProvinceAPIView(ListModelMixin,RetrieveModelMixin,
         return self.update(request, *args, **kwargs)
 
 
-class DistrictAPIView(ListModelMixin,RetrieveModelMixin,
-    CreateModelMixin, UpdateModelMixin,GenericViewSet):
+class DistrictAPIView(
+    ListModelMixin,
+    RetrieveModelMixin,
+    CreateModelMixin,
+    UpdateModelMixin,
+    GenericViewSet,
+):
     """
     API end point for District model list, create and update.
     """
+
     queryset = District.objects.all()
     serializer_class = DistrictModelSerializer
 
@@ -414,11 +388,17 @@ class DistrictAPIView(ListModelMixin,RetrieveModelMixin,
         return self.update(request, *args, **kwargs)
 
 
-class ServiceAreaAPIView(ListModelMixin,RetrieveModelMixin,
-    CreateModelMixin, UpdateModelMixin,GenericViewSet):
+class ServiceAreaAPIView(
+    ListModelMixin,
+    RetrieveModelMixin,
+    CreateModelMixin,
+    UpdateModelMixin,
+    GenericViewSet,
+):
     """
     API end point for ServiceArea model list, create and update.
     """
+
     queryset = ServiceArea.objects.all()
     serializer_class = ServiceAreaModelSerializer
 
@@ -432,11 +412,17 @@ class ServiceAreaAPIView(ListModelMixin,RetrieveModelMixin,
         return self.update(request, *args, **kwargs)
 
 
-class WorkDetailAPIView(ListModelMixin,RetrieveModelMixin,
-    CreateModelMixin, UpdateModelMixin,GenericViewSet):
+class WorkDetailAPIView(
+    ListModelMixin,
+    RetrieveModelMixin,
+    CreateModelMixin,
+    UpdateModelMixin,
+    GenericViewSet,
+):
     """
     API end point for WorkDetail model list, create and update.
     """
+
     queryset = WorkDetail.objects.all()
     serializer_class = WorkDetailModelSerializer
 
@@ -448,4 +434,3 @@ class WorkDetailAPIView(ListModelMixin,RetrieveModelMixin,
 
     def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
-

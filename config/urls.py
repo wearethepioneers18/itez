@@ -4,6 +4,9 @@ from django.contrib import admin
 from django.urls import include, path
 from django.views import defaults as default_views
 
+from django.conf.urls import url
+import notifications.urls
+
 from drf_spectacular.views import (
     SpectacularAPIView, 
     SpectacularRedocView, 
@@ -12,8 +15,6 @@ from drf_spectacular.views import (
 
 from itez.beneficiary.api.views import (
     DrugAPIView,
-    LabAPIView,
-    PrescriptionAPIView,
     FacilityAPIView,
     FacilityTypeAPIView,
     ImplementingPartnerAPIView,
@@ -28,7 +29,8 @@ urlpatterns = [
     path("", include("itez.beneficiary.urls", namespace="beneficiary")),          
     path("", include("itez.authentication.urls")),
     path("", include("itez.users.urls", namespace="user")),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path('inbox/notifications/', include(notifications.urls, namespace='notifications')),    # path('^notifications/', include('notifications_rest.urls')),
+ ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 admin.site.site_header = "ITEZ Administration"                   
 admin.site.site_title = "ITEZ Administration" 
@@ -47,11 +49,6 @@ urlpatterns += [
 
     # Additional APIViews
     path(
-        "lab/", 
-        LabAPIView.as_view(), 
-        name='lab'
-        ),
-    path(
         "drug/", 
         DrugAPIView.as_view(), 
         name='drug'
@@ -65,11 +62,6 @@ urlpatterns += [
         "facility/", 
         FacilityAPIView.as_view(), 
         name='facility'
-        ),
-    path(
-        "prescription/", 
-        PrescriptionAPIView.as_view(), 
-        name='prescription'
         ),
     path(
         "facility_type/", 
